@@ -1,0 +1,99 @@
+{
+  "name": "material-ui-colorpicker",
+  "version": "0.1.0",
+  "description": "Simple <ColorPicker /> components for React Material-Ui. No dependencies. It uses Hooks and support RGBA, HSVA, and more !",
+  "main": "index.js",
+  "repository": "https://github.com/mikbry/material-ui-colorpicker.git",
+  "author": "Mik <mik@miklabs.com>",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rimraf build && mkdir build",
+    "build": "yarn clean &  cross-env NODE_ENV=production rollup -c",
+    "storybook": "start-storybook -p 9005 -c .storybook",
+    "lint": "$(yarn bin)/eslint src",
+    "test": "cross-env NODE_ENV=test  jest",
+    "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
+    "prepublishOnly": "yarn build"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "@commitlint/cli": "^8.3.5",
+    "@commitlint/config-conventional": "^8.3.4",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-replace": "^2.3.1",
+    "@rollup/plugin-url": "^4.0.2",
+    "@storybook/addon-actions": "^5.2.6",
+    "@storybook/addon-links": "^5.2.6",
+    "@storybook/addons": "^5.2.6",
+    "@storybook/react": "^5.2.6",
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^9.4.0",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^7.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react-hooks": "^2.3.0",
+    "husky": "^4.2.1",
+    "jest": "^25.1.0",
+    "jest-css-modules": "^2.1.0",
+    "prettier": "^1.19.1",
+    "react-refresh": "^0.7.2",
+    "react-test-renderer": "^16.12.0",
+    "rimraf": "^3.0.2",
+    "rollup": "^1.31.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-hot-css": "^0.0.6",
+    "rollup-plugin-react-refresh": "^0.0.1",
+    "rollup-plugin-string": "^3.0.0",
+    "rollup-plugin-terser": "^5.2.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint",
+      "commit-msg": "[[ -n $HUSKY_BYPASS ]] || commitlint -E HUSKY_GIT_PARAMS"
+    },
+    "commitlint": {
+      "extends": [
+        "@commitlint/config-conventional"
+      ]
+    }
+  },
+  "peerDependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "dependencies": {},
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/config/jest/setup.js"
+    ],
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sss|styl)$": "<rootDir>/node_modules/jest-css-modules",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/config/jest/assetsTransformer.js"
+    },
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!src/index.js",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/config/"
+    ]
+  }
+}
