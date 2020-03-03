@@ -9,22 +9,30 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    width: '24px',
-    height: '24px',
-    margin: '4px 8px 8px 0px',
-    border: '2px solid black',
-    borderColor: '#212121',
-    cursor: 'pointer',
-    borderRadius: '4px',
-  },
-}));
+const useStyles = makeStyles(theme => {
+  const light = theme.palette.type === 'light';
+  const borderColor = light ? '#767676' : '#767676';
+  return {
+    root: {
+      width: '16px',
+      height: '16px',
+      // margin: '8px 8px 8px 8px',
+      border: `2px solid ${borderColor}`,
+      cursor: 'pointer',
+      borderRadius: '4px',
+    },
+  };
+});
 
-const ColorPickerBox = ({ color, forwardRef, ...props }) => {
+const ColorButton = ({ color, forwardRef, ...props }) => {
   const classes = useStyles();
-  return <div ref={forwardRef} className={classes.root} {...props} style={color.css} />;
+  return (
+    <IconButton color="primary" aria-label={color.value}>
+      <span ref={forwardRef} className={classes.root} {...props} style={color.css} />
+    </IconButton>
+  );
 };
 
-export default ColorPickerBox;
+export default ColorButton;

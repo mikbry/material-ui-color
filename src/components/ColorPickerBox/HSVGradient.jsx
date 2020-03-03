@@ -91,12 +91,12 @@ const HSVGradient = props => {
           >
             <div
               style={{
-                width: '12px',
-                height: '12px',
-                borderRadius: '6px',
+                width: '8px',
+                height: '8px',
+                borderRadius: '4px',
                 boxShadow:
                   'rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px',
-                transform: 'translate(-6px, -6px)',
+                transform: 'translate(-4px, -4px)',
               }}
             />
           </div>

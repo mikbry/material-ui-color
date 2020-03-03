@@ -10,97 +10,140 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 import HSVGradient from './HSVGradient';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
     width: '320px',
-    height: '240px',
+    padding: '0px',
   },
   hsvGradient: {
     width: 'calc(100% - 12px)',
-    height: 'calc(50% - 12px)',
+    height: 'calc(128px - 12px)',
     margin: '6px',
+  },
+  sliders: {
+    width: '100%',
+    padding: '0 6px',
   },
 }));
 
 const ColorSlider = withStyles({
   root: {
     color: '#52af77',
-    height: 8,
+    width: 'calc(100% - 12px)',
+    height: 24,
+    padding: 0,
   },
   thumb: {
-    height: 24,
-    width: 24,
+    height: 28,
+    width: 8,
+    opacity: 0.8,
     backgroundColor: '#fff',
-    border: '2px solid currentColor',
-    marginTop: 0,
-    marginLeft: -12,
+    borderRadius: '4px',
+    border: '1px solid #9e9e9e',
+    marginTop: -2,
+    marginLeft: -4,
     '&:focus,&:hover,&$active': {
       boxShadow: 'inherit',
     },
   },
   active: {},
-  valueLabel: {
-    left: 'calc(-50% + 4px)',
-  },
   track: {
     height: 24,
     borderRadius: 4,
+    opacity: 0,
+    backgroundColor: 'transparent',
   },
   rail: {
     height: 24,
-    borderRadius: 4,
+    borderRadius: 0,
+    opacity: 1,
+    background:
+      'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 17%, rgb(0, 255, 0) 33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 67%, rgb(255, 0, 255) 83%, rgb(255, 0, 0) 100%) repeat scroll 0% 0%',
   },
 })(Slider);
 
 const AlphaSlider = withStyles({
   root: {
     color: '#6666',
-    height: 8,
+    height: 16,
+    width: 'calc(100% - 12px)',
+    padding: 0,
+    background: `
+      linear-gradient(45deg, #ccc 25%, transparent 25%), 
+      linear-gradient(135deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%),
+      linear-gradient(135deg, transparent 75%, #ccc 75%)`,
+    backgroundSize: '8px 8px',
+    backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
+    backgroundColor: 'white',
   },
   thumb: {
-    height: 24,
-    width: 24,
+    height: 20,
+    width: 8,
+    opacity: 0.8,
     backgroundColor: '#fff',
-    border: '2px solid currentColor',
-    marginTop: -4,
-    marginLeft: -12,
+    borderRadius: '4px',
+    border: '1px solid #9e9e9e',
+    marginTop: -2,
+    marginLeft: -4,
     '&:focus,&:hover,&$active': {
       boxShadow: 'inherit',
     },
   },
   active: {},
-  valueLabel: {
-    left: 'calc(-50% + 4px)',
-  },
   track: {
     height: 16,
     borderRadius: 4,
+    opacity: 0,
   },
   rail: {
     height: 16,
-    borderRadius: 4,
+    borderRadius: 0,
+    opacity: 1,
+    background:
+      'rgba(0, 0, 0, 0) linear-gradient(to right, rgba(120, 255, 0, 0) 0%, rgb(120, 255, 0) 100%) repeat scroll 0% 0%',
   },
 })(Slider);
 
-const ColorPickerBox = ({ color }) => {
+const displayPalette = palette =>
+  palette && (
+    <div>
+      {palette.forEach(color => (
+        <div>{color.value}</div>
+      ))}
+    </div>
+  );
+
+const displayInput = (color, inputformats) =>
+  inputformats && (
+    <div>
+      {inputformats.forEach(input => (
+        <div>{input}</div>
+      ))}
+    </div>
+  );
+
+const ColorPickerBox = ({ color, palette, inputFormats, deferred }) => {
   const classes = useStyles();
   return (
-    // TODO
     <Box p={2} className={classes.root}>
       <div className={classes.hsvGradient}>
         <HSVGradient className={classes.hsvGradient} color={color} />
       </div>
-      <ColorSlider aria-label="color slider" defaultValue={0} />
-      <AlphaSlider valueLabelDisplay="auto" aria-label="alpha slider" defaultValue={0} />
-      <Typography>{color.value}</Typography>
+      <div className={classes.sliders}>
+        <ColorSlider aria-label="color slider" defaultValue={0} />
+        <AlphaSlider valueLabelDisplay="auto" aria-label="alpha slider" defaultValue={0} />{' '}
+      </div>
+      {displayPalette(palette)}
+      {displayInput(inputFormats)}
+      <div>{color.value}</div>
+      {deferred && <Button>Set</Button>}
     </Box>
   );
 };
