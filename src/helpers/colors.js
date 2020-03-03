@@ -13,8 +13,13 @@ const parse = (raw, type) => {
   // TODO find raw type
   color.type = 'unknown';
   // TODO get hexa
+  color.hex = raw;
   // TODO get rgb
+  color.rgb = [0, 0, 0];
   // TODO get hsv
+  color.hsv = [0, 0, 0];
+  // TODO get hsl
+  color.hsl = [0, 0, 0];
   if (!type) {
     color.value = raw || 'none';
   }
@@ -34,5 +39,29 @@ const parse = (raw, type) => {
   return color;
 };
 
-// eslint-disable-next-line import/prefer-default-export
-export { parse };
+const getComponents = (_color, type) => {
+  // eslint-disable-next-line no-unused-vars
+  const color = typeof _color === 'string' ? parse(_color) : _color;
+  const components = {};
+  // TODO set values
+  if (type === 'rgb') {
+    components.r = { value: color.rgb[0], type: 'integer', min: 0, max: 255, name: 'R' };
+    components.g = { value: color.rgb[1], type: 'integer', min: 0, max: 255, name: 'G' };
+    components.b = { value: color.rgb[2], type: 'integer', min: 0, max: 255, name: 'B' };
+  } else if (type === 'hsv') {
+    components.h = { value: color.hsv[0], type: 'integer', min: 0, max: 255, name: 'H', unit: '°' };
+    components.s = { value: color.hsv[1], type: 'integer', min: 0, max: 255, name: 'S', unit: '%' };
+    components.v = { value: color.hsv[2], type: 'integer', min: 0, max: 255, name: 'V', unit: '%' };
+  } else if (type === 'hsl') {
+    components.h = { value: color.hsl[0], type: 'integer', min: 0, max: 255, name: 'H', unit: '°' };
+    components.s = { value: color.hsl[1], type: 'integer', min: 0, max: 255, name: 'S', unit: '%' };
+    components.l = { value: color.hsl[2], type: 'integer', min: 0, max: 255, name: 'L', unit: '%' };
+  } else if (type === 'hex') {
+    components.hex = { value: color.hex, type: 'hex', name: 'HEX', unit: '#' };
+  } else {
+    components.hex = { value: color.value };
+  }
+  return components;
+};
+
+export { parse, getComponents };

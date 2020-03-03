@@ -11,6 +11,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+import * as Colors from '../helpers/colors';
 
 const useStyles = makeStyles(theme => {
   const light = theme.palette.type === 'light';
@@ -26,11 +27,12 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-const ColorButton = ({ color, size, borderWidth = null, forwardRef, className, tooltip, ...props }) => {
+const ColorButton = ({ color: c, size, borderWidth = null, forwardRef, className, tooltip, ...props }) => {
+  const color = typeof c === 'string' ? Colors.parse(c) : c;
   const classes = useStyles();
   let style = color.css;
   if (!style) {
-    style = { backgroundColor: color };
+    style = { backgroundColor: c };
   }
   if (size) {
     style.width = `${size}px`;
@@ -41,12 +43,12 @@ const ColorButton = ({ color, size, borderWidth = null, forwardRef, className, t
   }
 
   let component = (
-    <IconButton color="primary" aria-label={color.value || color} className={className}>
+    <IconButton color="primary" aria-label={color.value || c} className={className}>
       <span ref={forwardRef} className={classes.root} {...props} style={style} />
     </IconButton>
   );
   if (tooltip) {
-    component = <Tooltip title={color.value || color}>{component}</Tooltip>;
+    component = <Tooltip title={tooltip}>{component}</Tooltip>;
   }
   return component;
 };

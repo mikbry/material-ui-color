@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import ColorButton from './ColorButton';
-import ColorPickerBox from './ColorPickerBox';
+import ColorBox from './ColorBox';
 import * as Colors from '../helpers/colors';
 
 const useStyles = makeStyles(() => ({
@@ -70,7 +70,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
           horizontal: 'center',
         }}
       >
-        <ColorPickerBox color={color} deferred={deferred} palette={palette} inputFormats={inputFormats} />
+        <ColorBox color={color} deferred={deferred} palette={palette} inputFormats={inputFormats} />
       </Popover>
     </div>
   );
