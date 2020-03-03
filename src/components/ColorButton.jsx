@@ -10,6 +10,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => {
   const light = theme.palette.type === 'light';
@@ -18,7 +19,6 @@ const useStyles = makeStyles(theme => {
     root: {
       width: '16px',
       height: '16px',
-      // margin: '8px 8px 8px 8px',
       border: `2px solid ${borderColor}`,
       cursor: 'pointer',
       borderRadius: '4px',
@@ -26,13 +26,29 @@ const useStyles = makeStyles(theme => {
   };
 });
 
-const ColorButton = ({ color, forwardRef, ...props }) => {
+const ColorButton = ({ color, size, borderWidth = null, forwardRef, className, tooltip, ...props }) => {
   const classes = useStyles();
-  return (
-    <IconButton color="primary" aria-label={color.value}>
-      <span ref={forwardRef} className={classes.root} {...props} style={color.css} />
+  let style = color.css;
+  if (!style) {
+    style = { backgroundColor: color };
+  }
+  if (size) {
+    style.width = `${size}px`;
+    style.height = `${size}px`;
+  }
+  if (borderWidth !== null) {
+    style.border = `${borderWidth}px solid`;
+  }
+
+  let component = (
+    <IconButton color="primary" aria-label={color.value || color} className={className}>
+      <span ref={forwardRef} className={classes.root} {...props} style={style} />
     </IconButton>
   );
+  if (tooltip) {
+    component = <Tooltip title={color.value || color}>{component}</Tooltip>;
+  }
+  return component;
 };
 
 export default ColorButton;
