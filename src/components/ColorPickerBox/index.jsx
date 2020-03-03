@@ -12,6 +12,7 @@ import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import HSVGradient from './HSVGradient';
+import ColorButton from '../ColorButton';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,12 +31,21 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     padding: '0 6px',
   },
+  palette: {
+    display: 'flex',
+    flexDirection: 'row',
+    padding: '0 6px',
+  },
+  paletteButton: {
+    marginRight: '4px',
+    padding: '0px',
+  },
 }));
 
 const ColorSlider = withStyles({
   root: {
     color: '#52af77',
-    width: 'calc(100% - 12px)',
+    width: '100%',
     height: 24,
     padding: 0,
   },
@@ -72,7 +82,7 @@ const AlphaSlider = withStyles({
   root: {
     color: '#6666',
     height: 16,
-    width: 'calc(100% - 12px)',
+    width: '100%',
     padding: 0,
     background: `
       linear-gradient(45deg, #ccc 25%, transparent 25%), 
@@ -111,26 +121,27 @@ const AlphaSlider = withStyles({
   },
 })(Slider);
 
-const displayPalette = palette =>
-  palette && (
-    <div>
-      {palette.forEach(color => (
-        <div>{color.value}</div>
-      ))}
-    </div>
-  );
-
-const displayInput = (color, inputformats) =>
-  inputformats && (
-    <div>
-      {inputformats.forEach(input => (
-        <div>{input}</div>
-      ))}
-    </div>
-  );
-
 const ColorPickerBox = ({ color, palette, inputFormats, deferred }) => {
   const classes = useStyles();
+
+  const displayPalette = () =>
+    palette && (
+      <div className={classes.palette}>
+        {Object.keys(palette).map(name => (
+          <ColorButton size={24} color={palette[name]} className={classes.paletteButton} borderWidth={1} tooltip />
+        ))}
+      </div>
+    );
+
+  const displayInput = () =>
+    inputFormats && (
+      <div className="toto">
+        {inputFormats.map(input => (
+          <div>{input}</div>
+        ))}
+      </div>
+    );
+
   return (
     <Box p={2} className={classes.root}>
       <div className={classes.hsvGradient}>

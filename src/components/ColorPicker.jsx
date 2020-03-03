@@ -25,8 +25,8 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ColorPicker = ({ color: c, disableTextfield, deferred, palette, inputFormats }) => {
-  const color = Colors.parse(c);
+const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats }) => {
+  const color = Colors.parse(value);
   const refButton = React.useRef();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
