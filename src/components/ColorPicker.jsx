@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/jsx-props-no-spreading */
 /**
  * Copyright (c) Mik BRY
@@ -20,11 +22,10 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: 'lightblue',
   },
 }));
 
-const ColorPicker = ({ color: c }) => {
+const ColorPicker = ({ color: c, disableTextfield, deferred, palette, inputFormats }) => {
   const color = Colors.parse(c);
   const refButton = React.useRef();
   const classes = useStyles();
@@ -48,7 +49,13 @@ const ColorPicker = ({ color: c }) => {
   return (
     <div className={classes.root}>
       <ColorButton color={color} forwardRef={refButton} aria-describedby={id} onClick={handleClick} />
-      <TextField color="primary" value={color.value} onClick={() => displayPicker(true)} />
+      {disableTextfield ? (
+        <div role="button" onClick={() => displayPicker(true)}>
+          {color.value}
+        </div>
+      ) : (
+        <TextField color="primary" value={color.value} />
+      )}
       <Popover
         id={id}
         open={open}
@@ -63,7 +70,7 @@ const ColorPicker = ({ color: c }) => {
           horizontal: 'center',
         }}
       >
-        <ColorPickerBox color={color} />
+        <ColorPickerBox color={color} deferred={deferred} palette={palette} inputFormats={inputFormats} />
       </Popover>
     </div>
   );
