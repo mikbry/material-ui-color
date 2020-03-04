@@ -7,5 +7,7 @@
  */
 
 import ColorPicker from './components/ColorPicker';
+import ColorButton from './components/ColorButton';
+import ColorField from './components/ColorField';
 
-export default ColorPicker;
+export { ColorPicker, ColorButton, ColorField };

@@ -11,8 +11,10 @@ import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import HSVGradient from './HSVGradient';
 import ColorButton from '../ColorButton';
+import ColorField from '../ColorField';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -34,11 +36,28 @@ const useStyles = makeStyles(theme => ({
   palette: {
     display: 'flex',
     flexDirection: 'row',
-    padding: '0 6px',
+    flexWrap: 'wrap',
+    padding: '6px',
   },
   paletteButton: {
     marginRight: '4px',
+    marginBottom: '4px',
     padding: '0px',
+  },
+  inputs: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: '6px',
+  },
+  input: {
+    marginRight: '14px',
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    flexWrap: 'wrap',
+    padding: '6px',
   },
 }));
 
@@ -121,23 +140,29 @@ const AlphaSlider = withStyles({
   },
 })(Slider);
 
-const ColorPickerBox = ({ color, palette, inputFormats, deferred }) => {
+const ColorBox = ({ color, palette, inputFormats = ['hex', 'rgb'], deferred }) => {
   const classes = useStyles();
 
   const displayPalette = () =>
     palette && (
       <div className={classes.palette}>
         {Object.keys(palette).map(name => (
-          <ColorButton size={24} color={palette[name]} className={classes.paletteButton} borderWidth={1} tooltip />
+          <ColorButton
+            size={24}
+            color={palette[name]}
+            className={classes.paletteButton}
+            borderWidth={0}
+            tooltip={name}
+          />
         ))}
       </div>
     );
 
   const displayInput = () =>
     inputFormats && (
-      <div className="toto">
+      <div className={classes.inputs}>
         {inputFormats.map(input => (
-          <div>{input}</div>
+          <ColorField color={color.value} type={input} className={classes.input} />
         ))}
       </div>
     );
@@ -151,12 +176,16 @@ const ColorPickerBox = ({ color, palette, inputFormats, deferred }) => {
         <ColorSlider aria-label="color slider" defaultValue={0} />
         <AlphaSlider valueLabelDisplay="auto" aria-label="alpha slider" defaultValue={0} />{' '}
       </div>
-      {displayPalette(palette)}
       {displayInput(inputFormats)}
-      <div>{color.value}</div>
-      {deferred && <Button>Set</Button>}
+      {palette && <Divider />}
+      {displayPalette(palette)}
+      {deferred && (
+        <div className={classes.controls}>
+          <Button>Set</Button>
+        </div>
+      )}
     </Box>
   );
 };
 
-export default ColorPickerBox;
+export default ColorBox;
