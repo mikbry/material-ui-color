@@ -1,5 +1,13 @@
-# material-ui-color-components
-[WIP] Simple &lt;ColorPicker /> components for React Material-UI. No dependencies. It uses Hooks and support RGBA, HSVA, and more !
+# `material-ui-color-components`
+[WIP] Collections of color components for `material-ui` components for React Material-UI. No dependencies. It uses hooks and supports theming and more !
+
+`<ColorPicker/>`
+
+`<ColorInput />`
+
+`<ColorPalette />`
+
+`<ColorButton />`
 
 ## WIP
 TODO list
