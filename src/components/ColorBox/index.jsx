@@ -14,7 +14,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import HSVGradient from './HSVGradient';
 import ColorButton from '../ColorButton';
-import ColorField from '../ColorField';
+import ColorInput from '../ColorInput';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -162,7 +162,7 @@ const ColorBox = ({ color, palette, inputFormats = ['hex', 'rgb'], deferred }) =
     inputFormats && (
       <div className={classes.inputs}>
         {inputFormats.map(input => (
-          <ColorField color={color.value} type={input} className={classes.input} />
+          <ColorInput defaultValue={color.value} type={input} className={classes.input} />
         ))}
       </div>
     );

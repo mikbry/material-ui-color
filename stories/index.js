@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { ColorPicker, ColorButton, ColorField } from '../src';
+import { ColorPicker, ColorButton, ColorInput } from '../src';
 
 const palette = {
   red: '#ff0000',
@@ -52,27 +52,27 @@ const style = { margin: '48px' };
 storiesOf('ColorInput', module)
   .add('default', () => (
     <div style={style}>
-      <ColorField color="" />
+      <ColorInput defaultValue="red" />
     </div>
   ))
   .add('hex', () => (
     <div style={style}>
-      <ColorField color="red" type="hex" margin="dense" size="small" />
+      <ColorInput defaultValue="red" type="hex" margin="dense" size="small" />
     </div>
   ))
   .add('rgb', () => (
     <div style={style}>
-      <ColorField color="red" type="rgb" margin="dense" size="small" />
+      <ColorInput defaultValue="red" type="rgb" margin="dense" size="small" />
     </div>
   ))
   .add('hsv', () => (
     <div style={style}>
-      <ColorField color="red" type="hsv" margin="dense" size="small" />
+      <ColorInput defaultValue="red" type="hsv" margin="dense" size="small" />
     </div>
   ))
   .add('hsl', () => (
     <div style={style}>
-      <ColorField color="red" type="hsl" margin="dense" size="small" />
+      <ColorInput defaultValue="red" type="hsl" margin="dense" size="small" />
     </div>
   ));
 
