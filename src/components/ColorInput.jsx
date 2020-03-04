@@ -30,12 +30,13 @@ const useStyles = makeStyles(() => {
   };
 });
 
-const ColorField = ({ color: c, type: t, margin, size, forwardRef, className, ...props }) => {
-  const color = typeof c === 'string' ? Colors.parse(c) : c;
+const ColorInput = ({ defaultValue, type: t, margin, size, forwardRef, className, ...props }) => {
+  const color = typeof defaultValue === 'string' ? Colors.parse(defaultValue) : defaultValue;
   const type = t || color.type || 'plain';
   const classes = useStyles();
   let field;
   if (type === 'plain') {
+    console.log('color', color);
     field = <TextField defaultValue={color.value} {...props} margin={margin} size={size} />;
   } else {
     const components = Colors.getComponents(color, type);
@@ -66,4 +67,4 @@ const ColorField = ({ color: c, type: t, margin, size, forwardRef, className, ..
   return field;
 };
 
-export default ColorField;
+export default ColorInput;
