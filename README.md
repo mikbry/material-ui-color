@@ -1,13 +1,22 @@
 # `material-ui-color-components`
-[WIP] Collections of color components for `material-ui` components for React Material-UI. No dependencies. It uses hooks and supports theming and more !
+[WIP] Collections of color components for `material-ui` components for React Material-UI. Highly customizable and theming support !
 
-`<ColorPicker/>`
+![WIP](./images/wip.png)
 
-`<ColorInput />`
+## Why ?
 
-`<ColorPalette />`
+- Fully compatible with Material-UI : Theming and low level components
+- Highly customizable ColorPicker : gradient picker, palette, input format, deferred mode
+-  Small in size without extra dependencies
+- Use modern hooks and coding conventions
 
-`<ColorButton />`
+## `<ColorPicker/>`
+
+## `<ColorInput />`
+
+## `<ColorPalette />`
+
+## `<ColorButton />`
 
 ## WIP
 TODO list
