@@ -36,7 +36,6 @@ const ColorInput = ({ defaultValue, type: t, margin, size, forwardRef, className
   const classes = useStyles();
   let field;
   if (type === 'plain') {
-    console.log('color', color);
     field = <TextField defaultValue={color.value} {...props} margin={margin} size={size} />;
   } else {
     const components = Colors.getComponents(color, type);
