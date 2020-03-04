@@ -8,34 +8,48 @@
  */
 
 const parse = (raw, type) => {
-  const color = { raw };
+  let color = { raw };
 
-  // TODO find raw type
-  color.type = 'unknown';
-  // TODO get hexa
-  color.hex = raw;
-  // TODO get rgb
-  color.rgb = [0, 0, 0];
-  // TODO get hsv
-  color.hsv = [0, 0, 0];
-  // TODO get hsl
-  color.hsl = [0, 0, 0];
-  if (!type) {
-    color.value = raw || 'none';
-  }
-  // WIP get css EG if none create a checkered pattern, if an error display a red cross
-  if (!raw) {
-    color.css = {
-      background: `
+  if (raw === 'red') {
+    color = {
+      type: 'plain',
+      hex: 'FF0000',
+      rgb: [255, 0, 0],
+      hsv: [0, 0, 0],
+      hsl: [0, 0, 0],
+      value: raw,
+      raw,
+      css: { backgroundColor: raw },
+    };
+  } else {
+    // TODO find raw type
+    color.type = 'unknown';
+    // TODO get hexa
+    color.hex = raw;
+    // TODO get rgb
+    color.rgb = [0, 0, 0];
+    // TODO get hsv
+    color.hsv = [0, 0, 0];
+    // TODO get hsl
+    color.hsl = [0, 0, 0];
+    if (!type) {
+      color.value = raw || 'none';
+    }
+    // WIP get css EG if none create a checkered pattern, if an error display a red cross
+    if (!raw) {
+      color.css = {
+        background: `
       linear-gradient(45deg, #ccc 25%, transparent 25%), 
       linear-gradient(135deg, #ccc 25%, transparent 25%),
       linear-gradient(45deg, transparent 75%, #ccc 75%),
       linear-gradient(135deg, transparent 75%, #ccc 75%)`,
-      backgroundSize: '8px 8px',
-      backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
-      backgroundColor: 'white',
-    };
+        backgroundSize: '8px 8px',
+        backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
+        backgroundColor: 'white',
+      };
+    }
   }
+
   return color;
 };
 

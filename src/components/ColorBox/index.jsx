@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import HSVGradient from './HSVGradient';
 import ColorButton from '../ColorButton';
+import ColorField from '../ColorField';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,9 +44,19 @@ const useStyles = makeStyles(theme => ({
     marginBottom: '4px',
     padding: '0px',
   },
-  value: {
+  inputs: {
     display: 'flex',
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    padding: '6px',
+  },
+  input: {
+    marginRight: '14px',
+  },
+  controls: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    flexWrap: 'wrap',
     padding: '6px',
   },
 }));
@@ -129,7 +140,7 @@ const AlphaSlider = withStyles({
   },
 })(Slider);
 
-const ColorBox = ({ color, palette, inputFormats, deferred }) => {
+const ColorBox = ({ color, palette, inputFormats = ['hex', 'rgb'], deferred }) => {
   const classes = useStyles();
 
   const displayPalette = () =>
@@ -149,9 +160,9 @@ const ColorBox = ({ color, palette, inputFormats, deferred }) => {
 
   const displayInput = () =>
     inputFormats && (
-      <div className="toto">
+      <div className={classes.inputs}>
         {inputFormats.map(input => (
-          <div>{input}</div>
+          <ColorField color={color.value} type={input} className={classes.input} />
         ))}
       </div>
     );
@@ -165,11 +176,14 @@ const ColorBox = ({ color, palette, inputFormats, deferred }) => {
         <ColorSlider aria-label="color slider" defaultValue={0} />
         <AlphaSlider valueLabelDisplay="auto" aria-label="alpha slider" defaultValue={0} />{' '}
       </div>
-      <div className={classes.value}>{color.value}</div>
       {displayInput(inputFormats)}
       {palette && <Divider />}
       {displayPalette(palette)}
-      {deferred && <Button>Set</Button>}
+      {deferred && (
+        <div className={classes.controls}>
+          <Button>Set</Button>
+        </div>
+      )}
     </Box>
   );
 };

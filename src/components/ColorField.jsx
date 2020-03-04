@@ -10,6 +10,8 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as Colors from '../helpers/colors';
@@ -24,12 +26,11 @@ const useStyles = makeStyles(() => {
     },
     value: {
       margin: '8px',
-      textAlign: 'center',
     },
   };
 });
 
-const ColorField = ({ color: c, type: t, margin, size, forwardRef, ...props }) => {
+const ColorField = ({ color: c, type: t, margin, size, forwardRef, className, ...props }) => {
   const color = typeof c === 'string' ? Colors.parse(c) : c;
   const type = t || color.type || 'plain';
   const classes = useStyles();
@@ -40,21 +41,24 @@ const ColorField = ({ color: c, type: t, margin, size, forwardRef, ...props }) =
     const components = Colors.getComponents(color, type);
     const names = Object.keys(components);
     field = (
-      <div className={classes.root} ref={forwardRef} {...props}>
+      <div className={`${className || ''} ${classes.root}`} ref={forwardRef} {...props}>
         {names.map(cn => (
-          <Input
-            label={components[cn].name}
-            className={classes.value}
-            defaultValue={components[cn].value}
-            margin={margin}
-            size={size}
-            placeholder={components[cn].name}
-            inputProps={{ 'aria-label': 'description', style: { textAlign: 'center' } }}
-            startAdornment={
-              names.length === 1 &&
-              components[cn].unit && <InputAdornment position="start">{components[cn].unit}</InputAdornment>
-            }
-          />
+          <FormControl key={cn} className={classes.value}>
+            <InputLabel htmlFor={cn}>{components[cn].name}</InputLabel>
+            <Input
+              id={cn}
+              label={components[cn].name}
+              defaultValue={components[cn].value}
+              margin={margin}
+              size={size}
+              placeholder={components[cn].name}
+              inputProps={{ 'aria-label': 'description' }}
+              startAdornment={
+                names.length === 1 &&
+                components[cn].unit && <InputAdornment position="start">{components[cn].unit}</InputAdornment>
+              }
+            />
+          </FormControl>
         ))}
       </div>
     );
