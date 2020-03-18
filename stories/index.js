@@ -57,22 +57,22 @@ storiesOf('ColorInput', module)
   ))
   .add('hex', () => (
     <div style={style}>
-      <ColorInput defaultValue="red" type="hex" margin="dense" size="small" />
+      <ColorInput defaultValue="red" format="hex" margin="dense" size="small" />
     </div>
   ))
   .add('rgb', () => (
     <div style={style}>
-      <ColorInput defaultValue="red" type="rgb" margin="dense" size="small" />
+      <ColorInput defaultValue="red" format="rgb" margin="dense" size="small" />
     </div>
   ))
   .add('hsv', () => (
     <div style={style}>
-      <ColorInput defaultValue="red" type="hsv" margin="dense" size="small" />
+      <ColorInput defaultValue="red" format="hsv" margin="dense" size="small" />
     </div>
   ))
   .add('hsl', () => (
     <div style={style}>
-      <ColorInput defaultValue="red" type="hsl" margin="dense" size="small" />
+      <ColorInput defaultValue="red" format="hsl" margin="dense" size="small" />
     </div>
   ));
 

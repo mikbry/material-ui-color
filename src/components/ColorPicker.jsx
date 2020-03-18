@@ -15,7 +15,7 @@ import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';
-import * as Colors from '../helpers/colors';
+import * as ColorTool from '../helpers/colorTool';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -26,10 +26,14 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats }) => {
-  const color = Colors.parse(value);
   const refButton = React.useRef();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [currentValue, setCurrentValue] = React.useState(value);
+  const handleChange = event => {
+    setCurrentValue(event.target.value);
+  };
+  const color = ColorTool.parse(currentValue);
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -51,10 +55,10 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
       <ColorButton color={color} forwardRef={refButton} aria-describedby={id} onClick={handleClick} />
       {disableTextfield ? (
         <div role="button" onClick={() => displayPicker(true)}>
-          {color.value}
+          {color.raw}
         </div>
       ) : (
-        <TextField color="primary" value={color.value} />
+        <TextField color="primary" defaultValue={color.raw} onChange={handleChange} />
       )}
       <Popover
         id={id}
