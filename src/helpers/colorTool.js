@@ -198,6 +198,7 @@ const hue2rgb = (p, q, _t) => {
 
 const fromHsl = hsl => {
   const rgb = [0, 0, 0];
+  // TODO handle non numeric values for hsl
   const h = hsl[0];
   const s = hsl[1];
   const l = hsl[2];
@@ -216,11 +217,48 @@ const fromHsl = hsl => {
   return rgbToInt(rgb);
 };
 
+// eslint-disable-next-line no-unused-vars
+const fromHsv = hsv => {
+  const rgb = [0, 0, 0];
+  // TODO
+  return rgbToInt(rgb);
+};
+
+// eslint-disable-next-line no-unused-vars
+const getHsl = value => {
+  const hsl = [0, 0, 0];
+  // TODO
+  return hsl;
+};
+
+// eslint-disable-next-line no-unused-vars
+const getHsv = value => {
+  const hsv = [0, 0, 0];
+  // TODO
+  return hsv;
+};
+
 const tupleToArray = (value, start = 0) => value.substring(start, value.indexOf(')')).split(',');
 
+const colorsFormats = ['plain', 'hex', 'rgb', 'hsl', 'hsv'];
+
 const colorsFunc = [
-  value => colors[value] && { format: 'plain', value: colors[value] },
+  // plain, ex:  value='[cyan]'
+  value => colors[value[0]],
+  // hex, ex:  value=['ff', '0', '0']
+  value => getRgb(value),
+  // rgb, ex: value=[255, 99, 71]
+  value => fromRgb(value),
+  // hsl, ex: value=[9, 100, 64]
+  value => fromHsl(value),
+  // hsv, ex: value=[9, 100, 64]
+  value => fromHsv(value),
+];
+
+const colorsCssFunc = [
   // ex:  value='cyan'
+  value => colors[value] && { format: 'plain', value: colors[value] },
+  // ex:  value='#fff'
   value => value.startsWith('#') && { format: 'hex', value: parseInt(value.substring(1), 16) },
   // ex: value=rgb(255, 99, 71)
   value => value.startsWith('rgb(') && { format: 'rgb', value: fromRgb(tupleToArray(value)) },
@@ -228,7 +266,7 @@ const colorsFunc = [
   value => value.startsWith('hsl(') && { format: 'hsl', value: fromHsl(tupleToArray(value)) },
 ];
 
-const colorsConditions = [
+const colorsCssConditions = [
   value => !!colors[value],
   // ex:  value='cyan'
   value => value.startsWith('#'),
@@ -245,14 +283,31 @@ const parse = (raw, _format) => {
   let format = _format || 'unknown';
   if (typeof raw === 'string') {
     const r = raw.replace(/\s+/g, '').toLowerCase();
-    const index = colorsConditions.findIndex(func => func(r));
+    const index = colorsCssConditions.findIndex(func => func(r));
     if (index > -1) {
-      ({ value, format } = colorsFunc[0](r));
+      ({ value, format } = colorsCssFunc[index](r));
       color.name = raw;
-      color.format = format;
       color.css = { backgroundColor: raw };
       // TODO alpha
       alpha = 1;
+    }
+  } else if (raw && raw.r && raw.g && raw.b) {
+    // TODO
+  } else if (raw && raw.h && raw.s && raw.l) {
+    // TODO
+  } else if (raw && raw.h && raw.s && raw.v) {
+    // TODO
+  } else if (Number.isInteger(raw)) {
+    value = raw;
+    format = 'number';
+  } else if (Array.isArray(raw) && format) {
+    // TODO
+    const index = colorsFormats.findIndex(f => f === format);
+    if (index > -1) {
+      // TODO
+      value = colorsFunc[index](raw);
+    } else {
+      // TODO error
     }
   }
   if (value === undefined) {
@@ -268,22 +323,31 @@ const parse = (raw, _format) => {
       backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
       backgroundColor: 'white',
     };
-    color.format = 'unknown';
+    format = 'unknown';
     color.name = 'none';
   }
   color.value = value;
   color.alpha = alpha;
-  color.hex = getHexa(value);
+  color.format = format;
+  const hex = getHexa(value);
+  color.hex = hex;
   color.rgb = getRgb(value);
-  color.hsv = [0, 0, 0];
-  color.hsl = [0, 0, 0];
-
+  color.hsv = getHsv(value);
+  color.hsl = getHsl(value);
+  if (!color.css) {
+    color.css = { backgroundColor: `#${hex}` };
+  }
+  if (!color.name) {
+    color.name = `color-${hex}`;
+  }
   return color;
 };
 
+const validateColor = _color => (_color && _color.format && _color.name ? _color : parse(_color));
+
 const getComponents = (_color, format) => {
   // eslint-disable-next-line no-unused-vars
-  const color = typeof _color === 'string' ? parse(_color) : _color;
+  const color = validateColor(_color);
   const components = {};
   // TODO set values
   if (format === 'rgb') {
@@ -306,4 +370,4 @@ const getComponents = (_color, format) => {
   return components;
 };
 
-export { parse, getComponents };
+export { parse, getComponents, validateColor };
