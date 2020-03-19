@@ -219,23 +219,83 @@ const fromHsl = hsl => {
 
 // eslint-disable-next-line no-unused-vars
 const fromHsv = hsv => {
-  const rgb = [0, 0, 0];
-  // TODO
+  let rgb = [0, 0, 0];
+  const h = hsv[0];
+  const s = hsv[1];
+  const v = hsv[2] * 255;
+
+  if (s === 0) {
+    rgb = [v, v, v];
+  } else {
+    let i = Math.floor(h * 6);
+    const f = h * 6 - i;
+    const p = v * (1 - s);
+    const q = v * (1 - s * f);
+    const t = v * (1 - s * (1 - f));
+    i %= 6;
+    if (i === 0) rgb = [v, t, p];
+    if (i === 1) rgb = [q, v, p];
+    if (i === 2) rgb = [p, v, t];
+    if (i === 3) rgb = [p, q, v];
+    if (i === 4) rgb = [t, p, v];
+    if (i === 5) rgb = [v, p, q];
+  }
+
   return rgbToInt(rgb);
 };
 
-// eslint-disable-next-line no-unused-vars
-const getHsl = value => {
-  const hsl = [0, 0, 0];
-  // TODO
-  return hsl;
+const getHsl = rgb => {
+  const r = rgb[0] / 255;
+  const g = rgb[1] / 255;
+  const b = rgb[2] / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  let h;
+  let s;
+  const l = (min + max) / 2;
+
+  if (min === max) return [0, 0, l];
+
+  if (l <= 0.5) s = (max - min) / (max + min);
+  else s = (max - min) / (2 - max - min);
+
+  const rc = (max - r) / (max - min);
+  const gc = (max - g) / (max - min);
+  const bc = (max - b) / (max - min);
+
+  if (r === max) h = bc - gc;
+  else if (g === max) h = 2 + rc - bc;
+  else h = 4 + gc - rc;
+
+  h = (h / 6.0) % 1.0;
+  if (h < 0) h += 1.0;
+
+  return [h, s, l];
 };
 
-// eslint-disable-next-line no-unused-vars
-const getHsv = value => {
-  const hsv = [0, 0, 0];
-  // TODO
-  return hsv;
+const getHsv = rgb => {
+  const r = rgb[0] / 255;
+  const g = rgb[1] / 255;
+  const b = rgb[2] / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  if (max === min) return [0, 0, max];
+
+  const v = max;
+  const s = (max - min) / max;
+  const rc = (max - r) / (max - min);
+  const gc = (max - g) / (max - min);
+  const bc = (max - b) / (max - min);
+
+  let h;
+  if (r === max) h = bc - gc;
+  else if (g === max) h = 2 + rc - bc;
+  else h = 4.0 + gc - rc;
+
+  h = (h / 6.0) % 1.0;
+  if (h < 0) h += 1.0;
+
+  return [h, s, v];
 };
 
 const tupleToArray = (value, start = 0) => value.substring(start, value.indexOf(')')).split(',');
@@ -292,19 +352,20 @@ const parse = (raw, _format) => {
       alpha = 1;
     }
   } else if (raw && raw.r && raw.g && raw.b) {
-    // TODO
+    value = fromRgb([raw.r, raw.g, raw.b]);
+    format = 'rgb';
   } else if (raw && raw.h && raw.s && raw.l) {
-    // TODO
+    value = fromHsl([raw.r, raw.g, raw.b]);
+    format = 'hsl';
   } else if (raw && raw.h && raw.s && raw.v) {
-    // TODO
+    value = fromHsv([raw.r, raw.g, raw.b]);
+    format = 'hsv';
   } else if (Number.isInteger(raw)) {
     value = raw;
     format = 'number';
   } else if (Array.isArray(raw) && format) {
-    // TODO
     const index = colorsFormats.findIndex(f => f === format);
     if (index > -1) {
-      // TODO
       value = colorsFunc[index](raw);
     } else {
       // TODO error
@@ -331,9 +392,10 @@ const parse = (raw, _format) => {
   color.format = format;
   const hex = getHexa(value);
   color.hex = hex;
-  color.rgb = getRgb(value);
-  color.hsv = getHsv(value);
-  color.hsl = getHsl(value);
+  const rgb = getRgb(value);
+  color.rgb = rgb;
+  color.hsv = getHsv(rgb);
+  color.hsl = getHsl(rgb);
   if (!color.css) {
     color.css = { backgroundColor: `#${hex}` };
   }
@@ -346,10 +408,8 @@ const parse = (raw, _format) => {
 const validateColor = _color => (_color && _color.format && _color.name ? _color : parse(_color));
 
 const getComponents = (_color, format) => {
-  // eslint-disable-next-line no-unused-vars
   const color = validateColor(_color);
   const components = {};
-  // TODO set values
   if (format === 'rgb') {
     components.r = { value: color.rgb[0], format: 'integer', min: 0, max: 255, name: 'R' };
     components.g = { value: color.rgb[1], format: 'integer', min: 0, max: 255, name: 'G' };
