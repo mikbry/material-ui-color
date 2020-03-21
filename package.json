@@ -80,9 +80,6 @@
   },
   "dependencies": {},
   "jest": {
-    "setupFilesAfterEnv": [
-      "<rootDir>/config/jest/setup.js"
-    ],
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },

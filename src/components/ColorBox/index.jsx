@@ -162,7 +162,7 @@ const ColorBox = ({ color, palette, inputFormats = ['hex', 'rgb'], deferred }) =
     inputFormats && (
       <div className={classes.inputs}>
         {inputFormats.map(input => (
-          <ColorInput defaultValue={color.value} type={input} className={classes.input} />
+          <ColorInput defaultValue={color.raw} format={input} className={classes.input} />
         ))}
       </div>
     );

@@ -14,7 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import * as Colors from '../helpers/colors';
+import * as ColorTool from '../helpers/colorTool';
 
 const useStyles = makeStyles(() => {
   const size = '140px';
@@ -30,20 +30,20 @@ const useStyles = makeStyles(() => {
   };
 });
 
-const ColorInput = ({ defaultValue, type: t, margin, size, forwardRef, className, ...props }) => {
-  const color = typeof defaultValue === 'string' ? Colors.parse(defaultValue) : defaultValue;
-  const type = t || color.type || 'plain';
+const ColorInput = ({ defaultValue, format: f, margin, size, forwardRef, className, ...props }) => {
+  const color = typeof defaultValue === 'string' ? ColorTool.parse(defaultValue) : defaultValue;
+  const format = f || color.format || 'plain';
   const classes = useStyles();
   let field;
-  if (type === 'plain') {
-    field = <TextField defaultValue={color.value} {...props} margin={margin} size={size} />;
+  if (format === 'plain') {
+    field = <TextField label="Color" defaultValue={color.raw} {...props} margin={margin} size={size} />;
   } else {
-    const components = Colors.getComponents(color, type);
+    const components = ColorTool.getComponents(color, format);
     const names = Object.keys(components);
     field = (
       <div className={`${className || ''} ${classes.root}`} ref={forwardRef} {...props}>
         {names.map(cn => (
-          <FormControl key={cn} className={classes.value}>
+          <FormControl key={cn} className={classes.raw}>
             <InputLabel htmlFor={cn}>{components[cn].name}</InputLabel>
             <Input
               id={cn}
@@ -52,7 +52,7 @@ const ColorInput = ({ defaultValue, type: t, margin, size, forwardRef, className
               margin={margin}
               size={size}
               placeholder={components[cn].name}
-              inputProps={{ 'aria-label': 'description' }}
+              inputProps={{ 'aria-label': `color-${components[cn].name}` }}
               startAdornment={
                 names.length === 1 &&
                 components[cn].unit && <InputAdornment position="start">{components[cn].unit}</InputAdornment>
