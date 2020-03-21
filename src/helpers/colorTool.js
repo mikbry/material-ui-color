@@ -1,3 +1,4 @@
+/* eslint-disable no-bitwise */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
@@ -20,13 +21,29 @@ const getHexa = _n => {
   return hexa;
 };
 
+const getCssHexa = n => {
+  let hex = getHexa(n);
+  if (hex.length === 8) {
+    // TODO
+    hex = hex.substring(2) + hex[0] + hex[1];
+  }
+  return hex;
+};
+
 // eslint-disable-next-line prettier/prettier, no-bitwise
 const getRgb = c => ([(c & 0xff0000) >> 16,  (c & 0x00ff00) >> 8,  (c & 0x0000ff)]);
 
 // eslint-disable-next-line no-bitwise
-const rgbToInt = rgb => (((rgb[0] || 0) & 0xff) << 16) | (((rgb[1] || 0) & 0xff) << 8) | (rgb[2] || 0 & 0xff);
+const rgbToInt = rgb =>
+  (((rgb[3] || 0) & 0xff) << 24) |
+  (((rgb[0] || 0) & 0xff) << 16) |
+  (((rgb[1] || 0) & 0xff) << 8) |
+  (rgb[2] || 0 & 0xff);
 
 const fromRgb = _rgb => {
+  if (!_rgb || _rgb.length < 3 || _rgb.length > 4) {
+    return {};
+  }
   const rgb = _rgb.map(v =>
     // eslint-disable-next-line no-nested-ternary
     typeof v === 'string'
@@ -39,10 +56,51 @@ const fromRgb = _rgb => {
   return { format: 'rgb', value, rgb };
 };
 
+const fromCssHexa = hex => {
+  let alpha;
+  let value = parseInt(hex.substring(1), 16);
+  const rgb = [];
+  if (hex.length === 7 || hex.length === 9) {
+    const padding = hex.length === 9 ? 8 : 0;
+    // #RRGGBB format
+    rgb[0] = (value >> (16 + padding)) & 0xff;
+    rgb[1] = (value >> (8 + padding)) & 0xff;
+    rgb[2] = (value >> padding) & 0xff;
+    if (hex.length === 9) {
+      // #RRGGBBAA format
+      alpha = value & 0xff;
+      rgb[3] = alpha;
+      value = rgbToInt(rgb);
+    }
+  } else if (hex.length === 4 || hex.length === 5) {
+    const padding = hex.length === 5 ? 4 : 0;
+    // #RGB format
+    rgb[0] = (value >> (8 + padding)) & 0xf;
+    rgb[1] = (value >> (4 + padding)) & 0xf;
+    rgb[2] = (value >> padding) & 0xf;
+    rgb[0] |= rgb[0] << 4;
+    rgb[1] |= rgb[1] << 4;
+    rgb[2] |= rgb[2] << 4;
+    if (hex.length === 5) {
+      // #RGBA format
+      alpha = value & 0xf;
+      alpha |= alpha << 4;
+      rgb[3] = alpha;
+    }
+    value = rgbToInt(rgb);
+  } else {
+    // unknown format
+    return {};
+  }
+  return { format: 'hex', value, rgb, alpha };
+};
+
 const fromHsl = _hsl => {
+  if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
+    return {};
+  }
   let rgb;
   const hsl = _hsl;
-  // console.log('fromHsl', hsl);
   let h = hsl[0];
   if (typeof h === 'string') {
     // Handle css unit for hsl
@@ -62,7 +120,6 @@ const fromHsl = _hsl => {
 
   s /= 100;
   l /= 100;
-  // console.log('fromHsl int', h, s, l);
   const c = s * (1 - Math.abs(2 * l - 1));
   const x = c * (1 - Math.abs(((h / 60) % 2) - 1));
   let m = l - c / 2;
@@ -85,13 +142,14 @@ const fromHsl = _hsl => {
   rgb[0] = Math.round((rgb[0] + m) * 255);
   rgb[1] = Math.round((rgb[1] + m) * 255);
   rgb[2] = Math.round((rgb[2] + m) * 255);
-  // console.log('fromHsl rgb', rgb);
   const value = rgbToInt(rgb);
-  // console.log('fromHsl rgb', getHexa(value));
   return { format: 'hsl', value, rgb, hsl };
 };
 
 const fromHsv = hsv => {
+  if (!hsv || hsv.length < 3 || hsv.length > 4) {
+    return {};
+  }
   let rgb;
   const h = hsv[0];
   const s = hsv[1];
@@ -167,7 +225,16 @@ const getHsv = rgb => {
   return [h, s, v];
 };
 
-const tupleToArray = (value, start = 4) => value.substring(start, value.indexOf(')')).split(',');
+const tupleToArray = (value, start = 4) => {
+  const tuple = value.substring(start, value.indexOf(')'));
+  if (tuple.indexOf(',') > -1) {
+    return tuple.split(',');
+  }
+  if (tuple.indexOf(' ') > -1) {
+    return tuple.split(' ').filter(e => e.length > 0);
+  }
+  return undefined;
+};
 
 const colorsFormats = ['plain', 'hex', 'rgb', 'hsl', 'hsv'];
 
@@ -188,16 +255,17 @@ const colorsCssFunc = [
   // ex:  value='cyan'
   value => ({ format: 'plain', value: cssColors[value] }),
   // ex:  value='#fff'
-  value => ({ format: 'hex', value: parseInt(value.substring(1), 16) }),
+  value => fromCssHexa(value),
   // ex: value=rgb(255, 99, 71)
-  value => ({ format: 'rgb', value: fromRgb(tupleToArray(value)) }),
+  value => fromRgb(tupleToArray(value)),
   // ex: value=hsl(9, 100%, 64%)
   value => fromHsl(tupleToArray(value)),
 ];
 
 const colorsCssConditions = [
-  value => !!cssColors[value],
   // ex:  value='cyan'
+  value => cssColors[value] !== undefined,
+  // ex:  value='#fff'
   value => value.startsWith('#'),
   // ex: value=rgb(255, 99, 71)
   value => value.startsWith('rgb('),
@@ -212,24 +280,27 @@ const parse = (raw, _format) => {
   let rgb;
   let hsl;
   let format = _format || 'unknown';
-  if (typeof raw === 'string') {
-    const r = raw.replace(/\s+/g, '').toLowerCase();
+  if (raw === 'transparent') {
+    value = undefined;
+    color.name = raw;
+    format = 'plain';
+  } else if (typeof raw === 'string') {
+    // const r = raw.replace(/\s+/g, '').toLowerCase();
+    const r = raw.trim().toLocaleLowerCase();
     const index = colorsCssConditions.findIndex(func => func(r));
     if (index > -1) {
-      ({ value, format, rgb, hsl } = colorsCssFunc[index](r));
+      ({ value, format, rgb, hsl, alpha } = colorsCssFunc[index](r));
       if (format === 'plain') color.name = raw;
-      // TODO check if raw is css valid
-      color.css = { backgroundColor: raw };
-      // TODO alpha
-      alpha = 1;
+      // Check if raw is css valid
+      if (format) color.css = { backgroundColor: raw };
     }
   } else if (raw && raw.r && raw.g && raw.b) {
-    value = fromRgb([raw.r, raw.g, raw.b]);
+    value = fromRgb([raw.r, raw.g, raw.b, raw.a]);
     format = 'rgb';
   } else if (raw && raw.h && raw.s && raw.l) {
     ({ value, rgb, hsl } = fromHsl([raw.r, raw.g, raw.b]));
   } else if (raw && raw.h && raw.s && raw.v) {
-    value = fromHsv([raw.r, raw.g, raw.b]);
+    value = fromHsv([raw.r, raw.g, raw.b, raw.a]);
     format = 'hsv';
   } else if (Number.isInteger(raw)) {
     value = raw;
@@ -255,13 +326,15 @@ const parse = (raw, _format) => {
       backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
       backgroundColor: 'white',
     };
-    format = 'unknown';
-    color.name = 'none';
+    if (raw !== 'transparent') {
+      format = 'unknown';
+      color.name = 'none';
+    }
   }
   color.value = value;
   color.alpha = alpha;
   color.format = format;
-  const hex = getHexa(value);
+  const hex = getCssHexa(value);
   color.hex = hex;
   rgb = rgb || getRgb(value);
   color.rgb = rgb;

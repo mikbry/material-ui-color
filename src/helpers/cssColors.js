@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
@@ -8,7 +7,7 @@
  */
 
 //  https://drafts.csswg.org/css-color/
-const colors = {
+const CSSCOLORS = {
   aliceblue: 0xf0f8ff,
   antiquewhite: 0xfaebd7,
   aqua: 0x00ffff,
@@ -159,4 +158,4 @@ const colors = {
   yellowgreen: 0x9acd32,
 };
 
-export default colors;
+export default CSSCOLORS;
