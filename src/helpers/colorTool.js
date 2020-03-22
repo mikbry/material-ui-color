@@ -102,13 +102,8 @@ const fromCssHexa = hex => {
   return { format: 'hex', value, rgb, alpha };
 };
 
-const fromHsl = _hsl => {
-  if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
-    return {};
-  }
-  let rgb;
-  const hsl = _hsl;
-  let h = hsl[0];
+const getDeg = _h => {
+  let h = _h;
   if (typeof h === 'string') {
     // Handle css unit for hsl
     if (h.indexOf('deg') > -1) h = h.substr(0, h.length - 3);
@@ -117,14 +112,27 @@ const fromHsl = _hsl => {
     if (h >= 360) h %= 360;
     h = parseFloat(h, 10);
   }
-  let s = hsl[1];
-  if (typeof s === 'string') s = parseFloat(s.indexOf('%') > -1 ? s.substring(0, s.length - 1) : s, 10);
-  let l = hsl[2];
-  if (typeof l === 'string') l = parseFloat(l.indexOf('%') > -1 ? l.substring(0, l.length - 1) : l, 10);
+  return h;
+};
+
+const getValue = _v => {
+  let v = _v;
+  if (typeof v === 'string') v = parseFloat(v.indexOf('%') > -1 ? v.substring(0, v.length - 1) : v, 10);
+  return v;
+};
+
+const fromHsl = _hsl => {
+  if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
+    return {};
+  }
+  let rgb;
+  const hsl = _hsl;
+  const h = getDeg(hsl[0]);
+  let s = getValue(hsl[1]);
+  let l = getValue(hsl[2]);
   hsl[0] = h;
   hsl[1] = s;
   hsl[2] = l;
-
   if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(l)) return {};
 
   s /= 100;
@@ -169,18 +177,25 @@ const fromHsv = hsv => {
     return {};
   }
   let rgb;
-  const h = hsv[0];
-  const s = hsv[1];
-  const v = hsv[2] * 255;
+  let h = getDeg(hsv[0]);
+  let s = getValue(hsv[1]);
+  let v = getValue(hsv[2]);
 
+  if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(v)) return {};
+
+  v *= 255 / 100;
   if (s === 0) {
+    v = Math.round(v);
     rgb = [v, v, v];
   } else {
+    h /= 360;
+    s /= 100;
     let i = Math.floor(h * 6);
     const f = h * 6 - i;
-    const p = v * (1 - s);
-    const q = v * (1 - s * f);
-    const t = v * (1 - s * (1 - f));
+    const p = Math.round(v * (1 - s));
+    const q = Math.round(v * (1 - s * f));
+    const t = Math.round(v * (1 - s * (1 - f)));
+    v = Math.round(v);
     i %= 6;
     if (i === 0) rgb = [v, t, p];
     if (i === 1) rgb = [q, v, p];
@@ -189,9 +204,17 @@ const fromHsv = hsv => {
     if (i === 4) rgb = [t, p, v];
     if (i === 5) rgb = [v, p, q];
   }
-
+  let alpha = hsv[3];
+  if (alpha !== undefined) {
+    if (typeof alpha === 'string') {
+      alpha =
+        alpha.indexOf('%') > -1 ? parseFloat(alpha.substring(0, alpha.length - 1), 10) / 100 : parseFloat(alpha, 10);
+    }
+    alpha = Math.floor(alpha * 255);
+    rgb[3] = alpha;
+  }
   const value = rgbToInt(rgb);
-  return { format: 'hsl', value, rgb, hsv };
+  return { format: 'hsl', value, rgb, hsv, alpha };
 };
 
 const getHsl = rgb => {
