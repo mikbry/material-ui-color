@@ -21,10 +21,16 @@ const getHexa = _n => {
   return hexa;
 };
 
-const getCssHexa = n => {
+const getCssHexa = (n, alpha) => {
   let hex = getHexa(n);
-  if (hex.length === 8) {
-    hex = hex.substring(2) + hex[0] + hex[1];
+  if (!Number.isNaN(alpha) && alpha !== undefined) {
+    let a = alpha.toString(16).toUpperCase();
+    if (a.length === 1) a = `0${a}`;
+    if (hex.length === 8) {
+      hex = hex.substring(2) + a;
+    } else {
+      hex += a;
+    }
   }
   return hex;
 };
@@ -96,13 +102,8 @@ const fromCssHexa = hex => {
   return { format: 'hex', value, rgb, alpha };
 };
 
-const fromHsl = _hsl => {
-  if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
-    return {};
-  }
-  let rgb;
-  const hsl = _hsl;
-  let h = hsl[0];
+const getDeg = _h => {
+  let h = _h;
   if (typeof h === 'string') {
     // Handle css unit for hsl
     if (h.indexOf('deg') > -1) h = h.substr(0, h.length - 3);
@@ -111,16 +112,28 @@ const fromHsl = _hsl => {
     if (h >= 360) h %= 360;
     h = parseFloat(h, 10);
   }
-  let s = hsl[1];
-  if (typeof s === 'string') s = parseFloat(s.indexOf('%') > -1 ? s.substring(0, s.length - 1) : s, 10);
-  let l = hsl[2];
-  if (typeof l === 'string') l = parseFloat(l.indexOf('%') > -1 ? l.substring(0, l.length - 1) : l, 10);
+  return h;
+};
+
+const getValue = _v => {
+  let v = _v;
+  if (typeof v === 'string') v = parseFloat(v.indexOf('%') > -1 ? v.substring(0, v.length - 1) : v, 10);
+  return v;
+};
+
+const fromHsl = _hsl => {
+  if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
+    return {};
+  }
+  let rgb;
+  const hsl = _hsl;
+  const h = getDeg(hsl[0]);
+  let s = getValue(hsl[1]);
+  let l = getValue(hsl[2]);
   hsl[0] = h;
   hsl[1] = s;
   hsl[2] = l;
-
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(h) || isNaN(s) | isNaN(l)) return {};
+  if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(l)) return {};
 
   s /= 100;
   l /= 100;
@@ -152,7 +165,7 @@ const fromHsl = _hsl => {
       alpha =
         alpha.indexOf('%') > -1 ? parseFloat(alpha.substring(0, alpha.length - 1), 10) / 100 : parseFloat(alpha, 10);
     }
-    alpha *= 255;
+    alpha = Math.floor(alpha * 255);
     rgb[3] = alpha;
   }
   const value = rgbToInt(rgb);
@@ -164,18 +177,25 @@ const fromHsv = hsv => {
     return {};
   }
   let rgb;
-  const h = hsv[0];
-  const s = hsv[1];
-  const v = hsv[2] * 255;
+  let h = getDeg(hsv[0]);
+  let s = getValue(hsv[1]);
+  let v = getValue(hsv[2]);
 
+  if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(v)) return {};
+
+  v *= 255 / 100;
   if (s === 0) {
+    v = Math.round(v);
     rgb = [v, v, v];
   } else {
+    h /= 360;
+    s /= 100;
     let i = Math.floor(h * 6);
     const f = h * 6 - i;
-    const p = v * (1 - s);
-    const q = v * (1 - s * f);
-    const t = v * (1 - s * (1 - f));
+    const p = Math.round(v * (1 - s));
+    const q = Math.round(v * (1 - s * f));
+    const t = Math.round(v * (1 - s * (1 - f)));
+    v = Math.round(v);
     i %= 6;
     if (i === 0) rgb = [v, t, p];
     if (i === 1) rgb = [q, v, p];
@@ -184,9 +204,17 @@ const fromHsv = hsv => {
     if (i === 4) rgb = [t, p, v];
     if (i === 5) rgb = [v, p, q];
   }
-
+  let alpha = hsv[3];
+  if (alpha !== undefined) {
+    if (typeof alpha === 'string') {
+      alpha =
+        alpha.indexOf('%') > -1 ? parseFloat(alpha.substring(0, alpha.length - 1), 10) / 100 : parseFloat(alpha, 10);
+    }
+    alpha = Math.floor(alpha * 255);
+    rgb[3] = alpha;
+  }
   const value = rgbToInt(rgb);
-  return { format: 'hsl', value, rgb, hsv };
+  return { format: 'hsl', value, rgb, hsv, alpha };
 };
 
 const getHsl = rgb => {
@@ -283,6 +311,7 @@ const parse = (raw, _format) => {
   let alpha;
   let rgb;
   let hsl;
+  let hsv;
   let format = _format || 'unknown';
   if (raw === 'transparent') {
     value = undefined;
@@ -297,14 +326,6 @@ const parse = (raw, _format) => {
       // Check if raw is css valid
       if (format) color.css = { backgroundColor: raw };
     }
-  } else if (raw && raw.r && raw.g && raw.b) {
-    value = fromRgb([raw.r, raw.g, raw.b, raw.a]);
-    format = 'rgb';
-  } else if (raw && raw.h && raw.s && raw.l) {
-    ({ value, rgb, hsl } = fromHsl([raw.r, raw.g, raw.b]));
-  } else if (raw && raw.h && raw.s && raw.v) {
-    value = fromHsv([raw.r, raw.g, raw.b, raw.a]);
-    format = 'hsv';
   } else if (Number.isInteger(raw)) {
     value = raw;
     format = 'number';
@@ -315,10 +336,22 @@ const parse = (raw, _format) => {
     } else {
       // TODO error
     }
+  } else if (raw && 'r' in raw && 'g' in raw && 'b' in raw) {
+    rgb = [raw.r, raw.g, raw.b];
+    if (raw.a) rgb.push(raw.a);
+    ({ value, format, rgb, alpha } = fromRgb(rgb));
+  } else if (raw && 'h' in raw && 's' in raw && 'l' in raw) {
+    hsl = [raw.h, raw.s, raw.l];
+    if (raw.a) hsl.push(raw.a);
+    ({ value, format, rgb, hsl, alpha } = fromHsl(hsl));
+  } else if (raw && 'h' in raw && 's' in raw && 'v' in raw) {
+    hsv = [raw.h, raw.s, raw.v];
+    if (raw.a) hsv.push(raw.a);
+    ({ value, format, rgb, hsv, alpha } = fromHsv(hsv));
   }
   if (value === undefined) {
     value = 0;
-    alpha = 0;
+    alpha = undefined;
     color.css = {
       background: `
         linear-gradient(45deg, #ccc 25%, transparent 25%), 
@@ -335,13 +368,13 @@ const parse = (raw, _format) => {
     }
   }
   color.value = value;
-  color.alpha = alpha === undefined ? 1 : alpha;
+  color.alpha = Number.isNaN(alpha) ? 1 : alpha;
   color.format = format;
-  const hex = getCssHexa(value);
+  const hex = getCssHexa(value, alpha);
   color.hex = hex;
   rgb = rgb || getRgb(value);
   color.rgb = rgb;
-  color.hsv = getHsv(rgb);
+  color.hsv = hsv || getHsv(rgb);
   color.hsl = hsl || getHsl(rgb);
   if (!color.css) {
     color.css = { backgroundColor: `#${hex}` };
