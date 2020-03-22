@@ -223,60 +223,67 @@ test('ColorTool parse css rgb / rgba', () => {
   rgb = ColorTool.parse('#F09A');
   expect(rgb.hex).toEqual('FF0099AA');
   // Functional syntax with alpha value
-  /* rgb = ColorTool.parse('rgb(255, 0, 153, 1)');
+  rgb = ColorTool.parse('rgb(255, 0, 153, 1)');
   expect(rgb.hex).toEqual('FF0099FF');
   rgb = ColorTool.parse('rgb(255, 0, 153, 100%)');
   expect(rgb.hex).toEqual('FF0099FF');
   rgb = ColorTool.parse('rgb(255 0 153 / 1)');
   expect(rgb.hex).toEqual('FF0099FF');
   rgb = ColorTool.parse('rgb(255 0 153 / 100%)');
-  expect(rgb.hex).toEqual('FF0099FF'); */
+  expect(rgb.hex).toEqual('FF0099FF');
   // Functional syntax with floats value
-  /* rgb = ColorTool.parse('rgb(255, 0, 153, 1.0)');
+  rgb = ColorTool.parse('rgb(255, 0, 153, 1.0)');
   expect(rgb.hex).toEqual('FF0099FF');
   rgb = ColorTool.parse('rgb(255, 0, 153, 100.0%)');
   expect(rgb.hex).toEqual('FF0099FF');
-  rgb = ColorTool.parse('rgb(1e2, .5e1, .5e0, +.25e2%)');
-  expect(rgb.hex).toEqual('FF0099FF'); */
+  rgb = ColorTool.parse('rgb(2.55e2, 0e0, 1.53e2, +1e2%)');
+  expect(rgb.hex).toEqual('FF0099FF');
 
   // TODO RGBA variations
-  /* Hexadecimal syntax
-    #3a30                    //   0% opaque green
-    #3A3F                    // full opaque green 
-    #33aa3300                //   0% opaque green 
-    #33AA3380                //  50% opaque green 
-
   // Functional syntax
-    rgba(51, 170, 51, .1)    //  10% opaque green
-    rgba(51, 170, 51, .4)    //  40% opaque green
-    rgba(51, 170, 51, .7)    //  70% opaque green
-    rgba(51, 170, 51,  1)    // full opaque green 
-
+  rgb = ColorTool.parse('rgba(51, 170, 51, .1)');
+  expect(rgb.hex).toEqual('33AA331A');
+  rgb = ColorTool.parse('rgba(51, 170, 51, .4)');
+  expect(rgb.hex).toEqual('33AA3366');
+  rgb = ColorTool.parse('rgba(51, 170, 51, .7)');
+  expect(rgb.hex).toEqual('33AA33B3');
+  rgb = ColorTool.parse('rgba(51, 170, 51,  1)');
+  expect(rgb.hex).toEqual('33AA33FF');
   // Whitespace syntax
-    rgba(51 170 51 / 0.4)    // 40% opaque green
-    rgba(51 170 51 / 40%)    //  40% opaque green
+  rgb = ColorTool.parse('rgba(51 170 51 / 0.4)');
+  expect(rgb.hex).toEqual('33AA3366');
+  rgb = ColorTool.parse('rgba(51 170 51 / 40%) ');
+  expect(rgb.hex).toEqual('33AA3366');
 
   // Functional syntax with floats value
-    rgba(255, 0, 153.6, 1)
-    rgba(1e2, .5e1, .5e0, +.25e2%) */
+  rgb = ColorTool.parse('rgba(255, 0, 153.6, 1)');
+  expect(rgb.hex).toEqual('FF009AFF');
+  rgb = ColorTool.parse('rgba(1e2, .5e1, .5e0, +.25e2%)');
+  expect(rgb.hex).toEqual('64050140');
 
   // TODO error syntax
-  /*
-      rgb()
-      rgb(0, 0,)
-      rgb(0, 0, 0,
-      rgb(aa, aa, aa)
-      rgb(x, x, x)
-      same for rgba
-    */
+  rgb = ColorTool.parse('rgb()');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgba()');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgb(');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgba(');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgb(255,)');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgba(255,)');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgb(aa, b, c)');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgba(aa, b, c)');
+  expect(rgb.hex).toEqual('000000');
 });
 
 test('ColorTool parse css hsl / hsla', () => {
   let hsl = ColorTool.parse('hsl(180,100%,50%)');
-  // console.log('hsl=', hsl);
   expect(hsl.hex).toEqual('00FFFF');
   hsl = ColorTool.parse('hsl(180deg,0%,50%)');
-  // console.log('hsl=', hsl);
   expect(hsl.hex).toEqual('808080');
   // Same color = lavender
   /* These examples all specify the same color: a lavender.
