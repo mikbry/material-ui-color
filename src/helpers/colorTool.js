@@ -24,7 +24,6 @@ const getHexa = _n => {
 const getCssHexa = n => {
   let hex = getHexa(n);
   if (hex.length === 8) {
-    // TODO
     hex = hex.substring(2) + hex[0] + hex[1];
   }
   return hex;
@@ -55,7 +54,7 @@ const fromRgb = _rgb => {
       : Math.round(i === 3 ? v * 255 : v),
   );
   const value = rgbToInt(rgb);
-  return { format: 'rgb', value, rgb };
+  return { format: 'rgb', value, rgb, alpha: rgb[3] };
 };
 
 const fromCssHexa = hex => {
@@ -120,6 +119,9 @@ const fromHsl = _hsl => {
   hsl[1] = s;
   hsl[2] = l;
 
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(h) || isNaN(s) | isNaN(l)) return {};
+
   s /= 100;
   l /= 100;
   const c = s * (1 - Math.abs(2 * l - 1));
@@ -144,8 +146,17 @@ const fromHsl = _hsl => {
   rgb[0] = Math.round((rgb[0] + m) * 255);
   rgb[1] = Math.round((rgb[1] + m) * 255);
   rgb[2] = Math.round((rgb[2] + m) * 255);
+  let alpha = hsl[3];
+  if (alpha !== undefined) {
+    if (typeof alpha === 'string') {
+      alpha =
+        alpha.indexOf('%') > -1 ? parseFloat(alpha.substring(0, alpha.length - 1), 10) / 100 : parseFloat(alpha, 10);
+    }
+    alpha *= 255;
+    rgb[3] = alpha;
+  }
   const value = rgbToInt(rgb);
-  return { format: 'hsl', value, rgb, hsl };
+  return { format: 'hsl', value, rgb, hsl, alpha };
 };
 
 const fromHsv = hsv => {
@@ -190,7 +201,7 @@ const getHsl = rgb => {
   let l = (cmin + cmax) / 2;
   if (delta !== 0) {
     s = delta / (1 - Math.abs(2 * l - 1));
-    s = +(s * 100).toFixed(1);
+    s = Math.round(+(s * 100).toFixed(1));
 
     if (cmax === r) h = ((g - b) / delta) % 6;
     else if (cmax === g) h = (b - r) / delta + 2;
@@ -198,8 +209,12 @@ const getHsl = rgb => {
     h = Math.round(h * 60);
     if (h < 0) h += 360;
   }
-  l = Math.floor(l + l * 100);
-  return [h, s, l];
+  l = Math.round(l + l * 100);
+  const hsl = [h, s, l];
+  if (rgb.length === 4) {
+    hsl[3] = rgb[3] / 255;
+  }
+  return hsl;
 };
 
 const getHsv = rgb => {
@@ -241,37 +256,24 @@ const tupleToArray = value => {
 const colorsFormats = ['plain', 'hex', 'rgb', 'hsl', 'hsv'];
 
 const colorsFunc = [
-  // plain, ex:  value='[cyan]'
   value => cssColors[value[0]],
-  // hex, ex:  value=['ff', '0', '0']
   value => getRgb(value),
-  // rgb, ex: value=[255, 99, 71]
   value => fromRgb(value),
-  // hsl, ex: value=[9, 100, 64]
   value => fromHsl(value),
-  // hsv, ex: value=[9, 100, 64]
   value => fromHsv(value),
 ];
 
 const colorsCssFunc = [
-  // ex:  value='cyan'
   value => ({ format: 'plain', value: cssColors[value] }),
-  // ex:  value='#fff'
   value => fromCssHexa(value),
-  // ex: value=rgb(255, 99, 71)
   value => fromRgb(tupleToArray(value)),
-  // ex: value=hsl(9, 100%, 64%)
   value => fromHsl(tupleToArray(value)),
 ];
 
 const colorsCssConditions = [
-  // ex:  value='cyan'
   value => cssColors[value] !== undefined,
-  // ex:  value='#fff'
   value => value.startsWith('#'),
-  // ex: value=rgb(255, 99, 71)
   value => value.startsWith('rgb(') || value.startsWith('rgba('),
-  // ex: value=hsl(9, 100%, 64%)
   value => value.startsWith('hsl(') || value.startsWith('hsla('),
 ];
 
@@ -287,7 +289,6 @@ const parse = (raw, _format) => {
     color.name = raw;
     format = 'plain';
   } else if (typeof raw === 'string') {
-    // const r = raw.replace(/\s+/g, '').toLowerCase();
     const r = raw.trim().toLocaleLowerCase();
     const index = colorsCssConditions.findIndex(func => func(r));
     if (index > -1) {
@@ -334,7 +335,7 @@ const parse = (raw, _format) => {
     }
   }
   color.value = value;
-  color.alpha = alpha;
+  color.alpha = alpha === undefined ? 1 : alpha;
   color.format = format;
   const hex = getCssHexa(value);
   color.hex = hex;
@@ -346,8 +347,8 @@ const parse = (raw, _format) => {
     color.css = { backgroundColor: `#${hex}` };
   }
   if (!color.name) {
-    // TODO find color name
-    color.name = `color-${hex}`;
+    // find color name
+    color.name = Object.keys(cssColors).find(n => cssColors[n] === value) || `color-${hex}`;
   }
   return color;
 };

@@ -175,6 +175,11 @@ test('ColorTool parse simple', () => {
   color = ColorTool.parse(0xff0000);
   expect(color.raw).toEqual(0xff0000);
   expect(color.hex).toEqual('FF0000');
+
+  color = ColorTool.parse(0xf0f8ff);
+  expect(color.name).toEqual('aliceblue');
+  color = ColorTool.parse(0xf4a460);
+  expect(color.name).toEqual('sandybrown');
 });
 
 test('ColorTool parse css color keywords', () => {
@@ -261,7 +266,7 @@ test('ColorTool parse css rgb / rgba', () => {
   rgb = ColorTool.parse('rgba(1e2, .5e1, .5e0, +.25e2%)');
   expect(rgb.hex).toEqual('64050140');
 
-  // TODO error syntax
+  // error syntax
   rgb = ColorTool.parse('rgb()');
   expect(rgb.hex).toEqual('000000');
   rgb = ColorTool.parse('rgba()');
@@ -276,7 +281,9 @@ test('ColorTool parse css rgb / rgba', () => {
   expect(rgb.hex).toEqual('000000');
   rgb = ColorTool.parse('rgb(aa, b, c)');
   expect(rgb.hex).toEqual('000000');
-  rgb = ColorTool.parse('rgba(aa, b, c)');
+  rgb = ColorTool.parse('rgba(aa, b, c, d)');
+  expect(rgb.hex).toEqual('000000');
+  rgb = ColorTool.parse('rgba(0, 0, 0, d)');
   expect(rgb.hex).toEqual('000000');
 });
 
@@ -286,35 +293,74 @@ test('ColorTool parse css hsl / hsla', () => {
   hsl = ColorTool.parse('hsl(180deg,0%,50%)');
   expect(hsl.hex).toEqual('808080');
   // Same color = lavender
-  /* These examples all specify the same color: a lavender.
-  hsl(270,60%,70%)
-  hsl(270, 60%, 70%)
-  hsl(270 60% 70%)
-  hsl(270deg, 60%, 70%)
-  hsl(4.71239rad, 60%, 70%)
-  hsl(.75turn, 60%, 70%) */
+  hsl = ColorTool.parse('hsl(270,60%,70%)');
+  expect(hsl.name).toEqual('color-B385E0');
+  hsl = ColorTool.parse('hsl(270 60% 70%)');
+  expect(hsl.name).toEqual('color-B385E0');
+  hsl = ColorTool.parse('hsl(270deg, 60%, 70%)');
+  expect(hsl.name).toEqual('color-B385E0');
+  hsl = ColorTool.parse('hsl(4.71239rad, 60%, 70%)');
+  expect(hsl.name).toEqual('color-B385E0');
+  hsl = ColorTool.parse('hsl(.75turn, 60%, 70%)');
+  expect(hsl.name).toEqual('color-B385E0');
 
-  /* These examples all specify the same color: a lavender that is 15% opaque.
-hsl(270, 60%, 50%, .15)
-hsl(270, 60%, 50%, 15%)
-hsl(270 60% 50% / .15)
-hsl(270 60% 50% / 15%) */
-  // TODO parse other css hsl / hsla
-  /*
-    hsl(180deg,100%,50%)
-    hsl(180deg 100% 50%)
-    hsl(3.14rad,100%,50%)
-    hsl(3.14rad 100% 50%)
-    hsl(0.5turn,100%,50%)
-    hsl(0.5turn 100% 50%)
-    hsla(240, 100%, 50%, .05)
-    hsla(240, 100%, 50%, .4)
-    hsla(240, 100%, 50%, .7)
-    hsla(240, 100%, 50%, 1)
-    hsla(240 100% 50% / .05)
-    hsla(240 100% 50% / 5%)
- */
-  // TODO parse non valid css hsl
+  // These examples all specify the same color: a lavender that is 15% opaque.
+
+  hsl = ColorTool.parse('hsl(270, 60%, 50%, .15)');
+  expect(hsl.hex).toEqual('8033CC26');
+  hsl = ColorTool.parse('hsl(270, 60%, 50%, 15%)');
+  expect(hsl.hex).toEqual('8033CC26');
+  hsl = ColorTool.parse('hsl(270 60% 50% / .15)');
+  expect(hsl.hex).toEqual('8033CC26');
+  hsl = ColorTool.parse('hsl(270 60% 50% / 15%) ');
+  expect(hsl.hex).toEqual('8033CC26');
+
+  // parse other css hsl / hsla
+  hsl = ColorTool.parse('hsl(180deg,100%,50%)');
+  expect(hsl.hex).toEqual('00FFFF');
+  hsl = ColorTool.parse('hsl(180deg 100% 50%)');
+  expect(hsl.hex).toEqual('00FFFF');
+  hsl = ColorTool.parse('hsl(3.14rad,100%,50%)');
+  expect(hsl.hex).toEqual('00FFFF');
+  hsl = ColorTool.parse('hsl(3.14rad 100% 50%)');
+  expect(hsl.hex).toEqual('00FFFF');
+  hsl = ColorTool.parse('hsl(0.5turn,100%,50%)');
+  expect(hsl.hex).toEqual('00FFFF');
+  hsl = ColorTool.parse('hsl(0.5turn,100%,50%)');
+  expect(hsl.hex).toEqual('00FFFF');
+
+  hsl = ColorTool.parse('hsla(240, 100%, 50%, .05)');
+  expect(hsl.hex).toEqual('0000FF0C');
+  hsl = ColorTool.parse('hsla(240, 100%, 50%, .4)');
+  expect(hsl.hex).toEqual('0000FF66');
+  hsl = ColorTool.parse('hsla(240, 100%, 50%, .7)');
+  expect(hsl.hex).toEqual('0000FFB2');
+  hsl = ColorTool.parse('hsla(240, 100%, 50%, 1)');
+  expect(hsl.hex).toEqual('0000FFFF');
+  hsl = ColorTool.parse('hsla(240 100% 50% / .05)');
+  expect(hsl.hex).toEqual('0000FF0C');
+  hsl = ColorTool.parse('hsla(240 100% 50% / 5%)');
+  expect(hsl.hex).toEqual('0000FF0C');
+
+  // parse non valid css hsl
+  hsl = ColorTool.parse('hsl()');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsla()');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsl(');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsla(');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsl(255,)');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsla(255,)');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsl(aa, b, c)');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsla(aa, b, c, d)');
+  expect(hsl.hex).toEqual('000000');
+  hsl = ColorTool.parse('hsla(0, 0, 0, d)');
+  expect(hsl.hex).toEqual('000000');
 });
 
 test('ColorTool parse rgb objects', () => {
