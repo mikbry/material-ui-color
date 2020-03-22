@@ -364,7 +364,34 @@ test('ColorTool parse css hsl / hsla', () => {
 });
 
 test('ColorTool parse rgb objects', () => {
-  // TODO
+  let color = ColorTool.parse({ r: 0xff, g: 0, b: 0 });
+  expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0 });
+  expect(color.hex).toEqual('FF0000');
+
+  color = ColorTool.parse({ r: '0xf0', g: '0xf8', b: '0xFF' });
+  expect(color.name).toEqual('aliceblue');
+  color = ColorTool.parse({ r: '0xf4', g: '0xa4', b: 0x60 });
+  expect(color.name).toEqual('sandybrown');
+
+  color = ColorTool.parse({ r: 0xffff, g: -100, b: -1000 });
+  expect(color.raw).toEqual({ r: 0xffff, g: -100, b: -1000 }); // TODO normalize result ?
+  expect(color.hex).toEqual('FF0000');
+
+  color = ColorTool.parse({ r: 'aa', g: 'bb', b: 'cc' });
+  expect(color.raw).toEqual({ r: 'aa', g: 'bb', b: 'cc' }); // TODO normalize result ?
+  expect(color.hex).toEqual('000000');
+
+  color = ColorTool.parse({ r: 0xff, g: 0, b: 0, a: '100%' });
+  expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0, a: '100%' });
+  expect(color.hex).toEqual('FF0000FF');
+
+  color = ColorTool.parse({ r: 0xff, g: 0, b: 0, a: 1 });
+  expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0, a: 1 });
+  expect(color.hex).toEqual('FF0000FF');
+
+  color = ColorTool.parse({ r: 0xff, g: 0, b: 0, a: '0%' });
+  expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0, a: '0%' });
+  expect(color.hex).toEqual('FF000000');
 });
 
 test('ColorTool parse hsl objects', () => {

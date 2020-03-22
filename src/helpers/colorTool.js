@@ -21,10 +21,16 @@ const getHexa = _n => {
   return hexa;
 };
 
-const getCssHexa = n => {
+const getCssHexa = (n, alpha) => {
   let hex = getHexa(n);
-  if (hex.length === 8) {
-    hex = hex.substring(2) + hex[0] + hex[1];
+  if (!Number.isNaN(alpha) && alpha !== undefined) {
+    let a = alpha.toString(16).toUpperCase();
+    if (a.length === 1) a = `0${a}`;
+    if (hex.length === 8) {
+      hex = hex.substring(2) + a;
+    } else {
+      hex += a;
+    }
   }
   return hex;
 };
@@ -119,8 +125,7 @@ const fromHsl = _hsl => {
   hsl[1] = s;
   hsl[2] = l;
 
-  // eslint-disable-next-line no-restricted-globals
-  if (isNaN(h) || isNaN(s) | isNaN(l)) return {};
+  if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(l)) return {};
 
   s /= 100;
   l /= 100;
@@ -152,7 +157,7 @@ const fromHsl = _hsl => {
       alpha =
         alpha.indexOf('%') > -1 ? parseFloat(alpha.substring(0, alpha.length - 1), 10) / 100 : parseFloat(alpha, 10);
     }
-    alpha *= 255;
+    alpha = Math.floor(alpha * 255);
     rgb[3] = alpha;
   }
   const value = rgbToInt(rgb);
@@ -283,6 +288,7 @@ const parse = (raw, _format) => {
   let alpha;
   let rgb;
   let hsl;
+  let hsv;
   let format = _format || 'unknown';
   if (raw === 'transparent') {
     value = undefined;
@@ -297,14 +303,6 @@ const parse = (raw, _format) => {
       // Check if raw is css valid
       if (format) color.css = { backgroundColor: raw };
     }
-  } else if (raw && raw.r && raw.g && raw.b) {
-    value = fromRgb([raw.r, raw.g, raw.b, raw.a]);
-    format = 'rgb';
-  } else if (raw && raw.h && raw.s && raw.l) {
-    ({ value, rgb, hsl } = fromHsl([raw.r, raw.g, raw.b]));
-  } else if (raw && raw.h && raw.s && raw.v) {
-    value = fromHsv([raw.r, raw.g, raw.b, raw.a]);
-    format = 'hsv';
   } else if (Number.isInteger(raw)) {
     value = raw;
     format = 'number';
@@ -315,10 +313,22 @@ const parse = (raw, _format) => {
     } else {
       // TODO error
     }
+  } else if (raw && 'r' in raw && 'g' in raw && 'b' in raw) {
+    rgb = [raw.r, raw.g, raw.b];
+    if (raw.a) rgb.push(raw.a);
+    ({ value, format, rgb, alpha } = fromRgb(rgb));
+  } else if (raw && 'h' in raw && 's' in raw && 'l' in raw) {
+    hsl = [raw.h, raw.s, raw.l];
+    if (raw.a) hsl.push(raw.a);
+    ({ value, format, rgb, hsl, alpha } = fromHsl(hsl));
+  } else if (raw && 'h' in raw && 's' in raw && 'v' in raw) {
+    hsv = [raw.h, raw.s, raw.v];
+    if (raw.a) hsv.push(raw.a);
+    ({ value, format, rgb, hsv, alpha } = fromHsv(hsv));
   }
   if (value === undefined) {
     value = 0;
-    alpha = 0;
+    alpha = undefined;
     color.css = {
       background: `
         linear-gradient(45deg, #ccc 25%, transparent 25%), 
@@ -335,13 +345,13 @@ const parse = (raw, _format) => {
     }
   }
   color.value = value;
-  color.alpha = alpha === undefined ? 1 : alpha;
+  color.alpha = Number.isNaN(alpha) ? 1 : alpha;
   color.format = format;
-  const hex = getCssHexa(value);
+  const hex = getCssHexa(value, alpha);
   color.hex = hex;
   rgb = rgb || getRgb(value);
   color.rgb = rgb;
-  color.hsv = getHsv(rgb);
+  color.hsv = hsv || getHsv(rgb);
   color.hsl = hsl || getHsl(rgb);
   if (!color.css) {
     color.css = { backgroundColor: `#${hex}` };
