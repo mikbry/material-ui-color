@@ -30,27 +30,29 @@ const getCssHexa = n => {
   return hex;
 };
 
-// eslint-disable-next-line prettier/prettier, no-bitwise
-const getRgb = c => ([(c & 0xff0000) >> 16,  (c & 0x00ff00) >> 8,  (c & 0x0000ff)]);
+const getRgb = c => [(c & 0xff0000) >> 16, (c & 0x00ff00) >> 8, c & 0x0000ff];
 
-// eslint-disable-next-line no-bitwise
-const rgbToInt = rgb =>
-  (((rgb[3] || 0) & 0xff) << 24) |
-  (((rgb[0] || 0) & 0xff) << 16) |
-  (((rgb[1] || 0) & 0xff) << 8) |
-  (rgb[2] || 0 & 0xff);
+const rgbToInt = _rgb => {
+  const rgb = _rgb.map(_c => {
+    let c = _c || 0;
+    if (c < 0) c = 0;
+    if (c > 255) c = 255;
+    return c;
+  });
+  return (rgb[3] << 24) | (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+};
 
 const fromRgb = _rgb => {
   if (!_rgb || _rgb.length < 3 || _rgb.length > 4) {
     return {};
   }
-  const rgb = _rgb.map(v =>
+  const rgb = _rgb.map((v, i) =>
     // eslint-disable-next-line no-nested-ternary
     typeof v === 'string'
       ? v[v.length - 1] !== '%'
-        ? parseInt(v, 10)
-        : Math.round((parseFloat(v.substring(0, v.length - 1), 10) / 100) * 255)
-      : Math.round(v),
+        ? Math.round(Number(v) * (i === 3 ? 255 : 1))
+        : Math.round((Number(v.substring(0, v.length - 1)) / 100) * 255)
+      : Math.round(i === 3 ? v * 255 : v),
   );
   const value = rgbToInt(rgb);
   return { format: 'rgb', value, rgb };
@@ -225,13 +227,13 @@ const getHsv = rgb => {
   return [h, s, v];
 };
 
-const tupleToArray = (value, start = 4) => {
-  const tuple = value.substring(start, value.indexOf(')'));
+const tupleToArray = value => {
+  const tuple = value.substring(value.indexOf('(') + 1, value.indexOf(')'));
   if (tuple.indexOf(',') > -1) {
     return tuple.split(',');
   }
   if (tuple.indexOf(' ') > -1) {
-    return tuple.split(' ').filter(e => e.length > 0);
+    return tuple.split(' ').filter(e => e.length > 0 && e !== '/');
   }
   return undefined;
 };
@@ -268,9 +270,9 @@ const colorsCssConditions = [
   // ex:  value='#fff'
   value => value.startsWith('#'),
   // ex: value=rgb(255, 99, 71)
-  value => value.startsWith('rgb('),
+  value => value.startsWith('rgb(') || value.startsWith('rgba('),
   // ex: value=hsl(9, 100%, 64%)
-  value => value.startsWith('hsl('),
+  value => value.startsWith('hsl(') || value.startsWith('hsla('),
 ];
 
 const parse = (raw, _format) => {
