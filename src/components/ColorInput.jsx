@@ -30,13 +30,13 @@ const useStyles = makeStyles(() => {
   };
 });
 
-const ColorInput = ({ defaultValue, format: f, margin, size, forwardRef, className, ...props }) => {
-  const color = typeof defaultValue === 'string' ? ColorTool.parse(defaultValue) : defaultValue;
+const ColorInput = ({ defaultValue, value, format: f, margin, size, forwardRef, className, ...props }) => {
+  const color = ColorTool.validateColor(defaultValue || value);
   const format = f || color.format || 'plain';
   const classes = useStyles();
   let field;
   if (format === 'plain') {
-    field = <TextField label="Color" defaultValue={color.raw} {...props} margin={margin} size={size} />;
+    field = <TextField label="Color" value={color.raw} {...props} margin={margin} size={size} />;
   } else {
     const components = ColorTool.getComponents(color, format);
     const names = Object.keys(components);
@@ -48,7 +48,7 @@ const ColorInput = ({ defaultValue, format: f, margin, size, forwardRef, classNa
             <Input
               id={cn}
               label={components[cn].name}
-              defaultValue={components[cn].value}
+              value={components[cn].value}
               margin={margin}
               size={size}
               placeholder={components[cn].name}

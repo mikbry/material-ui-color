@@ -20,7 +20,6 @@ const getRGB = _h => {
   const q = Math.round(v * (1 - f));
   const t = Math.round(v * f);
   v = Math.round(v);
-  console.log('f', f, 'vpqt', v, p, q, t);
   i %= 6;
   if (i === 0) rgb = [v, t, p];
   if (i === 1) rgb = [q, v, p];
@@ -57,13 +56,14 @@ const HSVGradient = props => {
       pos.y = ref.clientHeight - 1;
     }
     setPosition(pos);
+    const h = (pos.x / (ref.clientWidth - 1)) * 100;
+    const s = (1 - pos.y / (ref.clientHeight - 1)) * 100;
+    props.onChange(h, s);
   };
   React.useEffect(() => {
     const ref = box.current;
     const { hsv } = color;
-    console.log('hsv=', hsv);
     const pos = { x: (hsv[1] / 100) * (ref.clientWidth - 1), y: (1 - hsv[2] / 100) * (ref.clientHeight - 1) };
-    console.log('pos=', pos);
     setPosition(pos);
     const handleDown = event => {
       convertMousePosition(event, ref);
