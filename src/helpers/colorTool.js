@@ -332,7 +332,7 @@ const parse = (raw, _format) => {
   } else if (Array.isArray(raw) && format) {
     const index = colorsFormats.findIndex(f => f === format);
     if (index > -1) {
-      value = colorsFunc[index](raw);
+      ({ value, format, rgb, hsl, hsv, alpha } = colorsFunc[index](raw));
     } else {
       // TODO error
     }
