@@ -13,8 +13,8 @@ import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import HSVGradient from './HSVGradient';
-import ColorButton from '../ColorButton';
 import ColorInput from '../ColorInput';
+import ColorPalette from '../ColorPalette';
 import { parse as colorParse, getCssColor, validateColor } from '../../helpers/colorTool';
 
 const useStyles = makeStyles(theme => ({
@@ -33,17 +33,6 @@ const useStyles = makeStyles(theme => ({
   sliders: {
     width: '100%',
     padding: '0 6px',
-  },
-  palette: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: '6px',
-  },
-  paletteButton: {
-    marginRight: '4px',
-    marginBottom: '4px',
-    padding: '0px',
   },
   inputs: {
     display: 'flex',
@@ -165,22 +154,6 @@ const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], defer
     onChange(c);
   };
 
-  const displayPalette = () =>
-    palette && (
-      <div className={classes.palette}>
-        {Object.keys(palette).map(name => (
-          <ColorButton
-            size={24}
-            key={`${name}`}
-            color={palette[name]}
-            className={classes.paletteButton}
-            borderWidth={0}
-            tooltip={name}
-          />
-        ))}
-      </div>
-    );
-
   const displayInput = () =>
     inputFormats && (
       <div className={classes.inputs}>
@@ -211,8 +184,12 @@ const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], defer
         />
       </div>
       {displayInput(inputFormats)}
-      {palette && <Divider />}
-      {displayPalette(palette)}
+      {palette && (
+        <>
+          <Divider />
+          <ColorPalette palette={palette} />
+        </>
+      )}
       {deferred && (
         <div className={classes.controls}>
           <Button>Set</Button>
