@@ -251,10 +251,10 @@ const getHsv = rgb => {
   const b = rgb[2] / 255;
   const max = Math.max(r, g, b);
   const min = Math.min(r, g, b);
-  if (max === min) return [0, 0, max];
+  if (max === min) return [0, 0, Math.round(max * 100)];
 
-  const v = max;
-  const s = (max - min) / max;
+  let v = max;
+  let s = (max - min) / max;
   const rc = (max - r) / (max - min);
   const gc = (max - g) / (max - min);
   const bc = (max - b) / (max - min);
@@ -267,6 +267,9 @@ const getHsv = rgb => {
   h = (h / 6.0) % 1.0;
   if (h < 0) h += 1.0;
 
+  h = Math.round(h * 360);
+  s = Math.round(s * 100);
+  v = Math.round(v * 100);
   return [h, s, v];
 };
 
@@ -386,6 +389,14 @@ const parse = (raw, _format) => {
   return color;
 };
 
+const getCssColor = (color, format, noAlpha) => {
+  let value;
+  if (format === 'hex') {
+    value = `#${getCssHexa(color.value, noAlpha ? undefined : color.alpha)}`;
+  }
+  return value;
+};
+
 const validateColor = _color => (_color && _color.format && _color.name ? _color : parse(_color));
 
 const getComponents = (_color, format) => {
@@ -411,4 +422,4 @@ const getComponents = (_color, format) => {
   return components;
 };
 
-export { parse, getComponents, validateColor };
+export { parse, getComponents, validateColor, getCssColor };

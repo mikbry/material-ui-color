@@ -9,9 +9,34 @@
 
 import React from 'react';
 
+const getRGB = _h => {
+  let rgb;
+  const h = _h / 360;
+  // const s = 1;
+  let v = 255;
+  let i = Math.floor(h * 6);
+  const f = h * 6 - i;
+  const p = 0;
+  const q = Math.round(v * (1 - f));
+  const t = Math.round(v * f);
+  v = Math.round(v);
+  console.log('f', f, 'vpqt', v, p, q, t);
+  i %= 6;
+  if (i === 0) rgb = [v, t, p];
+  if (i === 1) rgb = [q, v, p];
+  if (i === 2) rgb = [p, v, t];
+  if (i === 3) rgb = [p, q, v];
+  if (i === 4) rgb = [t, p, v];
+  if (i === 5) rgb = [v, p, q];
+  return rgb;
+};
+
 const initialState = { x: 0, y: 0 };
 const HSVGradient = props => {
   const box = React.useRef(null);
+  const { color } = props;
+  const rgb = getRGB(color.hsv[0]);
+  const cssRgb = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
   const [pressed, setPressed] = React.useState(false);
   const [position, setPosition] = React.useState(initialState);
 
@@ -35,6 +60,11 @@ const HSVGradient = props => {
   };
   React.useEffect(() => {
     const ref = box.current;
+    const { hsv } = color;
+    console.log('hsv=', hsv);
+    const pos = { x: (hsv[1] / 100) * (ref.clientWidth - 1), y: (1 - hsv[2] / 100) * (ref.clientHeight - 1) };
+    console.log('pos=', pos);
+    setPosition(pos);
     const handleDown = event => {
       convertMousePosition(event, ref);
       setPressed(true);
@@ -63,7 +93,7 @@ const HSVGradient = props => {
     <div
       {...props}
       ref={box}
-      style={{ position: 'absolute', inset: '0px', background: 'rgb(255, 0, 0) none repeat scroll 0% 0%' }}
+      style={{ position: 'absolute', inset: '0px', background: `${cssRgb} none repeat scroll 0% 0%` }}
     >
       <div
         style={{
