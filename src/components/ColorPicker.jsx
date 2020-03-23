@@ -30,9 +30,19 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [currentValue, setCurrentValue] = React.useState(value);
+
   const handleChange = event => {
     setCurrentValue(event.target.value);
   };
+
+  const handleColorChange = newColor => {
+    let newValue = newColor.name;
+    if (newValue.startsWith('color-')) {
+      newValue = ColorTool.getCssColor(newColor, 'hex');
+    }
+    setCurrentValue(newValue);
+  };
+
   const color = ColorTool.parse(currentValue);
 
   const handleClick = event => {
@@ -58,7 +68,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
           {color.raw}
         </div>
       ) : (
-        <TextField color="primary" defaultValue={color.raw} onChange={handleChange} />
+        <TextField color="primary" value={color.raw} onChange={handleChange} />
       )}
       <Popover
         id={id}
@@ -74,7 +84,13 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
           horizontal: 'center',
         }}
       >
-        <ColorBox color={color} deferred={deferred} palette={palette} inputFormats={inputFormats} />
+        <ColorBox
+          color={color}
+          deferred={deferred}
+          palette={palette}
+          inputFormats={inputFormats}
+          onChange={handleColorChange}
+        />
       </Popover>
     </div>
   );
