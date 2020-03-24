@@ -53,10 +53,10 @@ const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRe
     const components = ColorTool.getComponents(color, format);
     const names = Object.keys(components);
     field = (
-      <div id="plain" className={`${className || ''} ${classes.root}`} ref={forwardRef} {...props}>
-        <FormControl className={classes.raw} error={!!color.error}>
+      <FormControl error={!!color.error}>
+        <div className={`${className || ''} ${classes.root}`} ref={forwardRef} {...props}>
           {names.map(cn => (
-            <div key={cn}>
+            <FormControl key={cn} className={classes.raw} error={!!color.error}>
               <InputLabel htmlFor={cn}>{components[cn].name}</InputLabel>
               <Input
                 id={cn}
@@ -72,11 +72,11 @@ const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRe
                   components[cn].unit && <InputAdornment position="start">{components[cn].unit}</InputAdornment>
                 }
               />
-            </div>
+            </FormControl>
           ))}
-          {color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
-        </FormControl>
-      </div>
+        </div>
+        {color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
+      </FormControl>
     );
   }
   return field;

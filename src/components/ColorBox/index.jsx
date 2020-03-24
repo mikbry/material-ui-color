@@ -160,11 +160,17 @@ const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], defer
     onChange(c);
   };
 
+  const handleInputChange = value => {
+    const c = colorParse(value);
+    setColor(c);
+    onChange(c);
+  };
+
   const displayInput = () =>
     inputFormats && (
       <div className={classes.inputs}>
         {inputFormats.map(input => (
-          <ColorInput key={input} defaultValue={color} format={input} className={classes.input} />
+          <ColorInput key={input} value={color} format={input} className={classes.input} onChange={handleInputChange} />
         ))}
       </div>
     );

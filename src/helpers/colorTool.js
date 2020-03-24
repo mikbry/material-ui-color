@@ -419,7 +419,10 @@ const getComponents = (_color, format) => {
     components.s = { value: color.hsl[1], format: 'integer', min: 0, max: 255, name: 'S', unit: '%' };
     components.l = { value: color.hsl[2], format: 'integer', min: 0, max: 255, name: 'L', unit: '%' };
   } else if (format === 'hex') {
-    const hex = color.raw.startsWith('#') ? color.raw.substring(1) : color.hex;
+    let { hex } = color;
+    if (color.raw && typeof color.raw === 'string' && color.raw.startsWith('#')) {
+      hex = color.raw.substring(1);
+    }
     components.hex = { value: hex, format: 'hex', name: 'HEX', unit: '#' };
   } else {
     components.hex = { value: color.value };
