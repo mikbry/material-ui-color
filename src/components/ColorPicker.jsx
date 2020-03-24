@@ -23,6 +23,9 @@ const useStyles = makeStyles(() => ({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
+  button: {
+    margin: '6px',
+  },
 }));
 
 const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats }) => {
@@ -62,7 +65,13 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
 
   return (
     <div className={classes.root}>
-      <ColorButton color={color} forwardRef={refButton} aria-describedby={id} onClick={handleClick} />
+      <ColorButton
+        className={classes.button}
+        color={color}
+        forwardRef={refButton}
+        aria-describedby={id}
+        onClick={handleClick}
+      />
       {disableTextfield ? (
         <div role="button" onClick={() => displayPicker(true)}>
           {color.raw}
