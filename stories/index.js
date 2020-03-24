@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { ColorPicker, ColorButton, ColorInput } from '../src';
+import { ColorPicker, ColorButton, ColorInput, ColorPalette } from '../src';
 
 const palette = {
   red: '#ff0000',
@@ -76,4 +76,4 @@ storiesOf('ColorInput', module)
     </div>
   ));
 
-storiesOf('ColorPalette', module).add('basic', () => <ColorPicker />);
+storiesOf('ColorPalette', module).add('basic', () => <ColorPalette palette={palette} />);
