@@ -49,7 +49,7 @@ const rgbToInt = _rgb => {
 
 const fromRgb = _rgb => {
   if (!_rgb || _rgb.length < 3 || _rgb.length > 4) {
-    return {};
+    return { error: 'not valid size' };
   }
   const rgb = _rgb.map((v, i) =>
     // eslint-disable-next-line no-nested-ternary
@@ -65,7 +65,10 @@ const fromRgb = _rgb => {
 
 const fromCssHexa = hex => {
   let alpha;
-  let value = parseInt(hex.substring(1), 16);
+  let value = Number(`0x${hex.substring(1)}`);
+  if (!Number.isInteger(value) || Number.isNaN(value)) {
+    return { error: 'Not an hex value' };
+  }
   const rgb = [];
   if (hex.length === 7 || hex.length === 9) {
     const padding = hex.length === 9 ? 8 : 0;
@@ -96,8 +99,7 @@ const fromCssHexa = hex => {
     }
     value = rgbToInt(rgb);
   } else {
-    // unknown format
-    return {};
+    return { error: 'wrong format' };
   }
   return { format: 'hex', value, rgb, alpha };
 };
@@ -123,7 +125,7 @@ const getValue = _v => {
 
 const fromHsl = _hsl => {
   if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
-    return {};
+    return { error: 'not valid size' };
   }
   let rgb;
   const hsl = _hsl;
@@ -174,7 +176,7 @@ const fromHsl = _hsl => {
 
 const fromHsv = hsv => {
   if (!hsv || hsv.length < 3 || hsv.length > 4) {
-    return {};
+    return { error: 'not valid size' };
   }
   let rgb;
   let h = getDeg(hsv[0]);
@@ -315,6 +317,7 @@ const parse = (raw, _format) => {
   let rgb;
   let hsl;
   let hsv;
+  let error;
   let format = _format || 'unknown';
   if (raw === 'transparent') {
     value = undefined;
@@ -324,7 +327,7 @@ const parse = (raw, _format) => {
     const r = raw.trim().toLocaleLowerCase();
     const index = colorsCssConditions.findIndex(func => func(r));
     if (index > -1) {
-      ({ value, format, rgb, hsl, alpha } = colorsCssFunc[index](r));
+      ({ value, format, rgb, hsl, alpha, error } = colorsCssFunc[index](r));
       if (format === 'plain') color.name = raw;
       // Check if raw is css valid
       if (format) color.css = { backgroundColor: raw };
@@ -335,22 +338,22 @@ const parse = (raw, _format) => {
   } else if (Array.isArray(raw) && format) {
     const index = colorsFormats.findIndex(f => f === format);
     if (index > -1) {
-      ({ value, format, rgb, hsl, hsv, alpha } = colorsFunc[index](raw));
+      ({ value, format, rgb, hsl, hsv, alpha, error } = colorsFunc[index](raw));
     } else {
-      // TODO error
+      error = 'unkown format';
     }
   } else if (raw && 'r' in raw && 'g' in raw && 'b' in raw) {
     rgb = [raw.r, raw.g, raw.b];
     if (raw.a) rgb.push(raw.a);
-    ({ value, format, rgb, alpha } = fromRgb(rgb));
+    ({ value, format, rgb, alpha, error } = fromRgb(rgb));
   } else if (raw && 'h' in raw && 's' in raw && 'l' in raw) {
     hsl = [raw.h, raw.s, raw.l];
     if (raw.a) hsl.push(raw.a);
-    ({ value, format, rgb, hsl, alpha } = fromHsl(hsl));
+    ({ value, format, rgb, hsl, alpha, error } = fromHsl(hsl));
   } else if (raw && 'h' in raw && 's' in raw && 'v' in raw) {
     hsv = [raw.h, raw.s, raw.v];
     if (raw.a) hsv.push(raw.a);
-    ({ value, format, rgb, hsv, alpha } = fromHsv(hsv));
+    ({ value, format, rgb, hsv, alpha, error } = fromHsv(hsv));
   }
   if (value === undefined) {
     value = 0;
@@ -370,6 +373,7 @@ const parse = (raw, _format) => {
       color.name = 'none';
     }
   }
+  if (error) color.error = error;
   color.value = value;
   color.alpha = Number.isNaN(alpha) || alpha === undefined ? 1 : alpha / 255;
   color.format = format;
@@ -415,7 +419,8 @@ const getComponents = (_color, format) => {
     components.s = { value: color.hsl[1], format: 'integer', min: 0, max: 255, name: 'S', unit: '%' };
     components.l = { value: color.hsl[2], format: 'integer', min: 0, max: 255, name: 'L', unit: '%' };
   } else if (format === 'hex') {
-    components.hex = { value: color.hex, format: 'hex', name: 'HEX', unit: '#' };
+    const hex = color.raw.startsWith('#') ? color.raw.substring(1) : color.hex;
+    components.hex = { value: hex, format: 'hex', name: 'HEX', unit: '#' };
   } else {
     components.hex = { value: color.value };
   }

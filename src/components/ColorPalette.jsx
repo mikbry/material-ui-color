@@ -10,7 +10,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import ColorButton from './ColorButton';
-// import * as ColorTool from '../helpers/colorTool';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -27,7 +26,6 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ColorPalette = ({ borderWidth = 0, palette, onSelect = () => {} }) => {
-  // const color = typeof c === 'string' ? ColorTool.parse(c) : c;
   const classes = useStyles();
 
   const handleSelectColor = name => {
