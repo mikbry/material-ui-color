@@ -154,6 +154,12 @@ const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], defer
     onChange(c);
   };
 
+  const handlePaletteSelection = (name, colour) => {
+    const c = colorParse(colour);
+    setColor(c);
+    onChange(c);
+  };
+
   const displayInput = () =>
     inputFormats && (
       <div className={classes.inputs}>
@@ -187,7 +193,7 @@ const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], defer
       {palette && (
         <>
           <Divider />
-          <ColorPalette palette={palette} />
+          <ColorPalette palette={palette} onSelect={handlePaletteSelection} />
         </>
       )}
       {deferred && (

@@ -51,7 +51,11 @@ export default ({ color: c, size, borderWidth = 0, forwardRef, className, toolti
   const color = ColorTool.validateColor(c);
   const ColorButton = buildButton(color, size, borderWidth);
 
-  let component = <ColorButton variant="contained" aria-label={color.name || c} className={className} {...props} />;
+  let component = (
+    <ColorButton ref={forwardRef} variant="contained" aria-label={color.name || c} className={className} {...props}>
+      <span />
+    </ColorButton>
+  );
   if (tooltip) {
     component = <Tooltip title={tooltip}>{component}</Tooltip>;
   }

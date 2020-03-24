@@ -26,9 +26,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ColorPalette = ({ borderWidth = 0, palette }) => {
+const ColorPalette = ({ borderWidth = 0, palette, onSelect = () => {} }) => {
   // const color = typeof c === 'string' ? ColorTool.parse(c) : c;
   const classes = useStyles();
+
+  const handleSelectColor = name => {
+    onSelect(name, palette[name]);
+  };
 
   return (
     <div className={classes.root}>
@@ -40,6 +44,7 @@ const ColorPalette = ({ borderWidth = 0, palette }) => {
           className={classes.paletteButton}
           borderWidth={borderWidth}
           tooltip={name}
+          onClick={() => handleSelectColor(name)}
         />
       ))}
     </div>

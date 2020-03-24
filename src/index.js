@@ -9,5 +9,6 @@
 import ColorPicker from './components/ColorPicker';
 import ColorButton from './components/ColorButton';
 import ColorInput from './components/ColorInput';
+import ColorPalette from './components/ColorPalette';
 
-export { ColorPicker, ColorButton, ColorInput };
+export { ColorPicker, ColorButton, ColorInput, ColorPalette };
