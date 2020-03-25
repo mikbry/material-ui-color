@@ -28,25 +28,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats }) => {
+const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats, onChange }) => {
   const refButton = React.useRef();
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [currentValue, setCurrentValue] = React.useState(value);
 
-  const handleChange = event => {
-    setCurrentValue(event.target.value);
-  };
-
-  const handleColorChange = newColor => {
-    let newValue = newColor.name;
-    if (newValue.startsWith('color-')) {
-      newValue = ColorTool.getCssColor(newColor, 'hex');
-    }
-    setCurrentValue(newValue);
-  };
-
-  const color = ColorTool.parse(currentValue);
+  const color = ColorTool.parse(value);
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -58,6 +45,21 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
 
   const displayPicker = toggle => {
     setAnchorEl(toggle ? refButton.current : null);
+  };
+
+  const handleColorChange = newColor => {
+    let newValue = newColor.name;
+    if (newValue.startsWith('color-')) {
+      newValue = ColorTool.getCssColor(newColor, 'hex');
+    }
+    onChange(newValue);
+    if (deferred) {
+      displayPicker(false);
+    }
+  };
+
+  const handleChange = event => {
+    onChange(event.target.value);
   };
 
   const open = Boolean(anchorEl);
@@ -94,7 +96,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
         }}
       >
         <ColorBox
-          color={color}
+          value={color}
           deferred={deferred}
           palette={palette}
           inputFormats={inputFormats}
@@ -105,4 +107,14 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats 
   );
 };
 
-export default ColorPicker;
+const Uncontrolled = ({ defaultValue, ...props }) => {
+  const [value, onChange] = React.useState(defaultValue);
+  return <ColorPicker value={value} onChange={onChange} {...props} />;
+};
+
+export default ({ defaultValue, value, onChange, ...props }) =>
+  defaultValue ? (
+    <Uncontrolled defaultValue={defaultValue} {...props} />
+  ) : (
+    <ColorPicker value={value} onChange={onChange} {...props} />
+  );

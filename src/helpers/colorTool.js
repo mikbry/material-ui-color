@@ -200,6 +200,7 @@ const fromHsv = hsv => {
     const q = Math.round(v * (1 - s * f));
     const t = Math.round(v * (1 - s * (1 - f)));
     v = Math.round(v);
+
     i %= 6;
     if (i === 0) rgb = [v, t, p];
     if (i === 1) rgb = [q, v, p];
@@ -267,7 +268,6 @@ const getHsv = rgb => {
   if (r === max) h = bc - gc;
   else if (g === max) h = 2 + rc - bc;
   else h = 4.0 + gc - rc;
-
   h = (h / 6.0) % 1.0;
   if (h < 0) h += 1.0;
 

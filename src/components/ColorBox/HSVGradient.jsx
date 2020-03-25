@@ -12,7 +12,6 @@ import React from 'react';
 const getRGB = _h => {
   let rgb;
   const h = _h / 360;
-  // const s = 1;
   let v = 255;
   let i = Math.floor(h * 6);
   const f = h * 6 - i;
@@ -30,14 +29,36 @@ const getRGB = _h => {
   return rgb;
 };
 
-const initialState = { x: 0, y: 0 };
-const HSVGradient = props => {
-  const box = React.useRef(null);
-  const { color } = props;
+const HSVGradient = ({ color, onChange, ...props }) => {
+  const latestColor = React.useRef(color);
+  React.useEffect(() => {
+    latestColor.current = color;
+  });
+  const box = React.useRef();
+  const cursor = React.useRef();
   const rgb = getRGB(color.hsv[0]);
   const cssRgb = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
   const [pressed, setPressed] = React.useState(false);
-  const [position, setPosition] = React.useState(initialState);
+
+  const setPosition = pos => {
+    // position.x = pos.x;
+    // position.y = pos.y;
+    cursor.current.style.top = `${pos.y}px`;
+    cursor.current.style.left = `${pos.x}px`;
+  };
+
+  const initPosition = ref => {
+    if (ref) {
+      const { hsv } = color;
+      const pos = { x: (hsv[1] / 100) * (ref.clientWidth - 1), y: (1 - hsv[2] / 100) * (ref.clientHeight - 1) };
+      setPosition(pos);
+    }
+  };
+
+  initPosition(box.current);
+  if (box.current) {
+    box.current.style.background = `${cssRgb} none repeat scroll 0% 0%`;
+  }
 
   const convertMousePosition = (event, ref) => {
     const { clientX, clientY } = event;
@@ -56,17 +77,17 @@ const HSVGradient = props => {
       pos.y = ref.clientHeight - 1;
     }
     setPosition(pos);
-    const h = (pos.x / (ref.clientWidth - 1)) * 100;
-    const s = (1 - pos.y / (ref.clientHeight - 1)) * 100;
-    props.onChange(h, s);
+    const s = (pos.x / (ref.clientWidth - 1)) * 100;
+    const v = (1 - pos.y / (ref.clientHeight - 1)) * 100;
+    const c = latestColor.current;
+    onChange([c.hsv[0], s, v]);
   };
+
   React.useEffect(() => {
     const ref = box.current;
-    const { hsv } = color;
-    const pos = { x: (hsv[1] / 100) * (ref.clientWidth - 1), y: (1 - hsv[2] / 100) * (ref.clientHeight - 1) };
-    setPosition(pos);
-    const handleDown = event => {
-      convertMousePosition(event, ref);
+    initPosition(ref);
+    const handleDown = () => {
+      // convertMousePosition(event, ref);
       setPressed(true);
     };
     const handleUp = event => {
@@ -111,10 +132,11 @@ const HSVGradient = props => {
           }}
         >
           <div
+            ref={cursor}
             style={{
               position: 'absolute',
-              top: `${position.y}px`,
-              left: `${position.x}px`,
+              top: `0px`,
+              left: `0px`,
               cursor: !pressed && 'pointer',
               zIndex: '100',
             }}
