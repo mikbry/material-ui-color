@@ -30,6 +30,10 @@ const getRGB = _h => {
 };
 
 const HSVGradient = ({ color, onChange, ...props }) => {
+  const latestColor = React.useRef(color);
+  React.useEffect(() => {
+    latestColor.current = color;
+  });
   const box = React.useRef();
   const cursor = React.useRef();
   const rgb = getRGB(color.hsv[0]);
@@ -52,6 +56,9 @@ const HSVGradient = ({ color, onChange, ...props }) => {
   };
 
   initPosition(box.current);
+  if (box.current) {
+    box.current.style.background = `${cssRgb} none repeat scroll 0% 0%`;
+  }
 
   const convertMousePosition = (event, ref) => {
     const { clientX, clientY } = event;
@@ -70,16 +77,17 @@ const HSVGradient = ({ color, onChange, ...props }) => {
       pos.y = ref.clientHeight - 1;
     }
     setPosition(pos);
-    const h = (pos.x / (ref.clientWidth - 1)) * 100;
-    const s = (1 - pos.y / (ref.clientHeight - 1)) * 100;
-    onChange(h, s);
+    const s = (pos.x / (ref.clientWidth - 1)) * 100;
+    const v = (1 - pos.y / (ref.clientHeight - 1)) * 100;
+    const c = latestColor.current;
+    onChange([c.hsv[0], s, v]);
   };
 
   React.useEffect(() => {
     const ref = box.current;
     initPosition(ref);
-    const handleDown = event => {
-      convertMousePosition(event, ref);
+    const handleDown = () => {
+      // convertMousePosition(event, ref);
       setPressed(true);
     };
     const handleUp = event => {
@@ -150,14 +158,4 @@ const HSVGradient = ({ color, onChange, ...props }) => {
   );
 };
 
-const Uncontrolled = ({ defaultColor, ...props }) => {
-  const [color, onChange] = React.useState(defaultColor);
-  return <HSVGradient color={color} onChange={onChange} {...props} />;
-};
-
-export default ({ defaultColor, color, onChange, ...props }) =>
-  defaultColor ? (
-    <Uncontrolled defaultColor={defaultColor} {...props} />
-  ) : (
-    <HSVGradient color={color} onChange={onChange} {...props} />
-  );
+export default HSVGradient;

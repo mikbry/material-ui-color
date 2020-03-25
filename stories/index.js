@@ -31,16 +31,16 @@ const Controlled = ({ value }) => {
   };
   return (
     <div>
-      <ColorPicker value={color} />
+      <ColorPicker value={color} onChange={handleChange} />
       <button onClick={() => handleChange('rgb(255, 0, 0)')}>set rgb(255, 0, 0)</button>
     </div>
   );
 };
 
 storiesOf('ColorPicker', module)
-  .add('basic', () => <ColorPicker />)
-  .add('palette', () => <ColorPicker palette={palette} />)
-  .add('deferred', () => <ColorPicker palette={palette} deferred value="red" />)
+  .add('basic', () => <ColorPicker defaultValue="#000" />)
+  .add('palette', () => <ColorPicker palette={palette} defaultValue="transparent" />)
+  .add('deferred', () => <ColorPicker palette={palette} deferred defaultValue="red" />)
   .add('controlled', () => <Controlled value="#fff" />);
 
 storiesOf('ColorButton', module)

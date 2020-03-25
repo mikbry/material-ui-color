@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
@@ -130,39 +131,46 @@ const ASlider = color =>
     },
   })(Slider);
 
-const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], deferred, onChange = () => {} }) => {
-  const initialColor = validateColor(_color);
-  const [color, setColor] = React.useState(initialColor);
+const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onChange: _onChange = () => {} }) => {
+  let color = validateColor(value);
+  let onChange = _onChange;
+  let onDeferredChange;
+  if (deferred) {
+    [color, onChange] = React.useState(color);
+    onDeferredChange = _onChange;
+  }
+
   const classes = useStyles();
+
+  const handleSet = () => {
+    if (onDeferredChange) {
+      onDeferredChange(color);
+    }
+  };
 
   const handleHueChange = (event, newValue) => {
     const c = colorParse([newValue, color.hsv[1], color.hsv[2]], 'hsv');
-    setColor(c);
     onChange(c);
   };
 
   const handleAlphaChange = (event, newValue) => {
     const alpha = newValue / 100;
     const c = colorParse([color.rgb[0], color.rgb[1], color.rgb[2], alpha], 'rgb');
-    setColor(c);
     onChange(c);
   };
 
-  const handleSVChange = (s, v) => {
-    const c = colorParse([color.hsv[0], s, v], 'hsv');
-    setColor(c);
+  const handleSVChange = hsv => {
+    const c = colorParse(hsv, 'hsv');
     onChange(c);
   };
 
   const handlePaletteSelection = (name, colour) => {
     const c = colorParse(colour);
-    setColor(c);
     onChange(c);
   };
 
-  const handleInputChange = value => {
-    const c = colorParse(value);
-    setColor(c);
+  const handleInputChange = newValue => {
+    const c = colorParse(newValue);
     onChange(c);
   };
 
@@ -204,11 +212,21 @@ const ColorBox = ({ color: _color, palette, inputFormats = ['hex', 'rgb'], defer
       )}
       {deferred && (
         <div className={classes.controls}>
-          <Button>Set</Button>
+          <Button onClick={handleSet}>Set</Button>
         </div>
       )}
     </Box>
   );
 };
 
-export default ColorBox;
+const Uncontrolled = ({ defaultValue, ...props }) => {
+  const [value, onChange] = React.useState(defaultValue);
+  return <ColorBox value={value} onChange={onChange} {...props} />;
+};
+
+export default ({ defaultValue, value, onChange, ...props }) =>
+  defaultValue ? (
+    <Uncontrolled defaultValue={defaultValue} {...props} />
+  ) : (
+    <ColorBox value={value} onChange={onChange} {...props} />
+  );
