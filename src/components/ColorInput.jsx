@@ -31,6 +31,8 @@ const useStyles = makeStyles(() => {
     raw: {
       paddingRight: '4px',
     },
+    label: {},
+    input: {},
   };
 });
 
@@ -38,28 +40,46 @@ const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRe
   const color = ColorTool.validateColor(value);
   const classes = useStyles();
   let field;
+  let components;
   const handleFieldChange = event => {
     if (format === 'plain') {
       onChange(event.target.value);
     } else if (format === 'hex') {
       onChange(`#${event.target.value}`);
+    } else if (format === 'rgb' || format === 'hsl' || format === 'hsv') {
+      const cn = event.target.id;
+      const v = Number(event.target.value);
+      const values = {};
+      Object.keys(components).forEach(e => {
+        let cv = components[e].value;
+        if (e === cn) {
+          cv = v;
+          if (cv < components[e].min) cv = components[e].min;
+          if (cv > components[e].max) cv = components[e].max;
+        }
+        values[e] = cv;
+      });
+      onChange(values);
     }
   };
   if (format === 'plain') {
     field = (
-      <TextField label="Color" value={color.raw} {...props} margin={margin} size={size} onChange={handleFieldChange} />
+      <TextField label="Color" value={color.raw} margin={margin} size={size} onChange={handleFieldChange} {...props} />
     );
   } else {
-    const components = ColorTool.getComponents(color, format);
+    components = ColorTool.getComponents(color, format);
     const names = Object.keys(components);
     field = (
       <FormControl error={!!color.error}>
         <div className={`${className || ''} ${classes.root}`} ref={forwardRef} {...props}>
           {names.map(cn => (
             <FormControl key={cn} className={classes.raw} error={!!color.error}>
-              <InputLabel htmlFor={cn}>{components[cn].name}</InputLabel>
+              <InputLabel htmlFor={cn} className={classes.label}>
+                {components[cn].name}
+              </InputLabel>
               <Input
                 id={cn}
+                className={classes.input}
                 label={components[cn].name}
                 value={components[cn].value}
                 margin={margin}

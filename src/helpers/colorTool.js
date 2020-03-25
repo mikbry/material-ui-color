@@ -111,15 +111,20 @@ const getDeg = _h => {
     if (h.indexOf('deg') > -1) h = h.substr(0, h.length - 3);
     else if (h.indexOf('rad') > -1) h = Math.round(h.substr(0, h.length - 3) * (180 / Math.PI));
     else if (h.indexOf('turn') > -1) h = Math.round(h.substr(0, h.length - 4) * 360);
-    if (h >= 360) h %= 360;
     h = parseFloat(h, 10);
   }
+  if (Number.isNaN(h)) h = 0;
+  if (h >= 360) h %= 360;
+  if (h < 0) h = 0;
   return h;
 };
 
 const getValue = _v => {
   let v = _v;
   if (typeof v === 'string') v = parseFloat(v.indexOf('%') > -1 ? v.substring(0, v.length - 1) : v, 10);
+  if (Number.isNaN(v)) v = 0;
+  else if (v > 100) v = 100;
+  else if (v < 0) v = 0;
   return v;
 };
 
@@ -135,7 +140,6 @@ const fromHsl = _hsl => {
   hsl[0] = h;
   hsl[1] = s;
   hsl[2] = l;
-  if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(l)) return {};
 
   s /= 100;
   l /= 100;
@@ -182,8 +186,6 @@ const fromHsv = hsv => {
   let h = getDeg(hsv[0]);
   let s = getValue(hsv[1]);
   let v = getValue(hsv[2]);
-
-  if (Number.isNaN(h) || Number.isNaN(s) | Number.isNaN(v)) return {};
 
   v *= 255 / 100;
   if (s === 0) {
@@ -411,13 +413,13 @@ const getComponents = (_color, format) => {
     components.g = { value: color.rgb[1], format: 'integer', min: 0, max: 255, name: 'G' };
     components.b = { value: color.rgb[2], format: 'integer', min: 0, max: 255, name: 'B' };
   } else if (format === 'hsv') {
-    components.h = { value: color.hsv[0], format: 'integer', min: 0, max: 255, name: 'H', unit: '°' };
-    components.s = { value: color.hsv[1], format: 'integer', min: 0, max: 255, name: 'S', unit: '%' };
-    components.v = { value: color.hsv[2], format: 'integer', min: 0, max: 255, name: 'V', unit: '%' };
+    components.h = { value: color.hsv[0], format: 'integer', min: 0, max: 360, name: 'H', unit: '°' };
+    components.s = { value: color.hsv[1], format: 'integer', min: 0, max: 100, name: 'S', unit: '%' };
+    components.v = { value: color.hsv[2], format: 'integer', min: 0, max: 100, name: 'V', unit: '%' };
   } else if (format === 'hsl') {
-    components.h = { value: color.hsl[0], format: 'integer', min: 0, max: 255, name: 'H', unit: '°' };
-    components.s = { value: color.hsl[1], format: 'integer', min: 0, max: 255, name: 'S', unit: '%' };
-    components.l = { value: color.hsl[2], format: 'integer', min: 0, max: 255, name: 'L', unit: '%' };
+    components.h = { value: color.hsl[0], format: 'integer', min: 0, max: 360, name: 'H', unit: '°' };
+    components.s = { value: color.hsl[1], format: 'integer', min: 0, max: 100, name: 'S', unit: '%' };
+    components.l = { value: color.hsl[2], format: 'integer', min: 0, max: 100, name: 'L', unit: '%' };
   } else if (format === 'hex') {
     let { hex } = color;
     if (color.raw && typeof color.raw === 'string' && color.raw.startsWith('#')) {
