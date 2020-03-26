@@ -14,9 +14,11 @@
 [license-image]: https://img.shields.io/npm/l/amaterial-ui-color-components.svg
 [License-url]:./LICENSE
 
-[WIP] Collections of color components for `material-ui` components for React Material-UI. Highly customizable and theming support !
+> **[Prerelease, not ready for production]** Collections of color components for `material-ui` components for React Material-UI. Highly customizable and theming support !
 
-![WIP](./images/wip.png)
+![Storybook](./images/wip.png)
+
+https://mikbry.github.io/material-ui-color-components/
 
 ## Why ?
 
@@ -24,6 +26,12 @@
 - Highly customizable ColorPicker : gradient picker, palette, input format, deferred mode
 -  Small in size without extra dependencies
 - Use modern hooks and coding conventions
+
+## Install
+
+`yarn add material-ui-color-components`
+
+
 
 ## `<ColorPicker/>`
 
@@ -50,6 +58,6 @@ TODO list
 - [x] init project
 - [x] create simple color picker
 - [x] create color tools/helpers
-- [ ] tests / coverage
-- [ ] publish
+- [x] publish
+- [ ] finish tests / coverage
 - [ ] documentation
