@@ -1,0 +1,14 @@
+{
+  "remove": {
+    "devDependencies": "*",
+    "scripts": "*",
+    "husky": true,
+    "commitlint": true,
+    "jest": true
+  },
+  "publisher": {
+    "name": "yarn test"
+  },
+  "output": "./dist",
+  "copy": ["README.md", "LICENSE"]
+}

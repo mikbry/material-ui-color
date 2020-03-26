@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "clean": "rimraf build && mkdir build",
-    "build": "yarn clean &  cross-env NODE_ENV=production rollup -c",
+    "build": "yarn clean &  cross-env NODE_ENV=production rollup -c && packito",
     "build-storybook": "build-storybook -c .storybook -o public",
     "storybook": "start-storybook -p 9005 -c .storybook",
     "lint": "$(yarn bin)/eslint src",
@@ -48,6 +48,7 @@
     "jest": "^25.1.0",
     "jest-css-modules": "^2.1.0",
     "material-ui-popup-state": "^1.5.3",
+    "packito": "^0.5.0",
     "prettier": "^1.19.1",
     "react-refresh": "^0.7.2",
     "react-test-renderer": "^16.12.0",
