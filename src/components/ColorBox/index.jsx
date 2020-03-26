@@ -8,128 +8,71 @@
  */
 
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
-import Slider from '@material-ui/core/Slider';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import HSVGradient from './HSVGradient';
 import ColorInput from '../ColorInput';
 import ColorPalette from '../ColorPalette';
+import HueSlider from './HueSlider';
+import alphaSlider from './alphaSlider';
 import { parse as colorParse, getCssColor, validateColor } from '../../helpers/colorTool';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
-    width: '320px',
-    padding: '0px',
-  },
-  hsvGradient: {
-    width: 'calc(100% - 12px)',
-    height: 'calc(128px - 12px)',
-    margin: '6px',
-  },
-  sliders: {
-    width: '100%',
-    padding: '0 6px',
-  },
-  inputs: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: '6px',
-  },
-  input: {
-    marginRight: '14px',
-  },
-  controls: {
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    flexWrap: 'wrap',
-    padding: '6px',
-  },
-}));
-
-const HueSlider = withStyles({
-  root: {
-    color: '#52af77',
-    width: '100%',
-    height: 24,
-    padding: 0,
-  },
-  thumb: {
-    height: 28,
-    width: 8,
-    opacity: 0.8,
-    backgroundColor: '#fff',
-    borderRadius: '4px',
-    border: '1px solid #9e9e9e',
-    marginTop: -2,
-    marginLeft: -4,
-    '&:focus,&:hover,&$active': {
-      boxShadow: 'inherit',
-    },
-  },
-  active: {},
-  track: {
-    height: 24,
-    borderRadius: 4,
-    opacity: 0,
-    backgroundColor: 'transparent',
-  },
-  rail: {
-    height: 24,
-    borderRadius: 0,
-    opacity: 1,
-    background:
-      'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(255, 0, 0) 0%, rgb(255, 255, 0) 17%, rgb(0, 255, 0) 33%, rgb(0, 255, 255) 50%, rgb(0, 0, 255) 67%, rgb(255, 0, 255) 83%, rgb(255, 0, 0) 100%) repeat scroll 0% 0%',
-  },
-})(Slider);
-
-const ASlider = color =>
-  withStyles({
+const useStyles = (color, width = 320) => {
+  const { backgroundColor } = color.css;
+  return makeStyles(theme => ({
     root: {
-      color: '#6666',
-      height: 16,
-      width: '100%',
-      padding: 0,
+      justifyContent: 'space-around',
+      overflow: 'hidden',
+      backgroundColor: theme.palette.background.paper,
+      width,
+      padding: '0px',
+    },
+    hsvGradient: {
+      width: `calc(${width}px - 12px)`,
+      height: 'calc(128px - 12px)',
+      margin: '6px',
+    },
+    sliders: {
+      width,
+      padding: '0 6px',
+    },
+    inputs: {
+      display: 'flex',
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      padding: '6px',
+    },
+    input: {
+      marginRight: '14px',
+    },
+    colorBg: {
+      width: 48,
+      height: 48,
       background: `
-      linear-gradient(45deg, #ccc 25%, transparent 25%), 
-      linear-gradient(135deg, #ccc 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, #ccc 75%),
-      linear-gradient(135deg, transparent 75%, #ccc 75%)`,
+        linear-gradient(45deg, #ccc 25%, transparent 25%), 
+        linear-gradient(135deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(135deg, transparent 75%, #ccc 75%)`,
       backgroundSize: '8px 8px',
       backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
       backgroundColor: 'white',
+      marginRight: 24,
     },
-    thumb: {
-      height: 20,
-      width: 8,
-      opacity: 0.8,
-      backgroundColor: '#fff',
-      borderRadius: '4px',
-      border: '1px solid #9e9e9e',
-      marginTop: -2,
-      marginLeft: -4,
-      '&:focus,&:hover,&$active': {
-        boxShadow: 'inherit',
-      },
+    color: {
+      width: 48,
+      height: 48,
+      backgroundColor,
     },
-    active: {},
-    track: {
-      height: 16,
-      borderRadius: 4,
-      opacity: 0,
+    controls: {
+      display: 'flex',
+      flexDirection: 'row-reverse',
+      flexWrap: 'wrap',
+      padding: '6px',
     },
-    rail: {
-      height: 16,
-      borderRadius: 0,
-      opacity: 1,
-      background: `rgba(0, 0, 0, 0) linear-gradient(to right, ${color}00 0%, ${color} 100%) repeat scroll 0% 0%`,
-    },
-  })(Slider);
+  }))();
+};
 
 const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onChange: _onChange = () => {} }) => {
   let color = validateColor(value);
@@ -140,8 +83,7 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
     onDeferredChange = _onChange;
   }
 
-  const classes = useStyles();
-
+  const classes = useStyles(color);
   const handleSet = () => {
     if (onDeferredChange) {
       onDeferredChange(color);
@@ -177,6 +119,9 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
   const displayInput = () =>
     inputFormats && (
       <div className={classes.inputs}>
+        <div className={classes.colorBg}>
+          <div className={classes.color} />
+        </div>
         {inputFormats.map(input => (
           <ColorInput key={input} value={color} format={input} className={classes.input} onChange={handleInputChange} />
         ))}
@@ -186,7 +131,7 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
   let { alpha } = color;
   alpha = alpha === undefined ? 100 : Math.floor(alpha * 100);
   const cssColor = getCssColor(color, 'hex', true);
-  const AlphaSlider = ASlider(cssColor);
+  const AlphaSlider = alphaSlider(cssColor);
   return (
     <Box p={2} className={classes.root}>
       <div className={classes.hsvGradient}>
