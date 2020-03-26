@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
-import { ColorPicker, ColorButton, ColorInput, ColorPalette } from '../src';
+import { ColorPicker, ColorButton, ColorBox, ColorInput, ColorPalette } from '../src';
 
 const palette = {
   red: '#ff0000',
@@ -77,3 +77,5 @@ storiesOf('ColorInput', module)
   ));
 
 storiesOf('ColorPalette', module).add('basic', () => <ColorPalette palette={palette} />);
+
+storiesOf('ColorBox', module).add('basic', () => <ColorBox defaultValue="#000" deferred palette={palette} />);
