@@ -1,121 +1,29 @@
-import resolve from '@rollup/plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
-import { terser } from 'rollup-plugin-terser';
-import replace from '@rollup/plugin-replace';
-import url from '@rollup/plugin-url';
-import hotcss from 'rollup-plugin-hot-css';
-import copy from 'rollup-plugin-copy';
+import resolve from '@rollup/plugin-node-resolve';
 
-const appName = 'rollupReactApp';
-const NODE_ENV = process.env.NODE_ENV || 'development';
-const production = NODE_ENV !== 'development' && NODE_ENV !== 'test';
-const development = NODE_ENV === 'development';
-const outputFile = production ? '/static/js/index' : '/index.[hash]';
-const publicUrl = process.env.PUBLIC_URL || 'http://localhost:9000';
-const esmFile = `${outputFile}.js`;
-const iifeFile = `${outputFile}.legacy.js`;
-const styles = development ? '/styles.[hash].css' : 'static/assets/styles.css';
-
-const genScripts = () => {
-  let scripts = `<script async type="module" src="${esmFile}"></script>`;
-  if (production) {
-    scripts += `<script nomodule src="${iifeFile}"></script>`;
-  }
-  return scripts;
+export default {
+  input: './src/index.js',
+  external: [
+    'react',
+    'react-dom',
+    '@material-ui/core/styles',
+    '@material-ui/core/Slider',
+    '@material-ui/core/Box',
+    '@material-ui/core/Button',
+    '@material-ui/core/Divider',
+    '@material-ui/core/Tooltip',
+    '@material-ui/core/TextField',
+    '@material-ui/core/FormControl',
+    '@material-ui/core/FormHelperText',
+    '@material-ui/core/InputLabel',
+    '@material-ui/core/Input',
+    '@material-ui/core/InputAdornment',
+    '@material-ui/core/Popover',
+    'material-ui-popup-state',
+    'prop-types',
+    'react-is',
+    'hoist-non-react-statics',
+  ],
+  output: [{ file: './dist/index.js', format: 'esm', sourcemap: true }],
+  plugins: [babel(), resolve({ extensions: ['.js', '.jsx'] })],
 };
-
-const plugins = babelConf => [
-  copy({
-    targets: [
-      {
-        src: [
-          'public/favicon.ico',
-          'public/logo192.png',
-          'public/logo512.png',
-          'public/manifest.json',
-          'public/robots.text',
-          'public/images',
-        ],
-        dest: 'build',
-      },
-      {
-        src: 'public/index.html',
-        dest: 'build',
-        transform: contents =>
-          contents
-            .toString()
-            .replace('%SCRIPTS%', genScripts())
-            .replace(/%PUBLIC_URL%/g, publicUrl)
-            .replace('%STYLES%', styles),
-      },
-    ],
-  }),
-  replace({
-    'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
-  }),
-  url(),
-  hotcss({
-    hot: development,
-    filename: development ? 'styles.css' : 'static/assets/styles.css',
-  }),
-  babel(babelConf),
-  resolve({ extensions: ['.mjs', '.js', '.jsx', '.json'] }),
-  production && terser(),
-];
-
-const esm = {
-  input: 'src/index.js',
-  output: {
-    dir: 'build',
-    format: 'esm',
-    entryFileNames: development ? '[name].[hash].js' : 'static/js/[name].js',
-    assetFileNames: development ? '[name].[hash][extname]' : '[name][extname]',
-    sourcemap: true,
-  },
-  plugins: plugins({
-    exclude: 'node_modules/**',
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: {
-            esmodules: true,
-          },
-        },
-      ],
-      '@babel/preset-react',
-    ],
-    plugins: development ? ['react-refresh/babel'] : [],
-  }),
-};
-
-const iife = {
-  input: 'src/index.js',
-  output: {
-    dir: 'build',
-    format: 'iife',
-    entryFileNames: 'static/js/[name].legacy.js',
-    assetFileNames: development ? '[name][hash][extname]' : '[name][extname]',
-    name: appName,
-    sourcemap: true,
-  },
-  plugins: plugins({
-    presets: [
-      [
-        '@babel/preset-env',
-        {
-          targets: {
-            browsers: ['> 0.5%'],
-          },
-        },
-      ],
-      '@babel/preset-react',
-    ],
-  }),
-};
-
-const config = [esm];
-if (production) {
-  config.push(iife);
-}
-export default config;
