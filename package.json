@@ -7,7 +7,7 @@
   "author": "Mik <mik@miklabs.com>",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf build && mkdir build",
+    "clean": "rimraf dist && mkdir dist",
     "build": "yarn clean &  cross-env NODE_ENV=production rollup -c && packito",
     "build-storybook": "build-storybook -c .storybook -o public",
     "storybook": "start-storybook -p 9005 -c .storybook",

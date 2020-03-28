@@ -17,9 +17,11 @@ import HSVGradient from './HSVGradient';
 import ColorInput from '../ColorInput';
 import ColorPalette from '../ColorPalette';
 import HueSlider from './HueSlider';
-import AlphaSlider from './ASlider';
+import AlphaSlider from './AlphaSlider';
 import { parse as colorParse, getCssColor, validateColor } from '../../helpers/colorTool';
 
+// To stay compatible with MUI theme
+// TODO remove in future
 const useStyles = () =>
   makeStyles(theme => ({
     root: {
