@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    width: 'max-content',
   },
   button: {
     margin: '6px',
@@ -29,22 +29,18 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats, onChange }) => {
-  const refButton = React.useRef();
+  const refPicker = React.useRef();
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [open, setOpen] = React.useState(false);
 
   const color = ColorTool.parse(value);
 
-  const handleClick = event => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = () => {
+    setOpen(Boolean(refPicker.current));
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const displayPicker = toggle => {
-    setAnchorEl(toggle ? refButton.current : null);
+    setOpen(false);
   };
 
   const handleColorChange = newColor => {
@@ -54,7 +50,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
     }
     onChange(newValue);
     if (deferred) {
-      displayPicker(false);
+      setOpen(false);
     }
   };
 
@@ -62,20 +58,13 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
     onChange(event.target.value);
   };
 
-  const open = Boolean(anchorEl);
   const id = open ? 'color-popover' : undefined;
 
   return (
-    <div className={classes.root}>
-      <ColorButton
-        className={classes.button}
-        color={color}
-        forwardRef={refButton}
-        aria-describedby={id}
-        onClick={handleClick}
-      />
+    <div className={classes.root} ref={refPicker}>
+      <ColorButton className={classes.button} color={color} aria-describedby={id} onClick={handleClick} />
       {disableTextfield ? (
-        <div role="button" onClick={() => displayPicker(true)}>
+        <div role="button" onClick={handleClick}>
           {color.raw}
         </div>
       ) : (
@@ -84,7 +73,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
       <Popover
         id={id}
         open={open}
-        anchorEl={anchorEl}
+        anchorEl={refPicker.current}
         onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
