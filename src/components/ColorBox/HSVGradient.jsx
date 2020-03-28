@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 
 const getRGB = _h => {
   let rgb;
@@ -29,7 +30,49 @@ const getRGB = _h => {
   return rgb;
 };
 
-const HSVGradient = ({ color, onChange, ...props }) => {
+const StyledRoot = styled.div`
+  position: absolute;
+  width: inherit;
+  height: inherit;
+  background: ${props => `${props.cssRgb} none repeat scroll 0% 0%`};
+  margin: 0;
+  & .muicc-hsvgradient-s {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0) linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0)) repeat scroll 0%
+      0%;
+  }
+  & .muicc-hsvgradient-v {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0) linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0)) repeat scroll 0% 0%;
+  }
+  & .muicc-hsvgradient-v {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0) linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0)) repeat scroll 0% 0%;
+  }
+  & .muicc-hsvgradient-pointer {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    cursor: ${props => !props.pressed && 'pointer'};
+    zindex: 100;
+  }
+  & .muicc-hsvgradient-pointer-c {
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset,
+      rgba(0, 0, 0, 0.4) 0px 0px 1px 2px;
+    transform: translate(-4px, -4px);
+  }
+`;
+
+const HSVGradient = ({ className, color, onChange, ...props }) => {
   const latestColor = React.useRef(color);
   React.useEffect(() => {
     latestColor.current = color;
@@ -111,51 +154,16 @@ const HSVGradient = ({ color, onChange, ...props }) => {
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div
-      {...props}
-      ref={box}
-      style={{ position: 'absolute', background: `${cssRgb} none repeat scroll 0% 0%`, margin: 0 }}
-    >
-      <div
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          background:
-            'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0)) repeat scroll 0% 0%',
-        }}
-      >
-        <div
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            background: 'rgba(0, 0, 0, 0) linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0)) repeat scroll 0% 0%',
-          }}
-        >
-          <div
-            ref={cursor}
-            style={{
-              position: 'absolute',
-              top: `0px`,
-              left: `0px`,
-              cursor: !pressed && 'pointer',
-              zIndex: '100',
-            }}
-          >
-            <div
-              style={{
-                width: '8px',
-                height: '8px',
-                borderRadius: '4px',
-                boxShadow:
-                  'rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset, rgba(0, 0, 0, 0.4) 0px 0px 1px 2px',
-                transform: 'translate(-4px, -4px)',
-              }}
-            />
+    <div className={className}>
+      <StyledRoot {...props} ref={box} cssRgb={cssRgb}>
+        <div className="muicc-hsvgradient-s">
+          <div className="muicc-hsvgradient-v">
+            <div ref={cursor} pressed={pressed} className="muicc-hsvgradient-pointer">
+              <div className="muicc-hsvgradient-pointer-c" />
+            </div>
           </div>
         </div>
-      </div>
+      </StyledRoot>
     </div>
   );
 };

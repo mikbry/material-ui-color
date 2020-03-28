@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -17,28 +17,20 @@ import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as ColorTool from '../helpers/colorTool';
 
-const useStyles = makeStyles(() => {
-  const size = '100px';
-  return {
-    root: {
-      width: size,
-      display: 'flex',
-      flexDirection: 'row',
-    },
-    value: {
-      margin: '8px',
-    },
-    raw: {
-      paddingRight: '4px',
-    },
-    label: {},
-    input: {},
-  };
-});
+const StyledRoot = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: ${props => props.size || '100px'};
+  & .muicc-colorinput-value {
+    margin: 8px;
+  }
+  & .muicc-colorinput-raw {
+    padding-right: 4px;
+  }
+`;
 
 const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRef, className, ...props }) => {
   const color = ColorTool.validateColor(value);
-  const classes = useStyles();
   let field;
   let components;
   const handleFieldChange = event => {
@@ -71,15 +63,15 @@ const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRe
     const names = Object.keys(components);
     field = (
       <FormControl error={!!color.error}>
-        <div className={`${className || ''} ${classes.root}`} ref={forwardRef} {...props}>
+        <StyledRoot className={className} ref={forwardRef} {...props}>
           {names.map(cn => (
-            <FormControl key={cn} className={classes.raw} error={!!color.error}>
-              <InputLabel htmlFor={cn} className={classes.label}>
+            <FormControl key={cn} className="muicc-colorinput-raw" error={!!color.error}>
+              <InputLabel htmlFor={cn} className="muicc-colorinput-label">
                 {components[cn].name}
               </InputLabel>
               <Input
                 id={cn}
-                className={classes.input}
+                className="muicc-colorinput-input"
                 label={components[cn].name}
                 value={components[cn].value}
                 margin={margin}
@@ -94,7 +86,7 @@ const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRe
               />
             </FormControl>
           ))}
-        </div>
+        </StyledRoot>
         {color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
       </FormControl>
     );
