@@ -10,27 +10,24 @@
  */
 
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';
 import * as ColorTool from '../helpers/colorTool';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: 'max-content',
-  },
-  button: {
-    margin: '6px',
-  },
-}));
+const StyledRoot = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  & .muicc-colorpicker-button {
+    margin: 6px;
+  }
+`;
 
 const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats, onChange }) => {
   const refPicker = React.useRef();
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const color = ColorTool.parse(value);
@@ -61,8 +58,8 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
   const id = open ? 'color-popover' : undefined;
 
   return (
-    <div className={classes.root} ref={refPicker}>
-      <ColorButton className={classes.button} color={color} aria-describedby={id} onClick={handleClick} />
+    <StyledRoot ref={refPicker}>
+      <ColorButton className="muicc-colorpicker-button" color={color} aria-describedby={id} onClick={handleClick} />
       {disableTextfield ? (
         <div role="button" onClick={handleClick}>
           {color.raw}
@@ -92,7 +89,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
           onChange={handleColorChange}
         />
       </Popover>
-    </div>
+    </StyledRoot>
   );
 };
 

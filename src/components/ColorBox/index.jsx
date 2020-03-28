@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
@@ -16,63 +17,65 @@ import HSVGradient from './HSVGradient';
 import ColorInput from '../ColorInput';
 import ColorPalette from '../ColorPalette';
 import HueSlider from './HueSlider';
-import alphaSlider from './alphaSlider';
+import AlphaSlider from './AlphaSlider';
 import { parse as colorParse, getCssColor, validateColor } from '../../helpers/colorTool';
 
-const useStyles = (color, width = 320) => {
-  const { backgroundColor } = color.css;
-  return makeStyles(theme => ({
+// To stay compatible with MUI theme
+// TODO remove in future
+const useStyles = () =>
+  makeStyles(theme => ({
     root: {
-      justifyContent: 'space-around',
-      overflow: 'hidden',
       backgroundColor: theme.palette.background.paper,
-      width,
+      height: '100%',
       padding: '0px',
     },
-    hsvGradient: {
-      width: `calc(${width}px - 12px)`,
-      height: 'calc(128px - 12px)',
-      margin: '6px',
-    },
-    sliders: {
-      width,
-      padding: '0 6px',
-    },
-    inputs: {
-      display: 'flex',
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      padding: '6px',
-    },
-    input: {
-      marginRight: '14px',
-    },
-    colorBg: {
-      width: 48,
-      height: 48,
-      background: `
-        linear-gradient(45deg, #ccc 25%, transparent 25%), 
-        linear-gradient(135deg, #ccc 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #ccc 75%),
-        linear-gradient(135deg, transparent 75%, #ccc 75%)`,
-      backgroundSize: '8px 8px',
-      backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
-      backgroundColor: 'white',
-      marginRight: 24,
-    },
-    color: {
-      width: 48,
-      height: 48,
-      backgroundColor,
-    },
-    controls: {
-      display: 'flex',
-      flexDirection: 'row-reverse',
-      flexWrap: 'wrap',
-      padding: '6px',
-    },
   }))();
-};
+
+const StyledBox = styled.div`
+  justify-content: space-around;
+  overflow: hidden;
+  width: ${props => `${props.boxWidth}px`};
+  padding: 0px;
+  & .muicc-colorbox-hsvgradient {
+    width: ${props => `calc(${props.boxWidth}px - 12px)`};
+    height: calc(128px - 12px);
+    margin: 6px;
+  }
+  & .muicc-colorbox-sliders {
+    width: ${props => `${props.boxWidth}px`};
+    padding: 0 6px;
+  }
+  & .muicc-colorbox-inputs {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 6px;
+  }
+  & .muicc-colorbox-input {
+    marginright: 14px;
+  }
+  & .muicc-colorbox-colorBg {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(45deg, #ccc 25%, transparent 25%), linear-gradient(135deg, #ccc 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ccc 75%), linear-gradient(135deg, transparent 75%, #ccc 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 4px 0, 4px -4px, 0px 4px;
+    background-color: white;
+    margin-right: 24px;
+  }
+  & .muicc-colorbox-color {
+    width: 48px;
+    height: 48px;
+    background-color: ${props => props.backgroundColor};
+  }
+  & .muicc-colorbox-controls {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+    padding: 6px;
+  }
+`;
 
 const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onChange: _onChange = () => {} }) => {
   let color = validateColor(value);
@@ -83,7 +86,6 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
     onDeferredChange = _onChange;
   }
 
-  const classes = useStyles(color);
   const handleSet = () => {
     if (onDeferredChange) {
       onDeferredChange(color);
@@ -118,12 +120,18 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
 
   const displayInput = () =>
     inputFormats && (
-      <div className={classes.inputs}>
-        <div className={classes.colorBg}>
-          <div className={classes.color} />
+      <div className="muicc-colorbox-inputs">
+        <div className="muicc-colorbox-colorBg">
+          <div className="muicc-colorbox-color" />
         </div>
         {inputFormats.map(input => (
-          <ColorInput key={input} value={color} format={input} className={classes.input} onChange={handleInputChange} />
+          <ColorInput
+            key={input}
+            value={color}
+            format={input}
+            className="muicc-colorbox-input"
+            onChange={handleInputChange}
+          />
         ))}
       </div>
     );
@@ -131,35 +139,38 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
   let { alpha } = color;
   alpha = alpha === undefined ? 100 : Math.floor(alpha * 100);
   const cssColor = getCssColor(color, 'hex', true);
-  const AlphaSlider = alphaSlider(cssColor);
+  const { backgroundColor } = color.css;
+  const boxWidth = 320;
+  const classroot = useStyles().root;
   return (
-    <Box p={2} className={classes.root}>
-      <div className={classes.hsvGradient}>
-        <HSVGradient className={classes.hsvGradient} color={color} onChange={handleSVChange} />
-      </div>
-      <div className={classes.sliders}>
-        <HueSlider aria-label="color slider" value={hsv[0]} min={0} max={360} onChange={handleHueChange} />
-        <AlphaSlider
-          valueLabelDisplay="auto"
-          aria-label="alpha slider"
-          value={alpha}
-          min={0}
-          max={100}
-          onChange={handleAlphaChange}
-        />
-      </div>
-      {displayInput(inputFormats)}
-      {palette && (
-        <>
-          <Divider />
-          <ColorPalette palette={palette} onSelect={handlePaletteSelection} />
-        </>
-      )}
-      {deferred && (
-        <div className={classes.controls}>
-          <Button onClick={handleSet}>Set</Button>
+    <Box p={2} className={classroot}>
+      <StyledBox boxWidth={boxWidth} backgroundColor={backgroundColor}>
+        <HSVGradient className="muicc-colorbox-hsvgradient" color={color} onChange={handleSVChange} />
+        <div className="muicc-colorbox-sliders">
+          <HueSlider aria-label="color slider" value={hsv[0]} min={0} max={360} onChange={handleHueChange} />
+          <AlphaSlider
+            color={cssColor}
+            valueLabelDisplay="auto"
+            aria-label="alpha slider"
+            value={alpha}
+            min={0}
+            max={100}
+            onChange={handleAlphaChange}
+          />
         </div>
-      )}
+        {displayInput(inputFormats)}
+        {palette && (
+          <>
+            <Divider />
+            <ColorPalette palette={palette} onSelect={handlePaletteSelection} />
+          </>
+        )}
+        {deferred && (
+          <div className="muicc-colorbox-controls">
+            <Button onClick={handleSet}>Set</Button>
+          </div>
+        )}
+      </StyledBox>
     </Box>
   );
 };

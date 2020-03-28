@@ -8,44 +8,40 @@
  */
 
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import styled from 'styled-components';
 import ColorButton from './ColorButton';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    padding: '6px',
-  },
-  paletteButton: {
-    marginRight: '4px',
-    marginBottom: '4px',
-    padding: '0px',
-  },
-}));
+const StyledRoot = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 6px;
+  & .muicc-palette-button {
+    margin-right: 4px;
+    margin-bottom: 4px;
+    padding: 0;
+  }
+`;
 
 const ColorPalette = ({ borderWidth = 0, palette, onSelect = () => {} }) => {
-  const classes = useStyles();
-
   const handleSelectColor = name => {
     onSelect(name, palette[name]);
   };
 
   return (
-    <div className={classes.root}>
+    <StyledRoot>
       {Object.keys(palette).map(name => (
         <ColorButton
           size={24}
           key={`${name}`}
           color={palette[name]}
-          className={classes.paletteButton}
+          className="muicc-palette-button"
           borderWidth={borderWidth}
           tooltip={name}
           onClick={() => handleSelectColor(name)}
         />
       ))}
-    </div>
+    </StyledRoot>
   );
 };
 
