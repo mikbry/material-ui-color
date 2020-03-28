@@ -114,12 +114,13 @@ const HSVGradient = ({ color, onChange, ...props }) => {
     <div
       {...props}
       ref={box}
-      style={{ position: 'absolute', inset: '0px', background: `${cssRgb} none repeat scroll 0% 0%` }}
+      style={{ position: 'absolute', background: `${cssRgb} none repeat scroll 0% 0%`, margin: 0 }}
     >
       <div
         style={{
           position: 'absolute',
-          inset: '0px',
+          width: '100%',
+          height: '100%',
           background:
             'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(255, 255, 255), rgba(255, 255, 255, 0)) repeat scroll 0% 0%',
         }}
@@ -127,7 +128,8 @@ const HSVGradient = ({ color, onChange, ...props }) => {
         <div
           style={{
             position: 'absolute',
-            inset: '0px',
+            width: '100%',
+            height: '100%',
             background: 'rgba(0, 0, 0, 0) linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0)) repeat scroll 0% 0%',
           }}
         >
