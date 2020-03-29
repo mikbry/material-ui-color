@@ -10,7 +10,6 @@ import React from 'react';
 // eslint-disable-next-line react/prop-types
 const Uncontrolled = ({ element, defaultValue, ...props }) => {
   const [value, onChange] = React.useState(defaultValue);
-  console.log('uncontrolled', element, value);
   return React.createElement(element, { value, onChange, ...props });
 };
 
