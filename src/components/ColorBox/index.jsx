@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -19,6 +20,8 @@ import ColorPalette from '../ColorPalette';
 import HueSlider from './HueSlider';
 import AlphaSlider from './AlphaSlider';
 import { parse as colorParse, getCssColor, validateColor } from '../../helpers/colorTool';
+import uncontrolled from '../../helpers/uncontrolled';
+import * as CommonTypes from '../../helpers/commonTypes';
 
 // To stay compatible with MUI theme
 // TODO remove in future
@@ -77,7 +80,7 @@ const StyledBox = styled.div`
   }
 `;
 
-const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onChange: _onChange = () => {} }) => {
+const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange }) => {
   let color = validateColor(value);
   let onChange = _onChange;
   let onDeferredChange;
@@ -175,14 +178,18 @@ const ColorBox = ({ value, palette, inputFormats = ['hex', 'rgb'], deferred, onC
   );
 };
 
-const Uncontrolled = ({ defaultValue, ...props }) => {
-  const [value, onChange] = React.useState(defaultValue);
-  return <ColorBox value={value} onChange={onChange} {...props} />;
+ColorBox.propTypes = {
+  value: CommonTypes.color.isRequired,
+  deferred: PropTypes.bool,
+  palette: CommonTypes.palette,
+  inputFormats: CommonTypes.inputFormats,
+  onChange: PropTypes.func.isRequired,
 };
 
-export default ({ defaultValue, value, onChange, ...props }) =>
-  defaultValue ? (
-    <Uncontrolled defaultValue={defaultValue} {...props} />
-  ) : (
-    <ColorBox value={value} onChange={onChange} {...props} />
-  );
+ColorBox.defaultProps = {
+  deferred: false,
+  palette: null,
+  inputFormats: ['hex', 'rgb'],
+};
+
+export default uncontrolled(ColorBox);

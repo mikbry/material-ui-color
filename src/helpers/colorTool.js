@@ -361,7 +361,7 @@ const parse = (raw, _format) => {
     value = 0;
     alpha = undefined;
     color.css = {
-      background: `
+      backgroundImage: `
         linear-gradient(45deg, #ccc 25%, transparent 25%), 
         linear-gradient(135deg, #ccc 25%, transparent 25%),
         linear-gradient(45deg, transparent 75%, #ccc 75%),
