@@ -10,12 +10,15 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';
 import * as ColorTool from '../helpers/colorTool';
+import uncontrolled from '../helpers/uncontrolled';
+import * as CommonTypes from '../helpers/commonTypes';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -93,14 +96,21 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
   );
 };
 
-const Uncontrolled = ({ defaultValue, ...props }) => {
-  const [value, onChange] = React.useState(defaultValue);
-  return <ColorPicker value={value} onChange={onChange} {...props} />;
+ColorPicker.propTypes = {
+  value: CommonTypes.color,
+  disableTextfield: PropTypes.bool,
+  deferred: PropTypes.bool,
+  palette: CommonTypes.palette,
+  inputFormats: CommonTypes.inputFormats,
+  onChange: PropTypes.func.isRequired,
 };
 
-export default ({ defaultValue, value, onChange, ...props }) =>
-  defaultValue ? (
-    <Uncontrolled defaultValue={defaultValue} {...props} />
-  ) : (
-    <ColorPicker value={value} onChange={onChange} {...props} />
-  );
+ColorPicker.defaultProps = {
+  value: 'none',
+  disableTextfield: false,
+  deferred: false,
+  palette: null,
+  inputFormats: ['hex', 'rgb'],
+};
+
+export default uncontrolled(ColorPicker);

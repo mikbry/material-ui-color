@@ -23,6 +23,7 @@ const palette = {
   darkBlue: 'darkBlue',
 };
 
+// eslint-disable-next-line react/prop-types
 const Controlled = ({ value }) => {
   const [color, setColor] = useState(value);
   const handleChange = newValue => {

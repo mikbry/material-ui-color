@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import Slider from '@material-ui/core/Slider';
 
 export default styled(Slider)`
-  color: #52af77;
   width: 100%;
   height: 24px;
   padding: 0;

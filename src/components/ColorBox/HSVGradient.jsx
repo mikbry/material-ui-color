@@ -8,7 +8,9 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import * as CommonTypes from '../../helpers/commonTypes';
 
 const getRGB = _h => {
   let rgb;
@@ -166,6 +168,12 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
       </StyledRoot>
     </div>
   );
+};
+
+HSVGradient.propTypes = {
+  color: CommonTypes.color.isRequired,
+  className: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 };
 
 export default HSVGradient;

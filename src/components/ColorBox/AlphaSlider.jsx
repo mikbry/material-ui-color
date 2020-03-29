@@ -5,10 +5,12 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
+import React from 'react';
 import styled from 'styled-components';
 import Slider from '@material-ui/core/Slider';
 
-export default styled(Slider)`
+// eslint-disable-next-line react/jsx-props-no-spreading
+export default styled(({ color, ...other }) => <Slider {...other} />)`
   color: #6666;
   width: 100%;
   height: 16px;

@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
@@ -16,11 +17,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import * as ColorTool from '../helpers/colorTool';
+import uncontrolled from '../helpers/uncontrolled';
+import * as CommonTypes from '../helpers/commonTypes';
 
 const StyledRoot = styled.div`
   display: flex;
   flex-direction: row;
-  width: ${props => props.size || '100px'};
+  width: ${props => props.width || '100px'};
   & .muicc-colorinput-value {
     margin: 8px;
   }
@@ -29,7 +32,7 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRef, className, ...props }) => {
+const ColorInput = ({ value, format, margin, size, width, onChange, forwardRef, className, ...props }) => {
   const color = ColorTool.validateColor(value);
   let field;
   let components;
@@ -94,14 +97,24 @@ const ColorInput = ({ value, format = 'plain', margin, size, onChange, forwardRe
   return field;
 };
 
-const Uncontrolled = ({ defaultValue, ...props }) => {
-  const [value, onChange] = React.useState(defaultValue);
-  return <ColorInput value={value} onChange={onChange} {...props} />;
+ColorInput.propTypes = {
+  value: CommonTypes.color.isRequired,
+  format: PropTypes.string,
+  margin: PropTypes.string,
+  size: PropTypes.string,
+  width: PropTypes.number,
+  onChange: PropTypes.func.isRequired,
+  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  className: PropTypes.string,
 };
 
-export default ({ defaultValue, value, onChange, ...props }) =>
-  defaultValue ? (
-    <Uncontrolled defaultValue={defaultValue} {...props} />
-  ) : (
-    <ColorInput value={value} onChange={onChange} {...props} />
-  );
+ColorInput.defaultProps = {
+  format: 'plain',
+  margin: undefined,
+  size: undefined,
+  width: undefined,
+  forwardRef: null,
+  className: null,
+};
+
+export default uncontrolled(ColorInput);

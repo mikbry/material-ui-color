@@ -8,15 +8,17 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import * as ColorTool from '../helpers/colorTool';
+import * as CommonTypes from '../helpers/commonTypes';
 
-const StyledButton = styled(({ color, style, size, hoverColor, borderColor, bordeWidth, tooltip, ...other }) => (
+const StyledButton = styled(({ color, style, size, hoverColor, borderColor, borderWidth, tooltip, ...other }) => (
   <Button {...other} />
 ))`
-  background: ${props => props.style.background};
+  background-image: ${props => props.style.backgroundImage};
   background-color: ${props => props.style.backgroundColor};
   background-size: ${props => props.style.backgroundSize};
   background-position: ${props => props.style.backgroundPosition};
@@ -38,7 +40,7 @@ const StyledButton = styled(({ color, style, size, hoverColor, borderColor, bord
   }
 `;
 
-export default ({ color: c, size, borderWidth, borderColor, forwardRef, className, tooltip, ...props }) => {
+const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, className, tooltip, ...props }) => {
   const color = ColorTool.validateColor(c);
   const style = color.css || { backgroundColor: ColorTool.getCssColor(color) };
   let l = color.hsl[2] - 10;
@@ -51,7 +53,7 @@ export default ({ color: c, size, borderWidth, borderColor, forwardRef, classNam
       size={size || 24}
       hoverColor={hoverColor}
       borderColor={borderColor}
-      borderWith={borderWidth || 0}
+      borderWidth={borderWidth || 0}
       ref={forwardRef}
       variant="contained"
       aria-label={color.name || c}
@@ -70,3 +72,24 @@ export default ({ color: c, size, borderWidth, borderColor, forwardRef, classNam
   }
   return component;
 };
+
+ColorButton.propTypes = {
+  color: CommonTypes.color.isRequired,
+  size: PropTypes.number,
+  borderWidth: PropTypes.number,
+  borderColor: PropTypes.string,
+  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  className: PropTypes.string,
+  tooltip: PropTypes.string,
+};
+
+ColorButton.defaultProps = {
+  size: 24,
+  borderWidth: 0,
+  borderColor: null,
+  forwardRef: null,
+  className: null,
+  tooltip: null,
+};
+
+export default ColorButton;

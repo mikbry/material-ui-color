@@ -8,8 +8,10 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ColorButton from './ColorButton';
+import * as CommonTypes from '../helpers/commonTypes';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -23,7 +25,7 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorPalette = ({ borderWidth = 0, palette, onSelect = () => {} }) => {
+const ColorPalette = ({ borderWidth, palette, onSelect }) => {
   const handleSelectColor = name => {
     onSelect(name, palette[name]);
   };
@@ -43,6 +45,19 @@ const ColorPalette = ({ borderWidth = 0, palette, onSelect = () => {} }) => {
       ))}
     </StyledRoot>
   );
+};
+
+ColorPalette.propTypes = {
+  borderWidth: PropTypes.number,
+  palette: CommonTypes.palette.isRequired,
+  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  onSelect: PropTypes.func,
+};
+
+ColorPalette.defaultProps = {
+  borderWidth: 0,
+  forwardRef: null,
+  onSelect: () => {},
 };
 
 export default ColorPalette;
