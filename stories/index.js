@@ -66,14 +66,14 @@ storiesOf('ColorInput', module)
       <ColorInput defaultValue="red" format="rgb" margin="dense" size="small" />
     </div>
   ))
-  .add('hsv', () => (
-    <div style={style}>
-      <ColorInput defaultValue="red" format="hsv" margin="dense" size="small" />
-    </div>
-  ))
   .add('hsl', () => (
     <div style={style}>
       <ColorInput defaultValue="red" format="hsl" margin="dense" size="small" />
+    </div>
+  ))
+  .add('hsv', () => (
+    <div style={style}>
+      <ColorInput defaultValue="red" format="hsv" margin="dense" size="small" />
     </div>
   ));
 

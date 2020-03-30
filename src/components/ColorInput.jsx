@@ -10,7 +10,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -20,10 +19,13 @@ import * as ColorTool from '../helpers/colorTool';
 import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
 
+const StyledFormControl = styled(FormControl)`
+  width: 100px;
+`;
+
 const StyledRoot = styled.div`
   display: flex;
   flex-direction: row;
-  width: ${props => props.width || '100px'};
   & .muicc-colorinput-value {
     margin: 8px;
   }
@@ -32,10 +34,11 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format, margin, size, width, onChange, forwardRef, className, ...props }) => {
+const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
   const color = ColorTool.validateColor(value);
   let field;
   let components;
+
   const handleFieldChange = event => {
     if (format === 'plain') {
       onChange(event.target.value);
@@ -57,64 +60,61 @@ const ColorInput = ({ value, format, margin, size, width, onChange, forwardRef, 
       onChange(values);
     }
   };
+
+  const buildInput = (cn, name, v, unit, isStart) => (
+    <>
+      <InputLabel htmlFor={cn} className="muicc-colorinput-label" data-testid="label-color">
+        {name}
+      </InputLabel>
+      <Input
+        id={cn}
+        name={cn}
+        className="muicc-colorinput-input"
+        label={name}
+        value={v}
+        placeholder={name}
+        inputProps={{ 'aria-label': `color-${name}`, 'data-testid': 'input-color' }}
+        onChange={handleFieldChange}
+        startAdornment={isStart && unit && <InputAdornment position="start">{unit}</InputAdornment>}
+        {...props}
+      />
+    </>
+  );
+
   if (format === 'plain') {
-    field = (
-      <TextField label="Color" value={color.raw} margin={margin} size={size} onChange={handleFieldChange} {...props} />
-    );
+    field = buildInput('color-plain', 'Color', color.raw);
   } else {
     components = ColorTool.getComponents(color, format);
     const names = Object.keys(components);
     field = (
-      <FormControl error={!!color.error}>
-        <StyledRoot className={className} ref={forwardRef} {...props}>
-          {names.map(cn => (
-            <FormControl key={cn} className="muicc-colorinput-raw" error={!!color.error}>
-              <InputLabel htmlFor={cn} className="muicc-colorinput-label">
-                {components[cn].name}
-              </InputLabel>
-              <Input
-                id={cn}
-                className="muicc-colorinput-input"
-                label={components[cn].name}
-                value={components[cn].value}
-                margin={margin}
-                size={size}
-                placeholder={components[cn].name}
-                inputProps={{ 'aria-label': `color-${components[cn].name}` }}
-                onChange={handleFieldChange}
-                startAdornment={
-                  names.length === 1 &&
-                  components[cn].unit && <InputAdornment position="start">{components[cn].unit}</InputAdornment>
-                }
-              />
-            </FormControl>
-          ))}
-        </StyledRoot>
-        {color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
-      </FormControl>
+      <StyledRoot ref={forwardRef}>
+        {names.map(cn => (
+          <FormControl key={cn} className="muicc-colorinput-raw" error={!!color.error}>
+            {buildInput(cn, components[cn].name, components[cn].value, components[cn].unit, names.length === 1)}
+          </FormControl>
+        ))}
+      </StyledRoot>
     );
   }
-  return field;
+  return (
+    <StyledFormControl error={!!color.error} data-testid="colorinput">
+      {field}
+      {color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
+    </StyledFormControl>
+  );
 };
 
 ColorInput.propTypes = {
-  value: CommonTypes.color.isRequired,
+  value: CommonTypes.color,
   format: PropTypes.string,
-  margin: PropTypes.string,
-  size: PropTypes.string,
-  width: PropTypes.number,
   onChange: PropTypes.func.isRequired,
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  className: PropTypes.string,
 };
 
 ColorInput.defaultProps = {
+  value: '',
   format: 'plain',
-  margin: undefined,
-  size: undefined,
-  width: undefined,
-  forwardRef: null,
-  className: null,
+  forwardRef: undefined,
 };
 
 export default uncontrolled(ColorInput);

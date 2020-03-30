@@ -16,7 +16,7 @@ import * as ColorTool from '../helpers/colorTool';
 import * as CommonTypes from '../helpers/commonTypes';
 
 const StyledButton = styled(({ color, style, size, hoverColor, borderColor, borderWidth, tooltip, ...other }) => (
-  <Button {...other} />
+  <Button data-testid="colorbutton" {...other} />
 ))`
   background-image: ${props => props.style.backgroundImage};
   background-color: ${props => props.style.backgroundColor};
