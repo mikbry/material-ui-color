@@ -10,7 +10,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ColorInput from '../src/components/ColorInput';
 
-test('ColorInput should renders correctly', () => {
+test('ColorInput should render correctly', () => {
   const { asFragment } = render(<ColorInput defaultValue="darkBlue" />);
   expect(asFragment()).toMatchSnapshot();
 });

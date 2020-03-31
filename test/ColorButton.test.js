@@ -10,7 +10,7 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ColorButton from '../src/components/ColorButton';
 
-test('ColorButton should renders correctly', () => {
+test('ColorButton should render correctly', () => {
   const { asFragment } = render(<ColorButton color="darkBlue" />);
   expect(asFragment()).toMatchSnapshot();
 });
