@@ -180,6 +180,14 @@ test('ColorTool parse simple', () => {
   expect(color.name).toEqual('aliceblue');
   color = ColorTool.parse(0xf4a460);
   expect(color.name).toEqual('sandybrown');
+
+  color = ColorTool.parse('#FFF');
+  expect(color.raw).toEqual('#FFF');
+  expect(color.hex).toEqual('FFFFFF');
+
+  color = ColorTool.parse('#FFFE');
+  expect(color.raw).toEqual('#FFFE');
+  expect(color.hex).toEqual('FFFFFFEE');
 });
 
 test('ColorTool parse css color keywords', () => {
@@ -190,6 +198,30 @@ test('ColorTool parse css color keywords', () => {
     color = ColorTool.parse(name);
     expect(color.name).toEqual(name);
   });
+});
+
+test('ColorTool parse errors', () => {
+  let color = ColorTool.parse('redbull');
+  expect(color.raw).toEqual('redbull');
+  expect(color.value).toEqual(0);
+
+  color = ColorTool.parse(0xff00000000);
+  expect(color.raw).toEqual(0xff00000000);
+  expect(color.hex).toEqual('000000');
+
+  color = ColorTool.parse(-10);
+  expect(color.raw).toEqual(-10);
+  expect(color.hex).toEqual('FFFFF6');
+
+  color = ColorTool.parse('#XZRT');
+  expect(color.raw).toEqual('#XZRT');
+  expect(color.hex).toEqual('000000');
+  expect(color.error).toEqual('Not an hex value');
+
+  color = ColorTool.parse('#F');
+  expect(color.raw).toEqual('#F');
+  expect(color.hex).toEqual('000000');
+  expect(color.error).toEqual('Wrong format');
 });
 
 test('ColorTool parse css rgb / rgba', () => {
@@ -342,6 +374,22 @@ test('ColorTool parse css hsl / hsla', () => {
   hsl = ColorTool.parse('hsla(240 100% 50% / 5%)');
   expect(hsl.hex).toEqual('0000FF0C');
 
+  // other gradient
+  hsl = ColorTool.parse('hsl(140 60% 10% ) ');
+  expect(hsl.hex).toEqual('0A2914');
+  hsl = ColorTool.parse('hsl(250 60% 10% ) ');
+  expect(hsl.hex).toEqual('0F0A29');
+  hsl = ColorTool.parse('hsl(310 60% 10% ) ');
+  expect(hsl.hex).toEqual('290A24');
+
+  // Out of border values
+  hsl = ColorTool.parse('hsl(470 60% 50% / 15%) ');
+  expect(hsl.hex).toEqual('4DCC3326');
+  hsl = ColorTool.parse('hsl(-70 60% 50% / 15%) ');
+  expect(hsl.hex).toEqual('CC333326');
+  hsl = ColorTool.parse('hsl(-70 -60% 150% / 15%) ');
+  expect(hsl.hex).toEqual('FFFFFF26');
+
   // parse non valid css hsl
   hsl = ColorTool.parse('hsl()');
   expect(hsl.hex).toEqual('000000');
@@ -458,4 +506,72 @@ test('ColorTool parse hsv array', () => {
   expect(hsv.hex).toEqual('E6E6FA');
   hsv = ColorTool.parse([240, 8, 98, 1], 'hsv');
   expect(hsv.hex).toEqual('E6E6FAFF');
+
+  // s = 0
+  hsv = ColorTool.parse([240, 0, 98, 1], 'hsv');
+  expect(hsv.hex).toEqual('FAFAFAFF');
+
+  hsv = ColorTool.parse([0, 50, 98, 1], 'hsv');
+  expect(hsv.hex).toEqual('FA7D7DFF');
+  hsv = ColorTool.parse([70, 50, 98, 1], 'hsv');
+  expect(hsv.hex).toEqual('E5FA7DFF');
+  hsv = ColorTool.parse([130, 50, 98, 1], 'hsv');
+  expect(hsv.hex).toEqual('7DFA92FF');
+  hsv = ColorTool.parse([190, 50, 98, 1], 'hsv');
+  expect(hsv.hex).toEqual('7DE5FAFF');
+  hsv = ColorTool.parse([320, 50, 98, 1], 'hsv');
+  expect(hsv.hex).toEqual('FA7DD0FF');
+
+  hsv = ColorTool.parse([320, 50, 98, '10%'], 'hsv');
+  expect(hsv.hex).toEqual('FA7DD019');
+
+  hsv = ColorTool.parse([320, 50, 98, '0.1'], 'hsv');
+  expect(hsv.hex).toEqual('FA7DD019');
+
+  // Parse non valid array
+  hsv = ColorTool.parse([], 'hsv');
+  expect(hsv.error).toEqual('Not a valid size');
+  hsv = ColorTool.parse([0, 1, 2, 3, 4, 5], 'hsv');
+  expect(hsv.error).toEqual('Not a valid size');
+});
+
+test('ColorTool parse csscolor/hex array', () => {
+  let color = ColorTool.parse(['red'], 'plain');
+  expect(color.name).toEqual('red');
+  color = ColorTool.parse(['#f00'], 'hex');
+  expect(color.name).toEqual('red');
+});
+
+test('ColorTool parse unknown array', () => {
+  const unknown = ColorTool.parse(['240', '8%', '98%']);
+  expect(unknown.error).toEqual('unkown format');
+});
+
+test('ColorTool getComponents hex', () => {
+  const components = ColorTool.getComponents('red', 'hex');
+  expect(components.hex.name).toEqual('HEX');
+  expect(components.hex.format).toEqual('hex');
+  expect(components.hex.value).toEqual('FF0000');
+  expect(components.hex.unit).toEqual('#');
+});
+
+test('ColorTool getComponents unknown', () => {
+  const components = ColorTool.getComponents('red');
+  expect(components.value).toEqual(16711680);
+  expect(components.format).toEqual('unknown');
+});
+
+test('ColorTool getCssColor unknown', () => {
+  const csscolor = ColorTool.getCssColor({ value: 16711680 });
+  expect(csscolor).toEqual(undefined);
+});
+
+test('ColorTool getCssColor alpha=1', () => {
+  const csscolor = ColorTool.getCssColor({ value: 16711680, alpha: 1 }, 'hex');
+  expect(csscolor).toEqual('#FF0000');
+});
+
+test('ColorTool getCssColor alpha=0.5', () => {
+  const csscolor = ColorTool.getCssColor({ value: 16711680, alpha: 0.5 }, 'hex');
+  expect(csscolor).toEqual('#FF00007F');
 });

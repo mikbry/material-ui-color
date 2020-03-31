@@ -87,6 +87,10 @@
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",

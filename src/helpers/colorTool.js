@@ -9,7 +9,7 @@
 import cssColors from './cssColors';
 
 // Inspiration : https://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hexadecimal-in-javascript
-const getHexa = _n => {
+/* const getHexa = n => {
   let n = _n;
   if (n < 0) {
     n = 0xffffffff + n + 1;
@@ -19,18 +19,20 @@ const getHexa = _n => {
     hexa = hexa.substring(2);
   }
   return hexa;
-};
+}; */
 
 const getCssHexa = (n, alpha) => {
-  let hex = getHexa(n & 0xffffff);
+  // let hex = getHexa(n & 0xffffff);
+  let hex = `00000000${(n & 0xffffff).toString(16).toUpperCase()}`.substr(-6);
   if (!Number.isNaN(alpha) && alpha !== undefined) {
     let a = alpha.toString(16).toUpperCase();
     if (a.length === 1) a = `0${a}`;
-    if (hex.length === 8) {
+    /* if (hex.length === 8) {
       hex = hex.substring(2) + a;
     } else {
       hex += a;
-    }
+    } */
+    hex += a;
   }
   return hex;
 };
@@ -99,7 +101,7 @@ const fromCssHexa = hex => {
     }
     value = rgbToInt(rgb);
   } else {
-    return { error: 'wrong format' };
+    return { error: 'Wrong format' };
   }
   return { format: 'hex', value, rgb, alpha };
 };
@@ -130,7 +132,7 @@ const getValue = _v => {
 
 const fromHsl = _hsl => {
   if (!_hsl || _hsl.length < 3 || _hsl.length > 4) {
-    return { error: 'not valid size' };
+    return { error: 'Not a valid size' };
   }
   let rgb;
   const hsl = _hsl;
@@ -159,7 +161,7 @@ const fromHsl = _hsl => {
     rgb = [0, x, c];
   } else if (h >= 240 && h < 300) {
     rgb = [x, 0, c];
-  } else if (h >= 300 && h < 360) {
+  } /* if (h >= 300 && h < 360) */ else {
     rgb = [c, 0, x];
   }
   rgb[0] = Math.round((rgb[0] + m) * 255);
@@ -180,7 +182,7 @@ const fromHsl = _hsl => {
 
 const fromHsv = hsv => {
   if (!hsv || hsv.length < 3 || hsv.length > 4) {
-    return { error: 'not valid size' };
+    return { error: 'Not a valid size' };
   }
   let rgb;
   let h = getDeg(hsv[0]);
@@ -203,11 +205,11 @@ const fromHsv = hsv => {
 
     i %= 6;
     if (i === 0) rgb = [v, t, p];
-    if (i === 1) rgb = [q, v, p];
-    if (i === 2) rgb = [p, v, t];
-    if (i === 3) rgb = [p, q, v];
-    if (i === 4) rgb = [t, p, v];
-    if (i === 5) rgb = [v, p, q];
+    else if (i === 1) rgb = [q, v, p];
+    else if (i === 2) rgb = [p, v, t];
+    else if (i === 3) rgb = [p, q, v];
+    else if (i === 4) rgb = [t, p, v];
+    /* if (i === 5) */ else rgb = [v, p, q];
   }
   let alpha = hsv[3];
   if (alpha !== undefined) {
@@ -291,8 +293,8 @@ const tupleToArray = value => {
 const colorsFormats = ['plain', 'hex', 'rgb', 'hsl', 'hsv'];
 
 const colorsFunc = [
-  value => cssColors[value[0]],
-  value => getRgb(value),
+  value => ({ format: 'plain', value: cssColors[value[0]] }),
+  value => fromCssHexa(value[0]),
   value => fromRgb(value),
   value => fromHsl(value),
   value => fromHsv(value),
@@ -427,7 +429,8 @@ const getComponents = (_color, format) => {
     }
     components.hex = { value: hex, format: 'hex', name: 'HEX', unit: '#' };
   } else {
-    components.hex = { value: color.value };
+    components.value = color.value;
+    components.format = 'unknown';
   }
   return components;
 };

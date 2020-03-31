@@ -61,3 +61,79 @@ test('ColorPicker onChange controlled', async () => {
   expect(input.value).toBe('blue');
   expect(value).toBe(undefined);
 });
+
+test('ColorPicker disableTextfield', async () => {
+  const { findByTestId } = render(<ColorPicker value="red" disableTextfield />);
+  expect(await findByTestId('colorpicker-noinput')).toBeTruthy();
+});
+
+test('ColorPicker disableTextfield click', async () => {
+  const onOpen = jest.fn();
+  const { findByTestId } = render(<ColorPicker value="#ff0a" disableTextfield onOpen={onOpen} />);
+  const button = await findByTestId('colorpicker-noinput');
+  fireEvent.click(button);
+  expect(onOpen).toHaveBeenCalledTimes(1);
+});
+
+test('ColorPicker colorbutton click', async () => {
+  const onOpen = jest.fn();
+  const { findByTestId, rerender } = render(<ColorPicker value="rgb(0,0,0)" disableTextfield />);
+  let button = await findByTestId('colorpicker-button');
+  fireEvent.click(button);
+  expect(onOpen).toHaveBeenCalledTimes(0);
+  rerender(<ColorPicker value="red" disableTextfield onOpen={onOpen} />);
+  button = await findByTestId('colorpicker-button');
+  fireEvent.click(button);
+  expect(onOpen).toHaveBeenCalledTimes(1);
+});
+
+test('ColorPicker deferred', async () => {
+  const onOpen = jest.fn();
+  const onChange = jest.fn();
+  const doPopup = box => <div>{box}</div>;
+
+  const { findAllByTestId, getByText, rerender } = render(
+    <ColorPicker value="red" palette={palette} openAtStart deferred doPopup={doPopup} onChange={onChange} />,
+  );
+  let buttons = await findAllByTestId('colorbutton');
+  expect(buttons.length).toBe(13);
+  fireEvent.click(buttons[2]);
+  let button = getByText('Set');
+  fireEvent.click(button);
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(onOpen).toHaveBeenCalledTimes(0);
+
+  rerender(
+    <ColorPicker
+      value="red"
+      palette={palette}
+      openAtStart
+      deferred
+      doPopup={doPopup}
+      onOpen={onOpen}
+      onChange={onChange}
+    />,
+  );
+  buttons = await findAllByTestId('colorbutton');
+  expect(buttons.length).toBe(13);
+  fireEvent.click(buttons[2]);
+  button = getByText('Set');
+  fireEvent.click(button);
+  expect(onChange).toHaveBeenCalledTimes(2);
+  expect(onOpen).toHaveBeenCalledTimes(1);
+});
+
+test('ColorPicker open', async () => {
+  const onChange = jest.fn();
+  const doPopup = box => <div>{box}</div>;
+
+  const { findAllByTestId, rerender } = render(<ColorPicker value={1234} palette={palette} doPopup={doPopup} />);
+  let buttons = await findAllByTestId('colorbutton');
+  expect(buttons.length).toBe(13);
+  fireEvent.click(buttons[2]);
+  expect(onChange).toHaveBeenCalledTimes(0);
+  rerender(<ColorPicker value="red" palette={palette} openAtStart doPopup={doPopup} onChange={onChange} />);
+  buttons = await findAllByTestId('colorbutton');
+  fireEvent.click(buttons[6]);
+  expect(onChange).toHaveBeenCalledTimes(1);
+});
