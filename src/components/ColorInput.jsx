@@ -63,7 +63,7 @@ const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
 
   const buildInput = (cn, name, v, unit, isStart) => (
     <>
-      <InputLabel htmlFor={cn} className="muicc-colorinput-label" data-testid="label-color">
+      <InputLabel htmlFor={cn} className="muicc-colorinput-label" data-testid="colorinput-label">
         {name}
       </InputLabel>
       <Input
@@ -73,7 +73,7 @@ const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
         label={name}
         value={v}
         placeholder={name}
-        inputProps={{ 'aria-label': `color-${name}`, 'data-testid': 'input-color' }}
+        inputProps={{ 'aria-label': `color-${name}`, 'data-testid': 'colorinput-input' }}
         onChange={handleFieldChange}
         startAdornment={isStart && unit && <InputAdornment position="start">{unit}</InputAdornment>}
         {...props}

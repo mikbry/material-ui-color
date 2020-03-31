@@ -150,8 +150,16 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange 
       <StyledBox boxWidth={boxWidth} backgroundColor={backgroundColor}>
         <HSVGradient className="muicc-colorbox-hsvgradient" color={color} onChange={handleSVChange} />
         <div className="muicc-colorbox-sliders">
-          <HueSlider aria-label="color slider" value={hsv[0]} min={0} max={360} onChange={handleHueChange} />
+          <HueSlider
+            data-testid="hue-slider"
+            aria-label="color slider"
+            value={hsv[0]}
+            min={0}
+            max={360}
+            onChange={handleHueChange}
+          />
           <AlphaSlider
+            data-testid="alpha-slider"
             color={cssColor}
             valueLabelDisplay="auto"
             aria-label="alpha slider"
@@ -179,7 +187,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange 
 };
 
 ColorBox.propTypes = {
-  value: CommonTypes.color.isRequired,
+  value: CommonTypes.color,
   deferred: PropTypes.bool,
   palette: CommonTypes.palette,
   inputFormats: CommonTypes.inputFormats,
@@ -187,8 +195,9 @@ ColorBox.propTypes = {
 };
 
 ColorBox.defaultProps = {
+  value: undefined,
   deferred: false,
-  palette: null,
+  palette: undefined,
   inputFormats: ['hex', 'rgb'],
 };
 

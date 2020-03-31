@@ -57,14 +57,14 @@ const StyledRoot = styled.div`
     height: 100%;
     background: rgba(0, 0, 0, 0) linear-gradient(to top, rgb(0, 0, 0), rgba(0, 0, 0, 0)) repeat scroll 0% 0%;
   }
-  & .muicc-hsvgradient-pointer {
+  & .muicc-hsvgradient-cursor {
     position: absolute;
     top: 0px;
     left: 0px;
     cursor: ${props => !props.pressed && 'pointer'};
     zindex: 100;
   }
-  & .muicc-hsvgradient-pointer-c {
+  & .muicc-hsvgradient-cursor-c {
     width: 8px;
     height: 8px;
     border-radius: 4px;
@@ -86,8 +86,6 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
   const [pressed, setPressed] = React.useState(false);
 
   const setPosition = pos => {
-    // position.x = pos.x;
-    // position.y = pos.y;
     cursor.current.style.top = `${pos.y}px`;
     cursor.current.style.left = `${pos.x}px`;
   };
@@ -132,7 +130,6 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
     const ref = box.current;
     initPosition(ref);
     const handleDown = () => {
-      // convertMousePosition(event, ref);
       setPressed(true);
     };
     const handleUp = event => {
@@ -157,11 +154,16 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div className={className}>
-      <StyledRoot {...props} ref={box} cssRgb={cssRgb}>
+      <StyledRoot {...props} ref={box} cssRgb={cssRgb} data-testid="hsvgradient-color">
         <div className="muicc-hsvgradient-s">
           <div className="muicc-hsvgradient-v">
-            <div ref={cursor} pressed={pressed} className="muicc-hsvgradient-pointer">
-              <div className="muicc-hsvgradient-pointer-c" />
+            <div
+              ref={cursor}
+              pressed={`${pressed}`}
+              data-testid="hsvgradient-cursor"
+              className="muicc-hsvgradient-cursor"
+            >
+              <div className="muicc-hsvgradient-cursor-c" />
             </div>
           </div>
         </div>

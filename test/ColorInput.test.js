@@ -17,23 +17,23 @@ test('ColorInput should render correctly', () => {
 
 test('ColorInput plain set props', () => {
   const { getByTestId, rerender } = render(<ColorInput defaultValue="" />);
-  expect(getByTestId('input-color').value).toBe('');
-  expect(getByTestId('label-color').textContent).toBe('Color');
+  expect(getByTestId('colorinput-input').value).toBe('');
+  expect(getByTestId('colorinput-label').textContent).toBe('Color');
   rerender(<ColorInput defaultValue="red" />);
-  expect(getByTestId('input-color').value).toBe('red');
-  expect(getByTestId('label-color').textContent).toBe('Color');
+  expect(getByTestId('colorinput-input').value).toBe('red');
+  expect(getByTestId('colorinput-label').textContent).toBe('Color');
 });
 
 test('ColorInput hex', () => {
   const { getByTestId } = render(<ColorInput defaultValue="red" format="hex" />);
-  expect(getByTestId('input-color').value).toBe('FF0000');
-  expect(getByTestId('label-color').textContent).toBe('HEX');
+  expect(getByTestId('colorinput-input').value).toBe('FF0000');
+  expect(getByTestId('colorinput-label').textContent).toBe('HEX');
 });
 
 test('ColorInput rgb', () => {
   const { getAllByTestId } = render(<ColorInput defaultValue="red" format="rgb" />);
-  const inputs = getAllByTestId('input-color');
-  const labels = getAllByTestId('label-color');
+  const inputs = getAllByTestId('colorinput-input');
+  const labels = getAllByTestId('colorinput-label');
   expect(inputs.length).toBe(3);
   expect(labels.length).toBe(3);
   expect(inputs[0].value).toBe('255');
@@ -46,8 +46,8 @@ test('ColorInput rgb', () => {
 
 test('ColorInput hsl', () => {
   const { getAllByTestId } = render(<ColorInput defaultValue="red" format="hsl" />);
-  const inputs = getAllByTestId('input-color');
-  const labels = getAllByTestId('label-color');
+  const inputs = getAllByTestId('colorinput-input');
+  const labels = getAllByTestId('colorinput-label');
   expect(inputs.length).toBe(3);
   expect(labels.length).toBe(3);
   expect(inputs[0].value).toBe('0');
@@ -60,8 +60,8 @@ test('ColorInput hsl', () => {
 
 test('ColorInput hsv', () => {
   const { getAllByTestId } = render(<ColorInput defaultValue="red" format="hsv" />);
-  const inputs = getAllByTestId('input-color');
-  const labels = getAllByTestId('label-color');
+  const inputs = getAllByTestId('colorinput-input');
+  const labels = getAllByTestId('colorinput-label');
   expect(inputs.length).toBe(3);
   expect(labels.length).toBe(3);
   expect(inputs[0].value).toBe('0');
@@ -79,11 +79,11 @@ test('ColorInput onChange uncontrolled', async () => {
   });
   const { getByTestId, findByTestId } = render(<ColorInput value="red" onChange={onChange} />);
   let input = getByTestId('colorinput');
-  input = await findByTestId('input-color');
+  input = await findByTestId('colorinput-input');
   expect(input.value).toBe('red');
   fireEvent.change(input, { target: { value: 'blue' } });
   expect(onChange).toHaveBeenCalledTimes(1);
-  input = await findByTestId('input-color');
+  input = await findByTestId('colorinput-input');
   expect(input.value).toBe('red');
   expect(value).toBe('blue');
 });
@@ -96,11 +96,11 @@ test('ColorInput onChange controlled', async () => {
   });
   const { getByTestId, findByTestId } = render(<ColorInput defaultValue="red" onChange={onChange} />);
   let input = getByTestId('colorinput');
-  input = await findByTestId('input-color');
+  input = await findByTestId('colorinput-input');
   expect(input.value).toBe('red');
   fireEvent.change(input, { target: { value: 'blue' } });
   expect(onChange).toHaveBeenCalledTimes(0);
-  input = await findByTestId('input-color');
+  input = await findByTestId('colorinput-input');
   expect(input.value).toBe('blue');
   expect(value).toBe(undefined);
 });
