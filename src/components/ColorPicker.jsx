@@ -75,7 +75,7 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
           {color.raw}
         </div>
       ) : (
-        <TextField color="primary" value={raw} onChange={handleChange} />
+        <TextField color="primary" value={raw} onChange={handleChange} data-testid="colorpicker-input" />
       )}
       <Popover
         id={id}
