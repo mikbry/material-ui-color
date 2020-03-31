@@ -151,7 +151,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange 
         <HSVGradient className="muicc-colorbox-hsvgradient" color={color} onChange={handleSVChange} />
         <div className="muicc-colorbox-sliders">
           <HueSlider
-            data-testid="hue-slider"
+            data-testid="hueslider"
             aria-label="color slider"
             value={hsv[0]}
             min={0}
@@ -159,7 +159,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange 
             onChange={handleHueChange}
           />
           <AlphaSlider
-            data-testid="alpha-slider"
+            data-testid="alphaslider"
             color={cssColor}
             valueLabelDisplay="auto"
             aria-label="alpha slider"

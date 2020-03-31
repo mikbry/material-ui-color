@@ -37,6 +37,8 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
   let raw = color.name;
   if (raw.startsWith('color-')) {
     raw = ColorTool.getCssColor(color, 'hex');
+  } else if (raw === 'none') {
+    raw = color.raw;
   }
   const handleClick = () => {
     setOpen(Boolean(refPicker.current));
@@ -50,6 +52,8 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
     let newValue = newColor.name;
     if (newValue.startsWith('color-')) {
       newValue = ColorTool.getCssColor(newColor, 'hex');
+    } else if (newValue === 'none') {
+      newValue = newColor.raw;
     }
     onChange(newColor);
     if (deferred) {

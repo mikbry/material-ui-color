@@ -93,7 +93,10 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
   const initPosition = ref => {
     if (ref) {
       const { hsv } = color;
-      const pos = { x: (hsv[1] / 100) * (ref.clientWidth - 1), y: (1 - hsv[2] / 100) * (ref.clientHeight - 1) };
+      const pos = {
+        x: Math.round((hsv[1] / 100) * (ref.clientWidth - 1)),
+        y: Math.round((1 - hsv[2] / 100) * (ref.clientHeight - 1)),
+      };
       setPosition(pos);
     }
   };

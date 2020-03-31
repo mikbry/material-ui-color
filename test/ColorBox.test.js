@@ -26,6 +26,19 @@ const palette = {
   darkBlue: 'darkBlue',
 };
 
+const originalclientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth');
+const originalclientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');
+
+beforeAll(() => {
+  Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, value: 308 });
+  Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 116 });
+});
+
+afterAll(() => {
+  if (originalclientWidth) Object.defineProperty(HTMLElement.prototype, 'clientWidth', originalclientWidth);
+  if (originalclientHeight) Object.defineProperty(HTMLElement.prototype, 'clientHeight', originalclientHeight);
+});
+
 test('ColorBox should render correctly', () => {
   const { asFragment } = render(<ColorBox defaultValue="darkBlue" />);
   expect(asFragment()).toMatchSnapshot();
@@ -45,12 +58,21 @@ test('ColorBox props', async () => {
   expect(labels[1].textContent).toBe('R');
   expect(labels[2].textContent).toBe('G');
   expect(labels[3].textContent).toBe('B');
-  // TODO test sliders
   let component = await findByTestId('hsvgradient-color');
   expect(component).toHaveStyleRule('background', 'rgb(255,0,0) none repeat scroll 0% 0%');
   component = await findByTestId('hsvgradient-cursor');
-  expect(component).toHaveStyle('top: -0.49px');
-  expect(component).toHaveStyle('left: -0.92px');
+  expect(component).toHaveStyle('left: 282px');
+  expect(component).toHaveStyle('top: 56px');
+  component = await findByTestId('hueslider');
+  let span = component.querySelector('.MuiSlider-track');
+  expect(span).toHaveStyle('width: 0%');
+  span = component.querySelector('.MuiSlider-thumb');
+  expect(span).toHaveStyle('left: 0%');
+  component = await findByTestId('alphaslider');
+  span = component.querySelector('.MuiSlider-track');
+  expect(span).toHaveStyle('width: 49%');
+  span = component.querySelector('.MuiSlider-thumb');
+  expect(span).toHaveStyle('left: 49%');
 });
 
 test('ColorBox palette onChange', () => {
