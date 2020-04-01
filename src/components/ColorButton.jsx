@@ -84,9 +84,9 @@ ColorButton.propTypes = {
 ColorButton.defaultProps = {
   size: 24,
   borderWidth: 0,
-  borderColor: null,
-  forwardRef: null,
-  tooltip: null,
+  borderColor: undefined,
+  forwardRef: undefined,
+  tooltip: undefined,
 };
 
 export default ColorButton;

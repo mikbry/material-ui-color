@@ -149,7 +149,7 @@ ColorPicker.defaultProps = {
   value: 'none',
   disableTextfield: false,
   deferred: false,
-  palette: null,
+  palette: undefined,
   inputFormats: ['hex', 'rgb'],
   onOpen: undefined,
   openAtStart: false,

@@ -27,7 +27,7 @@ const StyledRoot = styled.div`
 
 const ColorPalette = ({ borderWidth, palette, onSelect }) => {
   const handleSelectColor = name => {
-    onSelect(name, palette[name]);
+    if (onSelect) onSelect(name, palette[name]);
   };
 
   return (
@@ -56,8 +56,8 @@ ColorPalette.propTypes = {
 
 ColorPalette.defaultProps = {
   borderWidth: 0,
-  forwardRef: null,
-  onSelect: () => {},
+  forwardRef: undefined,
+  onSelect: undefined,
 };
 
 export default ColorPalette;
