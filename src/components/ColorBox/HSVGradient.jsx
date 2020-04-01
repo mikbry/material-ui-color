@@ -24,11 +24,11 @@ const getRGB = _h => {
   v = Math.round(v);
   i %= 6;
   if (i === 0) rgb = [v, t, p];
-  if (i === 1) rgb = [q, v, p];
-  if (i === 2) rgb = [p, v, t];
-  if (i === 3) rgb = [p, q, v];
-  if (i === 4) rgb = [t, p, v];
-  if (i === 5) rgb = [v, p, q];
+  else if (i === 1) rgb = [q, v, p];
+  else if (i === 2) rgb = [p, v, t];
+  else if (i === 3) rgb = [p, q, v];
+  else if (i === 4) rgb = [t, p, v];
+  else rgb = [v, p, q]; // if (i === 5)
   return rgb;
 };
 

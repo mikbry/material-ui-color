@@ -224,13 +224,24 @@ const fromHsv = hsv => {
   return { format: 'hsl', value, rgb, hsv, alpha };
 };
 
-const getHsl = rgb => {
+const getMinMax = rgb => {
   const r = rgb[0] / 255;
   const g = rgb[1] / 255;
   const b = rgb[2] / 255;
   const cmin = Math.min(r, g, b);
   const cmax = Math.max(r, g, b);
   const delta = cmax - cmin;
+  return { cmax, cmin, delta, r, g, b };
+};
+
+const getHsl = rgb => {
+  /* const r = rgb[0] / 255;
+  const g = rgb[1] / 255;
+  const b = rgb[2] / 255;
+  const cmin = Math.min(r, g, b);
+  const cmax = Math.max(r, g, b);
+  const delta = cmax - cmin; */
+  const { cmin, cmax, delta, r, g, b } = getMinMax(rgb);
   let h = 0;
   let s = 0;
   let l = (cmin + cmax) / 2;
@@ -253,22 +264,23 @@ const getHsl = rgb => {
 };
 
 const getHsv = rgb => {
-  const r = rgb[0] / 255;
+  /* const r = rgb[0] / 255;
   const g = rgb[1] / 255;
   const b = rgb[2] / 255;
   const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  if (max === min) return [0, 0, Math.round(max * 100)];
+  const min = Math.min(r, g, b); */
+  const { cmax, delta, r, g, b } = getMinMax(rgb);
+  if (delta === 0) return [0, 0, Math.round(cmax * 100)];
 
-  let v = max;
-  let s = (max - min) / max;
-  const rc = (max - r) / (max - min);
-  const gc = (max - g) / (max - min);
-  const bc = (max - b) / (max - min);
+  let v = cmax;
+  let s = delta / cmax;
+  const rc = (cmax - r) / delta;
+  const gc = (cmax - g) / delta;
+  const bc = (cmax - b) / delta;
 
   let h;
-  if (r === max) h = bc - gc;
-  else if (g === max) h = 2 + rc - bc;
+  if (r === cmax) h = bc - gc;
+  else if (g === cmax) h = 2 + rc - bc;
   else h = 4.0 + gc - rc;
   h = (h / 6.0) % 1.0;
   if (h < 0) h += 1.0;
