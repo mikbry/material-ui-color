@@ -29,35 +29,51 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats, onChange }) => {
+const getColorText = color => {
+  let text = color.name;
+  if (text.startsWith('color-')) {
+    if (typeof color.raw !== 'string' || !color.raw.startsWith('#')) {
+      text = ColorTool.getCssColor(color, 'hex');
+    } else {
+      text = color.raw;
+    }
+  } else if (text === 'none') {
+    text = color.raw;
+  }
+  return text;
+};
+
+const ColorPicker = ({
+  value,
+  disableTextfield,
+  deferred,
+  palette,
+  inputFormats,
+  openAtStart,
+  onChange,
+  onOpen,
+  doPopup,
+}) => {
   const refPicker = React.useRef();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(openAtStart);
 
   const color = ColorTool.validateColor(value);
-  let raw = color.name;
-  if (raw.startsWith('color-')) {
-    raw = ColorTool.getCssColor(color, 'hex');
-  } else if (raw === 'none') {
-    raw = color.raw;
-  }
+  const raw = getColorText(color);
   const handleClick = () => {
-    setOpen(Boolean(refPicker.current));
+    const b = Boolean(refPicker.current);
+    setOpen(b);
+    if (onOpen) onOpen(b);
   };
 
   const handleClose = () => {
     setOpen(false);
+    if (onOpen) onOpen(false);
   };
 
   const handleColorChange = newColor => {
-    let newValue = newColor.name;
-    if (newValue.startsWith('color-')) {
-      newValue = ColorTool.getCssColor(newColor, 'hex');
-    } else if (newValue === 'none') {
-      newValue = newColor.raw;
-    }
     onChange(newColor);
     if (deferred) {
-      setOpen(false);
+      handleClose();
     }
   };
 
@@ -65,20 +81,21 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
     onChange(event.target.value);
   };
 
-  const id = open ? 'color-popover' : undefined;
-
-  return (
-    <StyledRoot ref={refPicker}>
-      <ColorButton className="muicc-colorpicker-button" color={color} aria-describedby={id} onClick={handleClick} />
-      {disableTextfield ? (
-        <div role="button" onClick={handleClick}>
-          {color.raw}
-        </div>
-      ) : (
-        <TextField color="primary" value={raw} onChange={handleChange} data-testid="colorpicker-input" />
-      )}
+  let box = (
+    <ColorBox
+      value={color}
+      deferred={deferred}
+      palette={palette}
+      inputFormats={inputFormats}
+      onChange={handleColorChange}
+    />
+  );
+  if (doPopup) {
+    box = doPopup(box);
+  } else {
+    box = (
       <Popover
-        id={id}
+        id="color-popover"
         open={open}
         anchorEl={refPicker.current}
         onClose={handleClose}
@@ -91,14 +108,27 @@ const ColorPicker = ({ value, disableTextfield, deferred, palette, inputFormats,
           horizontal: 'center',
         }}
       >
-        <ColorBox
-          value={color}
-          deferred={deferred}
-          palette={palette}
-          inputFormats={inputFormats}
-          onChange={handleColorChange}
-        />
+        {box}
       </Popover>
+    );
+  }
+
+  return (
+    <StyledRoot ref={refPicker}>
+      <ColorButton
+        data-testid="colorpicker-button"
+        className="muicc-colorpicker-button"
+        color={color}
+        onClick={handleClick}
+      />
+      {disableTextfield ? (
+        <div role="button" data-testid="colorpicker-noinput" onClick={handleClick}>
+          {color.raw}
+        </div>
+      ) : (
+        <TextField color="primary" value={raw} onChange={handleChange} data-testid="colorpicker-input" />
+      )}
+      {box}
     </StyledRoot>
   );
 };
@@ -110,14 +140,20 @@ ColorPicker.propTypes = {
   palette: CommonTypes.palette,
   inputFormats: CommonTypes.inputFormats,
   onChange: PropTypes.func.isRequired,
+  onOpen: PropTypes.func,
+  openAtStart: PropTypes.bool,
+  doPopup: PropTypes.func,
 };
 
 ColorPicker.defaultProps = {
   value: 'none',
   disableTextfield: false,
   deferred: false,
-  palette: null,
+  palette: undefined,
   inputFormats: ['hex', 'rgb'],
+  onOpen: undefined,
+  openAtStart: false,
+  doPopup: undefined,
 };
 
 export default uncontrolled(ColorPicker);

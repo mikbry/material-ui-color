@@ -42,10 +42,10 @@ const StyledButton = styled(({ color, style, size, hoverColor, borderColor, bord
 
 const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, ...props }) => {
   const color = ColorTool.validateColor(c);
-  const style = color.css || { backgroundColor: ColorTool.getCssColor(color) };
+  const style = color.css; // || { backgroundColor: ColorTool.getCssColor(color) };
   let l = color.hsl[2] - 10;
   if (l < 30) l = color.hsl[2] + 50;
-  const a = color.alpha || 0.2;
+  const a = color.alpha; // || 0.2;
   const hoverColor = `hsl(${color.hsl[0]}, ${color.hsl[1]}%, ${l}%, ${a})`;
   const component = (
     <StyledButton
@@ -56,7 +56,7 @@ const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, too
       borderWidth={borderWidth}
       ref={forwardRef}
       variant="contained"
-      aria-label={color.name || c}
+      aria-label={color.name}
       {...props}
     >
       <span />
@@ -84,9 +84,9 @@ ColorButton.propTypes = {
 ColorButton.defaultProps = {
   size: 24,
   borderWidth: 0,
-  borderColor: null,
-  forwardRef: null,
-  tooltip: null,
+  borderColor: undefined,
+  forwardRef: undefined,
+  tooltip: undefined,
 };
 
 export default ColorButton;

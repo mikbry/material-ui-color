@@ -5,7 +5,7 @@
  * This source code is licensed under the license found in the
  * LICENSE file in the root directory of this source tree.
  */
-import { arrayOf, objectOf, shape, number, string, oneOfType } from 'prop-types';
+import { arrayOf, objectOf, shape, array, number, string, oneOfType } from 'prop-types';
 
 const color = oneOfType([
   shape({
@@ -14,7 +14,7 @@ const color = oneOfType([
     }),
     value: number,
     hex: string,
-    raw: string,
+    raw: oneOfType([string, array, number, shape]),
     name: string,
     alpha: number,
     rgb: arrayOf(number),

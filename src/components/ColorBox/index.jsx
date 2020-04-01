@@ -90,9 +90,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange 
   }
 
   const handleSet = () => {
-    if (onDeferredChange) {
-      onDeferredChange(color);
-    }
+    onDeferredChange(color);
   };
 
   const handleHueChange = (event, newValue) => {

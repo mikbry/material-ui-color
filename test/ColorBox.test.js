@@ -28,15 +28,20 @@ const palette = {
 
 const originalclientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth');
 const originalclientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');
-
+const originaloffsetParent = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetParent');
 beforeAll(() => {
   Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, value: 308 });
   Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 116 });
+  Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
+    configurable: true,
+    value: { offsetLeft: 16, offsetTop: 36 },
+  });
 });
 
 afterAll(() => {
   if (originalclientWidth) Object.defineProperty(HTMLElement.prototype, 'clientWidth', originalclientWidth);
   if (originalclientHeight) Object.defineProperty(HTMLElement.prototype, 'clientHeight', originalclientHeight);
+  if (originaloffsetParent) Object.defineProperty(HTMLElement.prototype, 'offsetParent', originaloffsetParent);
 });
 
 test('ColorBox should render correctly', () => {
@@ -103,4 +108,127 @@ test('ColorBox deferred', () => {
   expect(onChange).toHaveBeenCalledTimes(1);
   expect(value.name).toBe('red');
   expect(value.raw).toBe('#FF0000');
+});
+
+test('ColorBox hsvgradient cursor changes', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
+  let component = await findByTestId('hsvgradient-color');
+  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  component = await findByTestId('hsvgradient-cursor');
+  expect(component).toHaveStyle('left: 273px');
+  expect(component).toHaveStyle('top: 60px');
+  expect(value).toBe(undefined);
+  fireEvent(
+    component,
+    new MouseEvent('mousemove', {
+      bubbles: true,
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(0);
+  fireEvent(
+    component,
+    new MouseEvent('mousedown', {
+      bubbles: true,
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(0);
+  fireEvent(
+    component,
+    new MouseEvent('mousemove', {
+      bubbles: true,
+      clientX: 25,
+      clientY: 42,
+      buttons: 1,
+    }),
+  );
+  fireEvent(
+    component,
+    new MouseEvent('mousemove', {
+      bubbles: true,
+      clientX: 1000,
+      clientY: 1000,
+      buttons: 1,
+    }),
+  );
+  fireEvent(
+    component,
+    new MouseEvent('mouseup', {
+      bubbles: true,
+      clientX: -500,
+      clientY: -600,
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(3);
+  expect(value.name).toBe('white');
+});
+
+test('ColorBox sliders onChange', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const color = {
+    raw: 'red',
+    name: 'red',
+    css: {
+      backgroundColor: 'red',
+    },
+    value: 16711680,
+    format: 'plain',
+    hex: 'FF0000',
+    alpha: undefined,
+    rgb: [255, 0, 0],
+    hsv: [0, 100, 100],
+    hsl: [0, 100, 51],
+  };
+  const { getAllByTestId, findByTestId } = render(<ColorBox value={color} onChange={onChange} />);
+  const inputs = getAllByTestId('colorinput-input');
+  expect(inputs.length).toBe(4);
+  let component = await findByTestId('hueslider');
+  let span = component.querySelector('.MuiSlider-track');
+  expect(span).toHaveStyle('width: 0%');
+  span = component.querySelector('.MuiSlider-thumb');
+  expect(span).toHaveStyle('left: 0%');
+  fireEvent(
+    span,
+    new MouseEvent('mousedown', {
+      bubbles: true,
+    }),
+  );
+  fireEvent(
+    span,
+    new MouseEvent('mouseup', {
+      bubbles: true,
+      clientX: -500,
+      clientY: -600,
+    }),
+  );
+  expect(value.name).toBe('red');
+  expect(onChange).toHaveBeenCalledTimes(1);
+
+  component = await findByTestId('alphaslider');
+  span = component.querySelector('.MuiSlider-track');
+  expect(span).toHaveStyle('width: 100%');
+  span = component.querySelector('.MuiSlider-thumb');
+  expect(span).toHaveStyle('left: 100%');
+  fireEvent(
+    span,
+    new MouseEvent('mousedown', {
+      bubbles: true,
+    }),
+  );
+  fireEvent(
+    span,
+    new MouseEvent('mouseup', {
+      bubbles: true,
+      clientX: -500,
+      clientY: -600,
+    }),
+  );
+  expect(value.name).toBe('red');
+  expect(onChange).toHaveBeenCalledTimes(2);
 });

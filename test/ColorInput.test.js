@@ -104,3 +104,82 @@ test('ColorInput onChange controlled', async () => {
   expect(input.value).toBe('blue');
   expect(value).toBe(undefined);
 });
+
+test('ColorInput onChange hex', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { getByTestId, findByTestId } = render(<ColorInput value="#f00" format="hex" onChange={onChange} />);
+  let input = getByTestId('colorinput');
+  input = await findByTestId('colorinput-input');
+  expect(input.value).toBe('f00');
+  fireEvent.change(input, { target: { value: '00f' } });
+  expect(onChange).toHaveBeenCalledTimes(1);
+  input = await findByTestId('colorinput-input');
+  expect(input.value).toBe('f00');
+  expect(value).toBe('#00f');
+});
+
+test('ColorInput onChange rgb', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findAllByTestId } = render(<ColorInput value="#f00" format="rgb" onChange={onChange} />);
+  let inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('255');
+  fireEvent.change(inputs[0], { target: { value: '1000' } });
+  expect(onChange).toHaveBeenCalledTimes(1);
+  inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('255');
+  expect(value.r).toBe(255);
+  expect(value.g).toBe(0);
+  expect(value.b).toBe(0);
+  fireEvent.change(inputs[0], { target: { value: '-1000' } });
+  expect(onChange).toHaveBeenCalledTimes(2);
+  inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('255');
+  expect(value.r).toBe(0);
+  expect(value.g).toBe(0);
+  expect(value.b).toBe(0);
+});
+
+test('ColorInput onChange hsl', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findAllByTestId } = render(<ColorInput value="#f00" format="hsl" onChange={onChange} />);
+  let inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('0');
+  fireEvent.change(inputs[0], { target: { value: '1' } });
+  expect(onChange).toHaveBeenCalledTimes(1);
+  inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('0');
+  expect(value.h).toBe(1);
+  expect(value.s).toBe(100);
+  expect(value.l).toBe(51);
+});
+
+test('ColorInput onChange hsv', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findAllByTestId } = render(<ColorInput value="#f00" format="hsv" onChange={onChange} />);
+  let inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('0');
+  fireEvent.change(inputs[0], { target: { value: '1' } });
+  expect(onChange).toHaveBeenCalledTimes(1);
+  inputs = await findAllByTestId('colorinput-input');
+  expect(inputs[0].value).toBe('0');
+  expect(value.h).toBe(1);
+  expect(value.s).toBe(100);
+  expect(value.v).toBe(100);
+});
+
+test('ColorInput error', async () => {
+  const { getByText } = render(<ColorInput value={{ format: 'plain', name: 'red', error: 'error', raw: 'red' }} />);
+  expect(getByText('error')).toBeTruthy();
+});

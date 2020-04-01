@@ -31,6 +31,13 @@ test('ColorPalette should render correctly', () => {
   expect(asFragment()).toMatchSnapshot();
 });
 
+test('ColorPalette props', () => {
+  const { getAllByTestId } = render(<ColorPalette palette={palette} />);
+  const buttons = getAllByTestId('colorbutton');
+  expect(buttons.length).toBe(13);
+  fireEvent.click(buttons[0]);
+});
+
 test('ColorPalette onSelect', () => {
   let value;
   let color;
@@ -40,7 +47,6 @@ test('ColorPalette onSelect', () => {
   });
   const { getAllByTestId } = render(<ColorPalette palette={palette} onSelect={onSelect} />);
   const buttons = getAllByTestId('colorbutton');
-  expect(buttons.length).toBe(13);
   fireEvent.click(buttons[0]);
   expect(onSelect).toHaveBeenCalledTimes(1);
   expect(value).toBe('red');

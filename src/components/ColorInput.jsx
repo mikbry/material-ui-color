@@ -44,7 +44,8 @@ const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
       onChange(event.target.value);
     } else if (format === 'hex') {
       onChange(`#${event.target.value}`);
-    } else if (format === 'rgb' || format === 'hsl' || format === 'hsv') {
+    } else {
+      /* if (format === 'rgb' || format === 'hsl' || format === 'hsv') { */
       const cn = event.target.id;
       const v = Number(event.target.value);
       const values = {};
