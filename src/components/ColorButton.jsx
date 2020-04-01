@@ -40,6 +40,14 @@ const StyledButton = styled(({ color, style, size, hoverColor, borderColor, bord
   }
 `;
 
+const Styleddiv = styled.div`
+  width: min-content;
+`;
+
+/**
+- Use a ColorButton to select a predefined color by clicking on this button.
+- If the color is not valid or transparent a crossed background is displayed.
+ */
 const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, ...props }) => {
   const color = ColorTool.validateColor(c);
   const style = color.css; // || { backgroundColor: ColorTool.getCssColor(color) };
@@ -65,7 +73,7 @@ const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, too
   if (tooltip) {
     return (
       <Tooltip title={tooltip}>
-        <div>{component}</div>
+        <Styleddiv>{component}</Styleddiv>
       </Tooltip>
     );
   }
@@ -73,12 +81,30 @@ const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, too
 };
 
 ColorButton.propTypes = {
+  /**
+    The color to display, could be a css valid string, an integer, or a Color object see  ColorType
+   */
   color: CommonTypes.color.isRequired,
+  /**
+    The size of the button in pixel
+   */
   size: PropTypes.number,
+  /**
+    The width of the button's border, not displayed if borderWidth=0
+   */
   borderWidth: PropTypes.number,
+  /**
+    The css color of the button's border, not displayed if borderWidth=0
+   */
   borderColor: PropTypes.string,
-  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  /**
+    A tooltip could be added to the button to display the color name or value
+   */
   tooltip: PropTypes.string,
+  /**
+    Internal usage
+   */
+  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
 
 ColorButton.defaultProps = {
