@@ -1,0 +1,20 @@
+import { Meta, Story, Props, Preview, Title, Subtitle, Description } from '@storybook/addon-docs/blocks';
+import * as stories from './ColorButton.stories.js';
+import { ColorButton } from '../src';
+
+<Meta title="Components|ColorButton" component={ColorButton} />
+
+<Title />
+<Subtitle>Displays a button filled with the color</Subtitle>
+<Description of={ColorButton} />
+
+
+<Props of={ColorButton} />
+
+## Preview
+
+<Preview>
+  <Story name="Basic">{stories.Basic()}</Story>
+  <Story name="Tooltip">{stories.Tooltip()}</Story>
+  <Story name="Border">{stories.Border()}</Story>
+</Preview>

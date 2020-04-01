@@ -29,7 +29,9 @@ const useStyles = () =>
   makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.background.paper,
-      height: '100%',
+      position: 'absolute',
+      width: 'min-content',
+      height: 'min-content',
       padding: '0px',
     },
   }))();
@@ -80,7 +82,7 @@ const StyledBox = styled.div`
   }
 `;
 
-const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange }) => {
+const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, ...props }) => {
   let color = validateColor(value);
   let onChange = _onChange;
   let onDeferredChange;
@@ -144,7 +146,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange 
   const boxWidth = 320;
   const classroot = useStyles().root;
   return (
-    <Box p={2} className={classroot}>
+    <Box p={2} className={classroot} {...props}>
       <StyledBox boxWidth={boxWidth} backgroundColor={backgroundColor}>
         <HSVGradient className="muicc-colorbox-hsvgradient" color={color} onChange={handleSVChange} />
         <div className="muicc-colorbox-sliders">

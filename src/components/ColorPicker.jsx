@@ -84,6 +84,7 @@ const ColorPicker = ({
   let box = (
     <ColorBox
       value={color}
+      style={{ position: 'relative' }}
       deferred={deferred}
       palette={palette}
       inputFormats={inputFormats}
