@@ -29,7 +29,7 @@ const useStyles = () =>
   makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.background.paper,
-      position: 'absolute',
+      position: 'relative',
       width: 'min-content',
       height: 'min-content',
       padding: '0px',

@@ -92,7 +92,8 @@
     },
     "coverageReporters": [
       "text",
-      "html"
+      "html",
+      "lcov"
     ],
     "moduleFileExtensions": [
       "js",
