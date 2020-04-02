@@ -1,6 +1,6 @@
 {
   "name": "material-ui-color-components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Simple <ColorPicker /> components for React Material-Ui. No dependencies. It uses Hooks and support RGBA, HSVA, and more !",
   "main": "index.js",
   "repository": "https://github.com/mikbry/material-ui-colorpicker.git",
@@ -91,7 +91,11 @@
       "^.+\\.mdx$": "@storybook/addon-docs/jest-transform-mdx"
     },
     "coverageReporters": [
-      "json", "lcov", "text", "clover", "html"
+      "json",
+      "lcov",
+      "text",
+      "clover",
+      "html"
     ],
     "moduleFileExtensions": [
       "js",
