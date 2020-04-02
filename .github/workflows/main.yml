@@ -16,8 +16,13 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+
     - name: Install dependencies
       run: yarn install --frozen-lockfile
+    
+    - name: Test & Coverage
+      run: yarn coverage
+
     - name: Build
       run: yarn build-storybook
           
