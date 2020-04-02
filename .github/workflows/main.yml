@@ -36,7 +36,4 @@ jobs:
     - name: Codecov
       uses: codecov/codecov-action@v1
       with:
-        file: ./coverage
-        flags: unittests # optional
-        name: codecov-umbrella # optional
         fail_ci_if_error: false # optional (default = false)
