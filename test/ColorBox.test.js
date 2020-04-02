@@ -26,6 +26,23 @@ const palette = {
   darkBlue: 'darkBlue',
 };
 
+// See : https://github.com/testing-library/react-testing-library/issues/268
+class FakeMouseEvent extends MouseEvent {
+  constructor(type, values) {
+    const { pageX, pageY, offsetX, offsetY, x, y, ...mouseValues } = values;
+    super(type, mouseValues);
+
+    Object.assign(this, {
+      offsetX: offsetX || 0,
+      offsetY: offsetY || 0,
+      pageX: pageX || 0,
+      pageY: pageY || 0,
+      x: x || 0,
+      y: y || 0,
+    });
+  }
+}
+
 const originalclientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth');
 const originalclientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');
 const originalgetBoundingClientRect = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'getBoundingClientRect');
@@ -125,46 +142,46 @@ test('ColorBox hsvgradient cursor changes', async () => {
   expect(value).toBe(undefined);
   fireEvent(
     component,
-    new MouseEvent('mousemove', {
+    new FakeMouseEvent('mousemove', {
       bubbles: true,
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(0);
   fireEvent(
     component,
-    new MouseEvent('mousedown', {
+    new FakeMouseEvent('mousedown', {
       bubbles: true,
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(0);
   fireEvent(
     component,
-    new MouseEvent('mousemove', {
+    new FakeMouseEvent('mousemove', {
       bubbles: true,
-      clientX: 25,
-      clientY: 42,
+      pageX: 25,
+      pageY: 42,
       buttons: 1,
     }),
   );
   fireEvent(
     component,
-    new MouseEvent('mousemove', {
+    new FakeMouseEvent('mousemove', {
       bubbles: true,
-      clientX: 1000,
-      clientY: 1000,
+      pageX: 1000,
+      pageY: 1000,
       buttons: 1,
     }),
   );
   fireEvent(
     component,
-    new MouseEvent('mouseup', {
+    new FakeMouseEvent('mouseup', {
       bubbles: true,
-      clientX: -500,
-      clientY: -600,
+      pageX: -500,
+      pageY: -600,
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(3);
-  expect(value.name).toBe('black');
+  expect(value.name).toBe('white');
 });
 
 test('ColorBox sliders onChange', async () => {
@@ -196,16 +213,16 @@ test('ColorBox sliders onChange', async () => {
   expect(span).toHaveStyle('left: 0%');
   fireEvent(
     span,
-    new MouseEvent('mousedown', {
+    new FakeMouseEvent('mousedown', {
       bubbles: true,
     }),
   );
   fireEvent(
     span,
-    new MouseEvent('mouseup', {
+    new FakeMouseEvent('mouseup', {
       bubbles: true,
-      clientX: -500,
-      clientY: -600,
+      pageX: -500,
+      pageY: -600,
     }),
   );
   expect(value.name).toBe('red');
@@ -218,16 +235,16 @@ test('ColorBox sliders onChange', async () => {
   expect(span).toHaveStyle('left: 100%');
   fireEvent(
     span,
-    new MouseEvent('mousedown', {
+    new FakeMouseEvent('mousedown', {
       bubbles: true,
     }),
   );
   fireEvent(
     span,
-    new MouseEvent('mouseup', {
+    new FakeMouseEvent('mouseup', {
       bubbles: true,
-      clientX: -500,
-      clientY: -600,
+      pageX: -500,
+      pageY: -600,
     }),
   );
   expect(value.name).toBe('red');
