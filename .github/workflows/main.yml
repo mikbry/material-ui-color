@@ -21,7 +21,7 @@ jobs:
       run: yarn install --frozen-lockfile
     
     - name: Test & Coverage
-      run: yarn coverage
+      run: yarn coverage --updateSnapshot
 
     - name: Build
       run: yarn build-storybook
