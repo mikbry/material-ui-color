@@ -36,7 +36,7 @@ jobs:
     - name: Codecov
       uses: codecov/codecov-action@v1
       with:
-        file: ./coverage/clover.xml # optional
+        file: ./coverage
         flags: unittests # optional
         name: codecov-umbrella # optional
-        fail_ci_if_error: true # optional (default = false)
+        fail_ci_if_error: false # optional (default = false)
