@@ -3,6 +3,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions';
+import Button from '@material-ui/core/Button';
 import { ColorPicker } from '../src';
 
 const paletteObj = {
@@ -34,7 +35,7 @@ Basic.story = {
 };
 
 export const Palette = () => (
-  <div style={style}>
+  <div>
     <ColorPicker defaultValue="transparent" palette={paletteObj} />
   </div>
 );
@@ -59,18 +60,34 @@ const Controller = ({ value }) => {
     action('changed')(newValue);
   };
   return (
-    <div style={style}>
-      <ColorPicker value={color} onChange={handleChange} />
-      <button onClick={() => handleChange('rgb(255, 0, 0)')}>set rgb(255, 0, 0)</button>
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+      <div>
+        <div style={{ marginLeft: '-28px', marginTop: '-8px', paddingBottom: '28px', color: '#777', fontSize: '10px' }}>
+          <h1>material-ui-color-components</h1>
+          <h2>ColorPicker example</h2>
+        </div>
+        <ColorPicker value={color} palette={paletteObj} onChange={handleChange} />
+        <Button variant="outlined" style={{ marginTop: '100px' }} onClick={() => handleChange('rgb(255, 0, 0)')}>
+          set rgb(255, 0, 0)
+        </Button>
+        <div style={{ paddingTop: '180px', marginLeft: '-28px', color: '#999', fontSize: '12px' }}>
+          https://github.com/mikbry/material-ui-color-components
+        </div>
+      </div>
+      <div
+        style={{
+          color: '#777',
+          marginLeft: '24px',
+          width: '400px',
+          height: '480px',
+          backgroundColor: color.hex ? `#${color.hex}` : color,
+        }}
+      />
     </div>
   );
 };
 
-export const Controlled = () => (
-  <div style={style}>
-    <Controller value="#fff" />
-  </div>
-);
+export const Controlled = () => <Controller value="#0fe" />;
 Controlled.story = {
   parameters: { defaultValue: 'red', palette: paletteObj, deferred: true },
 };

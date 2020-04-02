@@ -19,7 +19,7 @@
 
 > Collections of color components for `material-ui`. No dependencies, small, highly customizable and theming support !
 
-![Storybook](./images/wip.png)
+![Video of ColorPicker](./images/muicc-v0-2.webp)
 
 ## Why another ColorPicker ?
 

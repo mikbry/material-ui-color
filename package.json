@@ -91,9 +91,7 @@
       "^.+\\.mdx$": "@storybook/addon-docs/jest-transform-mdx"
     },
     "coverageReporters": [
-      "text",
-      "html",
-      "lcov"
+      "json", "lcov", "text", "clover", "html"
     ],
     "moduleFileExtensions": [
       "js",
