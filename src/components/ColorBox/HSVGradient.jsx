@@ -107,9 +107,9 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
   }
 
   const convertMousePosition = (event, ref) => {
-    const { clientX, clientY } = event;
-    const { offsetLeft, offsetTop } = ref.offsetParent;
-    const pos = { x: clientX - offsetLeft - 6, y: clientY - offsetTop - 6 };
+    const { pageX, pageY } = event;
+    const bounds = ref.getBoundingClientRect();
+    const pos = { x: pageX - bounds.left, y: pageY - bounds.top };
     if (pos.x < 0) {
       pos.x = 0;
     }

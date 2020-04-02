@@ -28,20 +28,21 @@ const palette = {
 
 const originalclientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientWidth');
 const originalclientHeight = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'clientHeight');
-const originaloffsetParent = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetParent');
+const originalgetBoundingClientRect = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'getBoundingClientRect');
 beforeAll(() => {
   Object.defineProperty(HTMLElement.prototype, 'clientWidth', { configurable: true, value: 308 });
   Object.defineProperty(HTMLElement.prototype, 'clientHeight', { configurable: true, value: 116 });
-  Object.defineProperty(HTMLElement.prototype, 'offsetParent', {
+  Object.defineProperty(HTMLElement.prototype, 'getBoundingClientRect', {
     configurable: true,
-    value: { offsetLeft: 16, offsetTop: 36 },
+    value: () => ({ left: 22, top: 90 }),
   });
 });
 
 afterAll(() => {
   if (originalclientWidth) Object.defineProperty(HTMLElement.prototype, 'clientWidth', originalclientWidth);
   if (originalclientHeight) Object.defineProperty(HTMLElement.prototype, 'clientHeight', originalclientHeight);
-  if (originaloffsetParent) Object.defineProperty(HTMLElement.prototype, 'offsetParent', originaloffsetParent);
+  if (originalgetBoundingClientRect)
+    Object.defineProperty(HTMLElement.prototype, 'getBoundingClientRect', originalgetBoundingClientRect);
 });
 
 test('ColorBox should render correctly', () => {
@@ -163,7 +164,7 @@ test('ColorBox hsvgradient cursor changes', async () => {
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(3);
-  expect(value.name).toBe('white');
+  expect(value.name).toBe('black');
 });
 
 test('ColorBox sliders onChange', async () => {
