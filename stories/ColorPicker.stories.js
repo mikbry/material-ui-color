@@ -28,11 +28,7 @@ export default {
 
 const style = { margin: '48px' };
 
-export const Basic = () => (
-  <div style={style}>
-    <ColorPicker defaultValue="#000" />
-  </div>
-);
+export const Basic = () => <ColorPicker defaultValue="#000" />;
 Basic.story = {
   parameters: { defaultValue: '#000' },
 };

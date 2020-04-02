@@ -2,14 +2,13 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 <Meta title="Docs|Intro" />
 
-WIP WIP WIP
-
 # `material-ui-color-components`
 
 [![Build Status][action-image]][action-url]
 [![codecov][codecov-image]][codecov-url]
 [![NPM version][npm-image]][npm-url]
 [![License][license-image]][license-url]
+[![minisize][min-image]][min-url]
 
 [action-image]: https://github.com/mikbry/material-ui-color-components/workflows/Build%20and%20Deploy/badge.svg
 [action-url]: https://mikbry.github.io/material-ui-color-components/
@@ -17,19 +16,55 @@ WIP WIP WIP
 [codecov-url]: https://codecov.io/gh/mikbry/material-ui-color-components
 [npm-image]: https://img.shields.io/npm/v/material-ui-color-components.svg
 [npm-url]: https://npmjs.org/package/material-ui-color-components
-[license-image]: https://img.shields.io/npm/l/amaterial-ui-color-components.svg
-[License-url]:./LICENSE
+[license-image]: https://img.shields.io/github/license/mikbry/material-ui-color-components
+[License-url]:https://github.com/mikbry/material-ui-color-components/blob/master/LICENSE
+[min-image]:https://badgen.net/bundlephobia/min/material-ui-color-components
+[min-url]:https://bundlephobia.com/result?p=material-ui-color-components
 
-> Collections of color components for `material-ui`. Highly customizable and theming support !
+> Collections of color components for `material-ui`. No dependencies, small, highly customizable and theming support !
 
-# Get started
+## Why another ColorPicker ?
 
+- Fully compatible with Material-UI : theming and low level components
+- Styled with `styled-components`
+- Highly customizable ColorPicker : gradient picker, palette, input format, deferred mode
+-  Small in size (<30kb) without any extra dependencies
+- Use modern React hook and coding conventions
+- Documentation made with Storybook, using Component Story Format and MDX
+
+## Github
+
+Full code source is available here :
+
+https://github.com/mikbry/material-ui-color-components
+
+
+## Requirements
+- Works on modern browsers supporting ES6+ (Not compatible with IE)
+- Latest React, Styled-Component and Material-UI frameworks
 
 ## Install
 
+```bash
+yarn add material-ui-color-components
+```
 
-### **Use**
+Or using npm
+```bash
+npm add material-ui-color-components
+```
 
+## Usage
 
+you need to have in your dependencies:
 
-### Github
+```
+    "@material-ui/core": "^4.9.5",
+    "material-ui-popup-state": "^1.5.3",
+    "prop-types": "15.7.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "styled-components": "^5.0.1"
+```
+
+`material-ui-color-components` bring 5 components.
