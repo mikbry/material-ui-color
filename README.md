@@ -49,7 +49,7 @@ yarn add material-ui-color-components
 
 Or using npm
 ```bash
-npm add material-ui-color-components
+npm install material-ui-color-components
 ```
 
 ## Usage
