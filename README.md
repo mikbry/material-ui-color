@@ -21,6 +21,17 @@
 
 ![Video of ColorPicker](./images/muicc-v0-2.webp)
 
+## Contents
+
+- [Why another ColorPicker?](#why-another-colorpicker)
+- [Documentation](#documentation)
+- [Requirements](#requirements)
+- [Install](#install)
+- [Usage](#usage)
+- [Roadmap](#roadmap)
+- [Contribute](#contribute)
+- [License](#license)
+
 ## Why another ColorPicker ?
 
 - Fully compatible with Material-UI : theming and low level components
@@ -162,6 +173,22 @@ export const Container = () => (
 ```
 
 [ColorButton documentation](https://mikbry.github.io/material-ui-color-components/?path=/story/components-colorbutton--basic)
+
+## Roadmap
+
+### v0.3.0 - [Current project](https://github.com/mikbry/material-ui-color-components/projects/1)
+- add Typescript support
+- accessibility : keyboard and touch support
+- localization
+- disable alpha property
+- #30, #29, #22 resolved
+- better documentation (colorType explained)
+
+### v0.4.0
+- optimize code
+- more controls for inputs in ColorBox
+- remove `styled-components` to have less dependencies and reduce size
+- bugs fixes
 
 ## Contribute
 
