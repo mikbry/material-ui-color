@@ -336,9 +336,9 @@ const parse = (raw, _format) => {
   let error;
   let format = _format || 'unknown';
   if (raw === 'transparent') {
-    value = undefined;
     color.name = raw;
     format = 'plain';
+    alpha = 0;
   } else if (typeof raw === 'string') {
     const r = raw.trim().toLocaleLowerCase();
     const index = colorsCssConditions.findIndex(func => func(r));
@@ -373,7 +373,7 @@ const parse = (raw, _format) => {
   }
   if (value === undefined) {
     value = 0;
-    alpha = undefined;
+    alpha = alpha === 0 ? alpha : undefined;
     color.css = {
       backgroundImage: `
         linear-gradient(45deg, #ccc 25%, transparent 25%), 
