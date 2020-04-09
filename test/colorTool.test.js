@@ -193,7 +193,7 @@ test('ColorTool parse simple', () => {
 test('ColorTool parse css color keywords', () => {
   let color = ColorTool.parse('transparent');
   expect(color.raw).toEqual('transparent');
-  expect(color.hex).toEqual('000000');
+  expect(color.hex).toEqual('00000000');
   CSS_COLOR_NAMES.forEach(name => {
     color = ColorTool.parse(name);
     expect(color.name).toEqual(name);
