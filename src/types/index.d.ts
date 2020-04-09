@@ -49,7 +49,7 @@
     doPopup?: () => void;
   }
 
-  function ColorPicker<T extends Record<string, string> | null>(
+  declare function ColorPicker<T extends Record<string, string> | null>(
     props: ColorPickerPalettenProps<T> | ColorPickerProps
   ): JSX.Element;
 
@@ -76,7 +76,7 @@
     tooltip?: string;
   }
 
-  function ColorButton(props: ColorButtonProps): JSX.Element;
+  declare function ColorButton(props: ColorButtonProps): JSX.Element;
 
   interface ColorInputProps {
     value?: Color | string | number;
@@ -84,14 +84,15 @@
     onChange: (color: Color) => void;
   }
 
-  function ColorInput(props: ColorInputProps): JSX.Element;
+  declare function ColorInput(props: ColorInputProps): JSX.Element;
 
   interface ColorPaletteProps<T> {
     borderWidth?: number;
     palette: T;
     onSelect?: (color: keyof T) => void;
   }
-  function ColorPalette<T extends Record<string, string>>(
+
+  declare function ColorPalette<T extends Record<string, string>>(
     props: ColorPaletteProps<T>
   ): JSX.Element;
 
@@ -102,7 +103,8 @@
     inputFormats?: string[];
     onChange: (color: Color) => void;
   }
-  function ColorBox(props: ColorBoxProps): JSX.Element;
+
+  declare function ColorBox(props: ColorBoxProps): JSX.Element;
 
   export {
     ColorPicker,

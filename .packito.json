@@ -10,5 +10,5 @@
     "name": "yarn test"
   },
   "output": "./dist",
-  "copy": ["README.md", "LICENSE"]
+  "copy": ["README.md", "LICENSE", "src/types/index.d.ts"]
 }
