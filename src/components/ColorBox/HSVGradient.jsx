@@ -11,6 +11,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import * as CommonTypes from '../../helpers/commonTypes';
+import useEventCallback from '../../helpers/useEventCallback';
 
 const getRGB = _h => {
   let rgb;
@@ -76,28 +77,34 @@ const StyledRoot = styled.div`
 
 const HSVGradient = ({ className, color, onChange, ...props }) => {
   const latestColor = React.useRef(color);
+  const [focus, onFocus] = React.useState(false);
+  const [pressed, setPressed] = React.useState(false);
   React.useEffect(() => {
     latestColor.current = color;
   });
   const box = React.useRef();
   const cursor = React.useRef();
+  let cursorPos = { x: 0, y: 0 };
   const rgb = getRGB(color.hsv[0]);
   const cssRgb = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-  const [pressed, setPressed] = React.useState(false);
 
-  const setPosition = pos => {
+  const setPosition = (pos, f) => {
+    cursorPos = pos;
     cursor.current.style.top = `${pos.y}px`;
     cursor.current.style.left = `${pos.x}px`;
+    if (f) {
+      cursor.current.focus();
+    }
   };
 
   const initPosition = ref => {
     if (ref) {
       const { hsv } = color;
-      const pos = {
+      cursorPos = {
         x: Math.round((hsv[1] / 100) * (ref.clientWidth - 1)),
         y: Math.round((1 - hsv[2] / 100) * (ref.clientHeight - 1)),
       };
-      setPosition(pos);
+      setPosition(cursorPos);
     }
   };
 
@@ -106,10 +113,9 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
     box.current.style.background = `${cssRgb} none repeat scroll 0% 0%`;
   }
 
-  const convertMousePosition = (event, ref) => {
-    const { pageX, pageY } = event;
+  const convertMousePosition = ({ x, y }, ref) => {
     const bounds = ref.getBoundingClientRect();
-    const pos = { x: pageX - bounds.left, y: pageY - bounds.top };
+    const pos = { x: x - bounds.left, y: y - bounds.top };
     if (pos.x < 0) {
       pos.x = 0;
     }
@@ -122,7 +128,7 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
     if (pos.y >= ref.clientHeight) {
       pos.y = ref.clientHeight - 1;
     }
-    setPosition(pos);
+    setPosition(pos, true);
     const s = (pos.x / (ref.clientWidth - 1)) * 100;
     const v = (1 - pos.y / (ref.clientHeight - 1)) * 100;
     const c = latestColor.current;
@@ -132,39 +138,98 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
   React.useEffect(() => {
     const ref = box.current;
     initPosition(ref);
-    const handleDown = () => {
+    const handleDown = event => {
+      onFocus(true);
       setPressed(true);
+      event.preventDefault();
     };
     const handleUp = event => {
-      convertMousePosition(event, ref);
+      convertMousePosition({ x: event.pageX, y: event.pageY }, ref);
       setPressed(false);
+      event.preventDefault();
     };
     const handleMove = event => {
       if (pressed || event.buttons) {
-        convertMousePosition(event, ref);
+        convertMousePosition({ x: event.pageX, y: event.pageY }, ref);
+        event.preventDefault();
       }
     };
+    const handleTouch = event => {
+      const xy = { x: event.touches[0].pageX, y: event.touches[0].pageY };
+      convertMousePosition(xy, ref);
+      event.preventDefault();
+    };
+
     ref.addEventListener('mousedown', handleDown);
     ref.addEventListener('mouseup', handleUp);
     ref.addEventListener('mousemove', handleMove);
+    ref.addEventListener('touchdown', handleDown);
+    ref.addEventListener('touchup', handleUp);
+    ref.addEventListener('touchmove', handleTouch);
     return () => {
       ref.removeEventListener('mousedown', handleDown);
       ref.removeEventListener('mouseup', handleUp);
       ref.removeEventListener('mousemove', handleMove);
+      ref.removeEventListener('touchdown', handleDown);
+      ref.removeEventListener('touchup', handleUp);
+      ref.removeEventListener('touchmove', handleTouch);
     };
   }, []);
-
+  const handleKey = useEventCallback(event => {
+    console.log('handlekey', event.key, cursorPos, focus);
+    if (!focus) return;
+    let { x, y } = cursorPos;
+    switch (event.key) {
+      case 'ArrowRight':
+        x += 1;
+        break;
+      case 'ArrowLeft':
+        x -= 1;
+        break;
+      case 'ArrowDown':
+        y += 1;
+        break;
+      case 'ArrowUp':
+        y -= 1;
+        break;
+      case 'Tab':
+        onFocus(false);
+        return;
+      default:
+        return;
+    }
+    event.preventDefault();
+    const bounds = box.current.getBoundingClientRect();
+    convertMousePosition({ x: x + bounds.left, y: y + bounds.top }, box.current);
+  });
+  const handleFocus = useEventCallback(event => {
+    console.log('onfocus');
+    onFocus(true);
+    event.preventDefault();
+  });
+  const handleBlur = useEventCallback(event => {
+    console.log('onblur');
+    onFocus(false);
+    event.preventDefault();
+  });
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div className={className}>
       <StyledRoot {...props} ref={box} cssRgb={cssRgb} data-testid="hsvgradient-color">
         <div className="muicc-hsvgradient-s">
           <div className="muicc-hsvgradient-v">
             <div
               ref={cursor}
+              tabIndex="0"
+              role="slider"
+              aria-valuemax={255}
+              aria-valuemin={0}
+              aria-valuenow={0}
               pressed={`${pressed}`}
               data-testid="hsvgradient-cursor"
               className="muicc-hsvgradient-cursor"
+              onKeyDown={handleKey}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
             >
               <div className="muicc-hsvgradient-cursor-c" />
             </div>
