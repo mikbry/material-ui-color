@@ -42,19 +42,20 @@ const StyledBox = styled.div`
   width: ${props => `${props.boxWidth}px`};
   padding: 0px;
   & .muicc-colorbox-hsvgradient {
-    width: ${props => `calc(${props.boxWidth}px - 12px)`};
-    height: calc(128px - 12px);
-    margin: 6px;
+    width: ${props => `calc(${props.boxWidth}px - 16px)`};
+    height: calc(128px - 16px);
+    margin: 8px;
   }
   & .muicc-colorbox-sliders {
     width: ${props => `${props.boxWidth}px`};
-    padding: 0 6px;
+    padding: 8px 8px 4px 8px;
   }
   & .muicc-colorbox-inputs {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 6px;
+    padding: 8px 4px 8px 8px;
+    justify-content: space-between;
   }
   & .muicc-colorbox-input {
     marginright: 14px;
@@ -67,18 +68,19 @@ const StyledBox = styled.div`
     background-size: 8px 8px;
     background-position: 0 0, 4px 0, 4px -4px, 0px 4px;
     background-color: white;
-    margin-right: 24px;
+    border-radius: 4px;
   }
   & .muicc-colorbox-color {
     width: 48px;
     height: 48px;
     background-color: ${props => props.backgroundColor};
+    border-radius: 4px;
   }
   & .muicc-colorbox-controls {
     display: flex;
     flex-direction: row-reverse;
     flex-wrap: wrap;
-    padding: 6px;
+    padding: 8px;
   }
 `;
 
@@ -173,7 +175,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
         {palette && (
           <>
             <Divider />
-            <ColorPalette palette={palette} onSelect={handlePaletteSelection} />
+            <ColorPalette size={26.65} palette={palette} onSelect={handlePaletteSelection} />
           </>
         )}
         {deferred && (

@@ -62,16 +62,29 @@ const StyledRoot = styled.div`
     position: absolute;
     top: 0px;
     left: 0px;
+    border: 1px solid #f0f0f0;
+    box-shadow: rgba(0, 0, 0, 0.37) 0px 1px 4px 0px;
+    transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-radius: 4px;
     cursor: ${props => !props.pressed && 'pointer'};
     zindex: 100;
+    transform: translate(-4px, -4px);
+  }
+  & .muicc-hsvgradient-cursor:hover {
+    box-shadow: 0px 0px 0px 8px rgba(63, 81, 181, 0.16);
+  }
+  & .muicc-hsvgradient-cursor:focus {
+    outline: none !important;
+    box-shadow: 0px 0px 0px 8px rgba(63, 81, 181, 0.16);
+  }
+  & .muicc-hsvgradient-cursor:focus > div {
+    // TODO
   }
   & .muicc-hsvgradient-cursor-c {
     width: 8px;
     height: 8px;
     border-radius: 4px;
-    box-shadow: rgb(255, 255, 255) 0px 0px 0px 1.5px, rgba(0, 0, 0, 0.3) 0px 0px 1px 1px inset,
-      rgba(0, 0, 0, 0.4) 0px 0px 1px 2px;
-    transform: translate(-4px, -4px);
+    box-shadow: white 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 `;
 
@@ -176,7 +189,6 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
     };
   }, []);
   const handleKey = useEventCallback(event => {
-    console.log('handlekey', event.key, cursorPos, focus);
     if (!focus) return;
     let { x, y } = cursorPos;
     switch (event.key) {
@@ -203,12 +215,10 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
     convertMousePosition({ x: x + bounds.left, y: y + bounds.top }, box.current);
   });
   const handleFocus = useEventCallback(event => {
-    console.log('onfocus');
     onFocus(true);
     event.preventDefault();
   });
   const handleBlur = useEventCallback(event => {
-    console.log('onblur');
     onFocus(false);
     event.preventDefault();
   });
@@ -221,9 +231,9 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
               ref={cursor}
               tabIndex="0"
               role="slider"
-              aria-valuemax={255}
+              aria-valuemax={100}
               aria-valuemin={0}
-              aria-valuenow={0}
+              aria-valuenow={color.hsv[1]}
               pressed={`${pressed}`}
               data-testid="hsvgradient-cursor"
               className="muicc-hsvgradient-cursor"
