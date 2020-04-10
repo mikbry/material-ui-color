@@ -10,10 +10,10 @@ import Slider from '@material-ui/core/Slider';
 
 export default styled(Slider)`
   width: 100%;
-  height: 24px;
+  height: 16px;
   padding: 0;
   & .MuiSlider-rail {
-    height: 24px;
+    height: 16px;
     opacity: 1;
     background: rgba(0, 0, 0, 0)
       linear-gradient(
@@ -30,24 +30,20 @@ export default styled(Slider)`
     border-radius: 0;
   }
   & .MuiSlider-track {
-    height: 24px;
+    height: 16px;
     opacity: 0;
     border-radius: 4px;
     background-color: transparent;
   }
   & .MuiSlider-thumb {
-    width: 8px;
-    border: 1px solid #9e9e9e;
-    height: 28px;
-    opacity: 0.8;
-    margin-top: -2px;
-    margin-left: -4px;
-    border-radius: 4px;
-    background-color: #fff;
-    &:focus,
-    &:hover,
-    &$active {
-      box-shadow: inherit;
+    width: 16px;
+    height: 16px;
+    margin-top: 0px;
+    margin-left: -8px;
+    background-color: #f0f0f0;
+    box-shadow: rgba(0, 0, 0, 0.37) 0px 1px 4px 0px;
+    &:focus {
+      box-shadow: 0px 0px 0px 8px rgba(63, 81, 181, 0.16);
     }
   }
 `;

@@ -17,15 +17,14 @@ const StyledRoot = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  padding: 6px;
+  padding: 8px 0 0 8px;
   & .muicc-palette-button {
-    margin-right: 4px;
-    margin-bottom: 4px;
+    margin: 0 8px 8px 0;
     padding: 0;
   }
 `;
 
-const ColorPalette = ({ borderWidth, palette, onSelect }) => {
+const ColorPalette = ({ size, borderWidth, palette, onSelect }) => {
   const handleSelectColor = name => {
     if (onSelect) onSelect(name, palette[name]);
   };
@@ -34,7 +33,7 @@ const ColorPalette = ({ borderWidth, palette, onSelect }) => {
     <StyledRoot>
       {Object.keys(palette).map(name => (
         <ColorButton
-          size={24}
+          size={size}
           key={`${name}`}
           color={palette[name]}
           className="muicc-palette-button"
@@ -49,6 +48,7 @@ const ColorPalette = ({ borderWidth, palette, onSelect }) => {
 
 ColorPalette.propTypes = {
   borderWidth: PropTypes.number,
+  size: PropTypes.number,
   palette: CommonTypes.palette.isRequired,
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   onSelect: PropTypes.func,
@@ -56,6 +56,7 @@ ColorPalette.propTypes = {
 
 ColorPalette.defaultProps = {
   borderWidth: 0,
+  size: 24,
   forwardRef: undefined,
   onSelect: undefined,
 };

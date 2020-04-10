@@ -29,7 +29,7 @@ const palette = {
 // See : https://github.com/testing-library/react-testing-library/issues/268
 class FakeMouseEvent extends MouseEvent {
   constructor(type, values) {
-    const { pageX, pageY, offsetX, offsetY, x, y, ...mouseValues } = values;
+    const { pageX, pageY, offsetX, offsetY, x, y, key, touches, ...mouseValues } = values;
     super(type, mouseValues);
 
     Object.assign(this, {
@@ -39,6 +39,8 @@ class FakeMouseEvent extends MouseEvent {
       pageY: pageY || 0,
       x: x || 0,
       y: y || 0,
+      touches,
+      key,
     });
   }
 }
@@ -182,6 +184,157 @@ test('ColorBox hsvgradient cursor changes', async () => {
   );
   expect(onChange).toHaveBeenCalledTimes(3);
   expect(value.name).toBe('white');
+});
+
+test('ColorBox hsvgradient touch move', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
+  let component = await findByTestId('hsvgradient-color');
+  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  component = await findByTestId('hsvgradient-cursor');
+  expect(component).toHaveStyle('left: 273px');
+  expect(component).toHaveStyle('top: 60px');
+  expect(value).toBe(undefined);
+  fireEvent(
+    component,
+    new FakeMouseEvent('touchmove', {
+      bubbles: true,
+      touches: [{ pageX: 25, pageY: 42 }],
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(1);
+  fireEvent(
+    component,
+    new FakeMouseEvent('touchmove', {
+      bubbles: true,
+      touches: [{ pageX: -500, pageY: -600 }],
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(2);
+  expect(value.name).toBe('white');
+});
+
+test('ColorBox hsvgradient focus/blur', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
+  let component = await findByTestId('hsvgradient-color');
+  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  component = await findByTestId('hsvgradient-cursor');
+  expect(component).toHaveStyle('left: 273px');
+  expect(component).toHaveStyle('top: 60px');
+  expect(value).toBe(undefined);
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowRight',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(0);
+  fireEvent(
+    component,
+    new FakeMouseEvent('mousedown', {
+      bubbles: true,
+    }),
+  );
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowRight',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(1);
+  fireEvent(
+    component,
+    new FakeMouseEvent('blur', {
+      bubbles: true,
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(1);
+});
+
+test('ColorBox hsvgradient keys', async () => {
+  let value;
+  const onChange = jest.fn().mockImplementation(newValue => {
+    value = newValue;
+  });
+  const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
+  let component = await findByTestId('hsvgradient-color');
+  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  component = await findByTestId('hsvgradient-cursor');
+  expect(component).toHaveStyle('left: 273px');
+  expect(component).toHaveStyle('top: 60px');
+  expect(value).toBe(undefined);
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowRight',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(0);
+  fireEvent(
+    component,
+    new FakeMouseEvent('mousedown', {
+      bubbles: true,
+    }),
+  );
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowRight',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(1);
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowLeft',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(2);
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowUp',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(3);
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'ArrowDown',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(4);
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'A',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(4);
+  expect(value.name).toBe('color-7A0E30');
+  fireEvent(
+    component,
+    new FakeMouseEvent('keydown', {
+      bubbles: true,
+      key: 'Tab',
+    }),
+  );
+  expect(onChange).toHaveBeenCalledTimes(4);
 });
 
 test('ColorBox sliders onChange', async () => {
