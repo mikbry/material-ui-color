@@ -24,7 +24,7 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorPalette = ({ size, borderWidth, palette, onSelect }) => {
+const ColorPalette = ({ size, borderWidth, palette, translate, onSelect }) => {
   const handleSelectColor = name => {
     if (onSelect) onSelect(name, palette[name]);
   };
@@ -39,6 +39,7 @@ const ColorPalette = ({ size, borderWidth, palette, onSelect }) => {
           className="muicc-palette-button"
           borderWidth={borderWidth}
           tooltip={name}
+          translate={translate}
           onClick={() => handleSelectColor(name)}
         />
       ))}
@@ -52,6 +53,10 @@ ColorPalette.propTypes = {
   palette: CommonTypes.palette.isRequired,
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   onSelect: PropTypes.func,
+  /**
+    The localization utils function
+   */
+  translate: PropTypes.func,
 };
 
 ColorPalette.defaultProps = {
@@ -59,6 +64,7 @@ ColorPalette.defaultProps = {
   size: 24,
   forwardRef: undefined,
   onSelect: undefined,
+  translate: undefined,
 };
 
 export default ColorPalette;

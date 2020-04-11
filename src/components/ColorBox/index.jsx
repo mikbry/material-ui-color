@@ -84,8 +84,8 @@ const StyledBox = styled.div`
   }
 `;
 
-const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, ...props }) => {
-  let color = validateColor(value);
+const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, translate, ...props }) => {
+  let color = validateColor(value, translate);
   let onChange = _onChange;
   let onDeferredChange;
   if (deferred) {
@@ -136,6 +136,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
             format={input}
             className="muicc-colorbox-input"
             onChange={handleInputChange}
+            translate={translate}
           />
         ))}
       </div>
@@ -175,12 +176,12 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
         {palette && (
           <>
             <Divider />
-            <ColorPalette size={26.65} palette={palette} onSelect={handlePaletteSelection} />
+            <ColorPalette size={26.65} palette={palette} onSelect={handlePaletteSelection} translate={translate} />
           </>
         )}
         {deferred && (
           <div className="muicc-colorbox-controls">
-            <Button onClick={handleSet}>Set</Button>
+            <Button onClick={handleSet}>{translate('Set')}</Button>
           </div>
         )}
       </StyledBox>
@@ -194,6 +195,10 @@ ColorBox.propTypes = {
   palette: CommonTypes.palette,
   inputFormats: CommonTypes.inputFormats,
   onChange: PropTypes.func.isRequired,
+  /**
+    The localization utils function
+   */
+  translate: PropTypes.func,
 };
 
 ColorBox.defaultProps = {
@@ -201,6 +206,7 @@ ColorBox.defaultProps = {
   deferred: false,
   palette: undefined,
   inputFormats: ['hex', 'rgb'],
+  translate: v => v,
 };
 
 export default uncontrolled(ColorBox);

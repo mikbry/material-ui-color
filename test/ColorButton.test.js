@@ -11,7 +11,7 @@ import { render, fireEvent } from '@testing-library/react';
 import ColorButton from '../src/components/ColorButton';
 
 test('ColorButton should render correctly', () => {
-  const { asFragment } = render(<ColorButton color="darkBlue" />);
+  const { asFragment } = render(<ColorButton color="darkblue" />);
   expect(asFragment()).toMatchSnapshot();
 });
 
@@ -38,11 +38,11 @@ test('ColorButton onClick', () => {
 });
 
 test('ColorButton toolitip props', () => {
-  const { getByTestId, queryByText } = render(<ColorButton color="" tooltip="tooltip-darkBlue" />);
+  const { getByTestId, queryByText } = render(<ColorButton color="" tooltip="tooltip-darkblue" />);
   const button = getByTestId('colorbutton');
-  let tooltip = queryByText('tooltip-darkBlue');
+  let tooltip = queryByText('tooltip-darkblue');
   expect(tooltip).toBeNull();
   fireEvent.mouseOver(button);
-  tooltip = queryByText('tooltip-darkBlue');
+  tooltip = queryByText('tooltip-darkblue');
   // Can't test tooltip added in DOM...
 });

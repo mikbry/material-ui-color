@@ -53,11 +53,11 @@ const ColorPicker = ({
   onChange,
   onOpen,
   doPopup,
+  translate,
 }) => {
   const refPicker = React.useRef();
   const [open, setOpen] = React.useState(openAtStart);
-
-  const color = ColorTool.validateColor(value);
+  const color = ColorTool.validateColor(value, translate);
   const raw = getColorText(color);
   const handleClick = () => {
     const b = Boolean(refPicker.current);
@@ -88,6 +88,7 @@ const ColorPicker = ({
       deferred={deferred}
       palette={palette}
       inputFormats={inputFormats}
+      translate={translate}
       onChange={handleColorChange}
     />
   );
@@ -144,6 +145,10 @@ ColorPicker.propTypes = {
   onOpen: PropTypes.func,
   openAtStart: PropTypes.bool,
   doPopup: PropTypes.func,
+  /**
+    The localization utils function
+   */
+  translate: PropTypes.func,
 };
 
 ColorPicker.defaultProps = {
@@ -155,6 +160,7 @@ ColorPicker.defaultProps = {
   onOpen: undefined,
   openAtStart: false,
   doPopup: undefined,
+  translate: undefined,
 };
 
 export default uncontrolled(ColorPicker);

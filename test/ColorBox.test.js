@@ -23,7 +23,7 @@ const palette = {
   black: 'black',
   white: 'white',
   pink: 'pink',
-  darkBlue: 'darkBlue',
+  darkblue: 'darkblue',
 };
 
 // See : https://github.com/testing-library/react-testing-library/issues/268
@@ -65,7 +65,7 @@ afterAll(() => {
 });
 
 test('ColorBox should render correctly', () => {
-  const { asFragment } = render(<ColorBox defaultValue="darkBlue" />);
+  const { asFragment } = render(<ColorBox defaultValue="darkblue" />);
   expect(asFragment()).toMatchSnapshot();
 });
 
