@@ -8,30 +8,11 @@
  */
 import cssColors from './cssColors';
 
-// Inspiration : https://stackoverflow.com/questions/57803/how-to-convert-decimal-to-hexadecimal-in-javascript
-/* const getHexa = n => {
-  let n = _n;
-  if (n < 0) {
-    n = 0xffffffff + n + 1;
-  }
-  let hexa = `00000000${n.toString(16).toUpperCase()}`.substr(-8);
-  if (hexa.startsWith('00')) {
-    hexa = hexa.substring(2);
-  }
-  return hexa;
-}; */
-
 const getCssHexa = (n, alpha) => {
-  // let hex = getHexa(n & 0xffffff);
   let hex = `00000000${(n & 0xffffff).toString(16).toUpperCase()}`.substr(-6);
   if (!Number.isNaN(alpha) && alpha !== undefined) {
     let a = alpha.toString(16).toUpperCase();
     if (a.length === 1) a = `0${a}`;
-    /* if (hex.length === 8) {
-      hex = hex.substring(2) + a;
-    } else {
-      hex += a;
-    } */
     hex += a;
   }
   return hex;
@@ -235,12 +216,6 @@ const getMinMax = rgb => {
 };
 
 const getHsl = rgb => {
-  /* const r = rgb[0] / 255;
-  const g = rgb[1] / 255;
-  const b = rgb[2] / 255;
-  const cmin = Math.min(r, g, b);
-  const cmax = Math.max(r, g, b);
-  const delta = cmax - cmin; */
   const { cmin, cmax, delta, r, g, b } = getMinMax(rgb);
   let h = 0;
   let s = 0;
@@ -264,11 +239,6 @@ const getHsl = rgb => {
 };
 
 const getHsv = rgb => {
-  /* const r = rgb[0] / 255;
-  const g = rgb[1] / 255;
-  const b = rgb[2] / 255;
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b); */
   const { cmax, delta, r, g, b } = getMinMax(rgb);
   if (delta === 0) return [0, 0, Math.round(cmax * 100)];
 
@@ -417,31 +387,62 @@ const getCssColor = (color, format, noAlpha) => {
   return value;
 };
 
-const validateColor = _color => (_color && _color.format && _color.name ? _color : parse(_color));
+let cssColorsTranslated;
+let language;
 
-const getComponents = (_color, format) => {
-  const color = validateColor(_color);
+const validateColor = (_color, translate) => {
+  let color = _color;
+  let isTranslated = false;
+  if (!(_color && _color.format && _color.name)) {
+    color = _color;
+    if (translate && typeof color === 'string') {
+      if (!cssColorsTranslated || translate('language') !== language) {
+        language = translate('language');
+        cssColorsTranslated = {};
+        Object.keys(cssColors).forEach(name => {
+          cssColorsTranslated[translate(name)] = name;
+        });
+      }
+      color = cssColorsTranslated[color] || color;
+      isTranslated = color !== _color;
+    }
+    color = parse(color);
+    if (color.name && translate) {
+      color.translated = translate(color.name);
+      if (isTranslated && color.translated) {
+        color.name = color.translated;
+      }
+      if (color.error) color.error = translate(color.error);
+    }
+  } else if (color.error && translate) {
+    color.error = translate(color.error);
+  }
+  return color;
+};
+
+const getComponents = (_color, format, translate = value => value) => {
+  const color = validateColor(_color, translate);
   const components = {};
   if (format === 'rgb') {
-    components.r = { value: color.rgb[0], format: 'integer', min: 0, max: 255, name: 'R' };
-    components.g = { value: color.rgb[1], format: 'integer', min: 0, max: 255, name: 'G' };
-    components.b = { value: color.rgb[2], format: 'integer', min: 0, max: 255, name: 'B' };
+    components.r = { value: color.rgb[0], format: 'integer', min: 0, max: 255, name: translate('R') };
+    components.g = { value: color.rgb[1], format: 'integer', min: 0, max: 255, name: translate('G') };
+    components.b = { value: color.rgb[2], format: 'integer', min: 0, max: 255, name: translate('B') };
   } else if (format === 'hsv') {
-    components.h = { value: color.hsv[0], format: 'integer', min: 0, max: 360, name: 'H', unit: '°' };
-    components.s = { value: color.hsv[1], format: 'integer', min: 0, max: 100, name: 'S', unit: '%' };
-    components.v = { value: color.hsv[2], format: 'integer', min: 0, max: 100, name: 'V', unit: '%' };
+    components.h = { value: color.hsv[0], format: 'integer', min: 0, max: 360, name: translate('H'), unit: '°' };
+    components.s = { value: color.hsv[1], format: 'integer', min: 0, max: 100, name: translate('S'), unit: '%' };
+    components.v = { value: color.hsv[2], format: 'integer', min: 0, max: 100, name: translate('V'), unit: '%' };
   } else if (format === 'hsl') {
-    components.h = { value: color.hsl[0], format: 'integer', min: 0, max: 360, name: 'H', unit: '°' };
-    components.s = { value: color.hsl[1], format: 'integer', min: 0, max: 100, name: 'S', unit: '%' };
-    components.l = { value: color.hsl[2], format: 'integer', min: 0, max: 100, name: 'L', unit: '%' };
+    components.h = { value: color.hsl[0], format: 'integer', min: 0, max: 360, name: translate('H'), unit: '°' };
+    components.s = { value: color.hsl[1], format: 'integer', min: 0, max: 100, name: translate('S'), unit: '%' };
+    components.l = { value: color.hsl[2], format: 'integer', min: 0, max: 100, name: translate('L'), unit: '%' };
   } else if (format === 'hex') {
     let { hex } = color;
     if (color.raw && typeof color.raw === 'string' && color.raw.startsWith('#')) {
       hex = color.raw.substring(1);
     }
-    components.hex = { value: hex, format: 'hex', name: 'HEX', unit: '#' };
+    components.hex = { value: hex, format: 'hex', name: translate('HEX'), unit: '#' };
   } else {
-    components.value = color.value;
+    components.value = translate(color.value);
     components.format = 'unknown';
   }
   return components;

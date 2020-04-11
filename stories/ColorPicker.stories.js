@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions';
 import Button from '@material-ui/core/Button';
 import { ColorPicker } from '../src';
+import frFR from '../translations/frFR.json';
 
 const paletteObj = {
   red: '#ff0000',
@@ -19,7 +20,7 @@ const paletteObj = {
   black: 'black',
   white: 'white',
   pink: 'pink',
-  darkBlue: 'darkBlue',
+  darkblue: 'darkblue',
 };
 
 export default {
@@ -89,5 +90,29 @@ const Controller = ({ value }) => {
 
 export const Controlled = () => <Controller value="#0fe" />;
 Controlled.story = {
+  parameters: { defaultValue: 'red', palette: paletteObj, deferred: true },
+};
+
+export const Localization = () => {
+  const [language, setLanguage] = useState('us');
+  const handleChange = () => {
+    setLanguage(language === 'us' ? 'fr' : 'us');
+    action('changed')(language);
+  };
+  const translate = value => {
+    let valueTranslated;
+    if (language === 'fr') valueTranslated = frFR[value];
+    return valueTranslated || value;
+  };
+  return (
+    <div style={style}>
+      <ColorPicker defaultValue="red" deferred palette={paletteObj} translate={v => translate(v)} />
+      <Button variant="outlined" style={{ marginTop: '100px' }} onClick={handleChange}>
+        {language}
+      </Button>
+    </div>
+  );
+};
+Localization.story = {
   parameters: { defaultValue: 'red', palette: paletteObj, deferred: true },
 };

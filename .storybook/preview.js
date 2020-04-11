@@ -7,8 +7,9 @@ import { withThemesProvider } from 'storybook-addon-styled-component-theme';
 import ThemeProvider from './ThemeProvider';
 import lightTheme from './lightTheme';
 import darkTheme from './darkTheme';
+import frenchTheme from './frenchTheme';
 
-const themes = [lightTheme, darkTheme];
+const themes = [lightTheme, darkTheme, frenchTheme];
 addDecorator(withThemesProvider(themes, ThemeProvider));
 addDecorator(withKnobs);
 addDecorator(storyFn => <div style={{ padding: '48px' }}>{storyFn()}</div>);

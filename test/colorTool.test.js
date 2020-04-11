@@ -575,3 +575,30 @@ test('ColorTool getCssColor alpha=0.5', () => {
   const csscolor = ColorTool.getCssColor({ value: 16711680, alpha: 0.5 }, 'hex');
   expect(csscolor).toEqual('#FF00007F');
 });
+
+test('ColorTool validateColor translate', () => {
+  const translate = value => {
+    if (value === 'red') {
+      return 'rouge';
+    }
+    if (value === 'language') {
+      return 'frFR';
+    }
+    if (value === 'Not an hex value') {
+      return 'Valeur non hexa';
+    }
+    if (value === 'Wrong format') {
+      return 'Format non valide';
+    }
+    return value;
+  };
+
+  let color = ColorTool.validateColor('rouge', translate);
+  expect(color.raw).toEqual('red');
+  expect(color.hex).toEqual('FF0000');
+  color = ColorTool.validateColor('#FFX0', translate);
+  expect(color.raw).toEqual('#FFX0');
+  expect(color.error).toEqual('Valeur non hexa');
+  color = ColorTool.validateColor({ error: 'Wrong format', format: 'unknown', name: '#ffu' }, translate);
+  expect(color.error).toEqual('Format non valide');
+});

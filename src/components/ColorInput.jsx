@@ -34,8 +34,8 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
-  const color = ColorTool.validateColor(value);
+const ColorInput = ({ value, format, onChange, forwardRef, translate, ...props }) => {
+  const color = ColorTool.validateColor(value, translate);
   let field;
   let components;
 
@@ -85,7 +85,7 @@ const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
   if (format === 'plain') {
     field = buildInput('color-plain', 'Color', color.raw);
   } else {
-    components = ColorTool.getComponents(color, format);
+    components = ColorTool.getComponents(color, format, translate);
     const names = Object.keys(components);
     field = (
       <StyledRoot ref={forwardRef}>
@@ -109,12 +109,20 @@ ColorInput.propTypes = {
   value: CommonTypes.color,
   format: PropTypes.string,
   onChange: PropTypes.func.isRequired,
+  /**
+    The localization utils function
+   */
+  translate: PropTypes.func,
+  /**
+    Internal usage
+   */
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
 
 ColorInput.defaultProps = {
   value: '',
   format: 'plain',
+  translate: undefined,
   forwardRef: undefined,
 };
 

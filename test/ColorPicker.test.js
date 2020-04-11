@@ -23,7 +23,7 @@ const palette = {
   black: 'black',
   white: 'white',
   pink: 'pink',
-  darkBlue: 'darkBlue',
+  darkblue: 'darkblue',
 };
 
 test('ColorPicker should render correctly', () => {
