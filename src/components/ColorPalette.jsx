@@ -12,6 +12,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import ColorButton from './ColorButton';
 import * as CommonTypes from '../helpers/commonTypes';
+import useTranslate from '../helpers/useTranslate';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -24,9 +25,11 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorPalette = ({ size, borderWidth, palette, translate, onSelect }) => {
+const ColorPalette = ({ size, borderWidth, palette, onSelect }) => {
+  const { t } = useTranslate();
   const handleSelectColor = name => {
-    if (onSelect) onSelect(name, palette[name]);
+    const translatedName = t(name);
+    if (onSelect) onSelect(translatedName, palette[name]);
   };
 
   return (
@@ -39,7 +42,6 @@ const ColorPalette = ({ size, borderWidth, palette, translate, onSelect }) => {
           className="muicc-palette-button"
           borderWidth={borderWidth}
           tooltip={name}
-          translate={translate}
           onClick={() => handleSelectColor(name)}
         />
       ))}
@@ -53,10 +55,6 @@ ColorPalette.propTypes = {
   palette: CommonTypes.palette.isRequired,
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
   onSelect: PropTypes.func,
-  /**
-    The localization utils function
-   */
-  translate: PropTypes.func,
 };
 
 ColorPalette.defaultProps = {
@@ -64,7 +62,6 @@ ColorPalette.defaultProps = {
   size: 24,
   forwardRef: undefined,
   onSelect: undefined,
-  translate: undefined,
 };
 
 export default ColorPalette;

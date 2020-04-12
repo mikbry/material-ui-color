@@ -4,7 +4,9 @@
 import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions';
 import Button from '@material-ui/core/Button';
-import { ColorPicker } from '../src';
+import { useTheme } from '@material-ui/styles';
+import { ColorPicker, useTranslate } from '../src';
+
 import frFR from '../translations/frFR.json';
 
 const paletteObj = {
@@ -94,21 +96,25 @@ Controlled.story = {
 };
 
 export const Localization = () => {
-  const [language, setLanguage] = useState('us');
+  const [language, setLanguage] = useState('enUS');
+  const theme = useTheme();
+  console.log('theme', theme);
   const handleChange = () => {
-    setLanguage(language === 'us' ? 'fr' : 'us');
-    action('changed')(language);
+    const newLanguage = language === 'enUS' ? 'frFR' : 'enUS';
+    setLanguage(newLanguage);
+    action('changed')(newLanguage);
   };
   const translate = value => {
     let valueTranslated;
-    if (language === 'fr') valueTranslated = frFR[value];
+    if (value && language === 'frFR') valueTranslated = frFR[value];
     return valueTranslated || value;
   };
+  useTranslate(() => ({ i18n: { language }, t: translate }));
   return (
     <div style={style}>
       <ColorPicker defaultValue="red" deferred palette={paletteObj} translate={v => translate(v)} />
       <Button variant="outlined" style={{ marginTop: '100px' }} onClick={handleChange}>
-        {language}
+        {language === 'enUS' ? 'english' : 'français'}
       </Button>
     </div>
   );

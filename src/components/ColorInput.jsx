@@ -18,6 +18,7 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import * as ColorTool from '../helpers/colorTool';
 import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
+import useTranslate from '../helpers/useTranslate';
 
 const StyledFormControl = styled(FormControl)`
   width: 100px;
@@ -34,8 +35,9 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format, onChange, forwardRef, translate, ...props }) => {
-  const color = ColorTool.validateColor(value, translate);
+const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
+  const { t, i18n } = useTranslate();
+  const color = ColorTool.validateColor(value, t, i18n.language);
   let field;
   let components;
 
@@ -85,7 +87,7 @@ const ColorInput = ({ value, format, onChange, forwardRef, translate, ...props }
   if (format === 'plain') {
     field = buildInput('color-plain', 'Color', color.raw);
   } else {
-    components = ColorTool.getComponents(color, format, translate);
+    components = ColorTool.getComponents(color, format, t);
     const names = Object.keys(components);
     field = (
       <StyledRoot ref={forwardRef}>
@@ -110,10 +112,6 @@ ColorInput.propTypes = {
   format: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   /**
-    The localization utils function
-   */
-  translate: PropTypes.func,
-  /**
     Internal usage
    */
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
@@ -122,7 +120,6 @@ ColorInput.propTypes = {
 ColorInput.defaultProps = {
   value: '',
   format: 'plain',
-  translate: undefined,
   forwardRef: undefined,
 };
 

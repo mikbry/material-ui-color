@@ -581,9 +581,6 @@ test('ColorTool validateColor translate', () => {
     if (value === 'red') {
       return 'rouge';
     }
-    if (value === 'language') {
-      return 'frFR';
-    }
     if (value === 'Not an hex value') {
       return 'Valeur non hexa';
     }
@@ -593,7 +590,10 @@ test('ColorTool validateColor translate', () => {
     return value;
   };
 
-  let color = ColorTool.validateColor('rouge', translate);
+  let color = ColorTool.validateColor('rouge', translate, 'frFR');
+  expect(color.raw).toEqual('red');
+  expect(color.hex).toEqual('FF0000');
+  color = ColorTool.validateColor('red');
   expect(color.raw).toEqual('red');
   expect(color.hex).toEqual('FF0000');
   color = ColorTool.validateColor('#FFX0', translate);

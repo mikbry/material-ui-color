@@ -14,6 +14,7 @@ import Button from '@material-ui/core/Button';
 import Tooltip from '@material-ui/core/Tooltip';
 import * as ColorTool from '../helpers/colorTool';
 import * as CommonTypes from '../helpers/commonTypes';
+import useTranslate from '../helpers/useTranslate';
 
 const StyledButton = styled(({ color, style, size, hoverColor, borderColor, borderWidth, tooltip, ...other }) => (
   <Button data-testid="colorbutton" {...other} />
@@ -48,9 +49,10 @@ const Styleddiv = styled.div`
 - Use a ColorButton to select a predefined color by clicking on this button.
 - If the color is not valid or transparent a crossed background is displayed.
  */
-const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, translate, ...props }) => {
-  const color = ColorTool.validateColor(c, translate);
-  const translated = translate(tooltip);
+const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, ...props }) => {
+  const { t, i18n } = useTranslate();
+  const color = ColorTool.validateColor(c, t, i18n.language);
+  const translated = t(tooltip);
   const style = color.css; // || { backgroundColor: ColorTool.getCssColor(color) };
   let l = color.hsl[2] - 10;
   if (l < 30) l = color.hsl[2] + 50;
@@ -103,10 +105,6 @@ ColorButton.propTypes = {
    */
   tooltip: PropTypes.string,
   /**
-    The localization utils function
-   */
-  translate: PropTypes.func,
-  /**
     Internal usage
    */
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
@@ -118,7 +116,6 @@ ColorButton.defaultProps = {
   borderColor: undefined,
   forwardRef: undefined,
   tooltip: undefined,
-  translate: v => v,
 };
 
 export default ColorButton;
