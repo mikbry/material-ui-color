@@ -390,14 +390,14 @@ const getCssColor = (color, format, noAlpha) => {
 let cssColorsTranslated;
 let language;
 
-const validateColor = (_color, translate) => {
+const validateColor = (_color, translate, translateLanguage) => {
   let color = _color;
   let isTranslated = false;
   if (!(_color && _color.format && _color.name)) {
     color = _color;
     if (translate && typeof color === 'string') {
-      if (!cssColorsTranslated || translate('language') !== language) {
-        language = translate('language');
+      if (!cssColorsTranslated || translateLanguage !== language) {
+        language = translateLanguage;
         cssColorsTranslated = {};
         Object.keys(cssColors).forEach(name => {
           cssColorsTranslated[translate(name)] = name;

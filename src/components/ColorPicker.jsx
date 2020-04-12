@@ -19,6 +19,7 @@ import ColorBox from './ColorBox';
 import * as ColorTool from '../helpers/colorTool';
 import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
+import useTranslate from '../helpers/useTranslate';
 
 const StyledRoot = styled.div`
   display: flex;
@@ -53,11 +54,11 @@ const ColorPicker = ({
   onChange,
   onOpen,
   doPopup,
-  translate,
 }) => {
   const refPicker = React.useRef();
   const [open, setOpen] = React.useState(openAtStart);
-  const color = ColorTool.validateColor(value, translate);
+  const { t, i18n } = useTranslate();
+  const color = ColorTool.validateColor(value, t, i18n.language);
   const raw = getColorText(color);
   const handleClick = () => {
     const b = Boolean(refPicker.current);
@@ -88,7 +89,6 @@ const ColorPicker = ({
       deferred={deferred}
       palette={palette}
       inputFormats={inputFormats}
-      translate={translate}
       onChange={handleColorChange}
     />
   );
@@ -145,10 +145,6 @@ ColorPicker.propTypes = {
   onOpen: PropTypes.func,
   openAtStart: PropTypes.bool,
   doPopup: PropTypes.func,
-  /**
-    The localization utils function
-   */
-  translate: PropTypes.func,
 };
 
 ColorPicker.defaultProps = {
@@ -160,7 +156,6 @@ ColorPicker.defaultProps = {
   onOpen: undefined,
   openAtStart: false,
   doPopup: undefined,
-  translate: undefined,
 };
 
 export default uncontrolled(ColorPicker);

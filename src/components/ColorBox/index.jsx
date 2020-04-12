@@ -22,6 +22,7 @@ import AlphaSlider from './AlphaSlider';
 import { parse as colorParse, getCssColor, validateColor } from '../../helpers/colorTool';
 import uncontrolled from '../../helpers/uncontrolled';
 import * as CommonTypes from '../../helpers/commonTypes';
+import useTranslate from '../../helpers/useTranslate';
 
 // To stay compatible with MUI theme
 // TODO remove in future
@@ -84,8 +85,9 @@ const StyledBox = styled.div`
   }
 `;
 
-const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, translate, ...props }) => {
-  let color = validateColor(value, translate);
+const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, ...props }) => {
+  const { t, i18n } = useTranslate();
+  let color = validateColor(value, t, i18n.language);
   let onChange = _onChange;
   let onDeferredChange;
   if (deferred) {
@@ -115,6 +117,8 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
 
   const handlePaletteSelection = (name, colour) => {
     const c = colorParse(colour);
+    // To handle back the translated name
+    c.name = name;
     onChange(c);
   };
 
@@ -136,7 +140,6 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
             format={input}
             className="muicc-colorbox-input"
             onChange={handleInputChange}
-            translate={translate}
           />
         ))}
       </div>
@@ -176,12 +179,12 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
         {palette && (
           <>
             <Divider />
-            <ColorPalette size={26.65} palette={palette} onSelect={handlePaletteSelection} translate={translate} />
+            <ColorPalette size={26.65} palette={palette} onSelect={handlePaletteSelection} />
           </>
         )}
         {deferred && (
           <div className="muicc-colorbox-controls">
-            <Button onClick={handleSet}>{translate('Set')}</Button>
+            <Button onClick={handleSet}>{t('Set')}</Button>
           </div>
         )}
       </StyledBox>
@@ -195,10 +198,6 @@ ColorBox.propTypes = {
   palette: CommonTypes.palette,
   inputFormats: CommonTypes.inputFormats,
   onChange: PropTypes.func.isRequired,
-  /**
-    The localization utils function
-   */
-  translate: PropTypes.func,
 };
 
 ColorBox.defaultProps = {
@@ -206,7 +205,6 @@ ColorBox.defaultProps = {
   deferred: false,
   palette: undefined,
   inputFormats: ['hex', 'rgb'],
-  translate: v => v,
 };
 
 export default uncontrolled(ColorBox);
