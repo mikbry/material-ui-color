@@ -9,6 +9,7 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ColorBox from '../src/components/ColorBox';
+import * as ColorTool from '../src/helpers/colorTool';
 
 const palette = {
   red: '#ff0000',
@@ -112,6 +113,13 @@ test('ColorBox palette onChange', () => {
   expect(onChange).toHaveBeenCalledTimes(1);
   expect(value.name).toBe('red');
   expect(value.raw).toBe('#ff0000');
+});
+
+test('ColorBox error display', () => {
+  const color = ColorTool.validateColor('#ffx');
+  const { getByTestId } = render(<ColorBox value={color} />);
+  const span = getByTestId('colorbox-error');
+  expect(span.textContent).toBe('Not an hex value');
 });
 
 test('ColorBox deferred', () => {
