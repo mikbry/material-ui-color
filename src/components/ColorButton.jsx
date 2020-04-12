@@ -49,9 +49,9 @@ const Styleddiv = styled.div`
 - Use a ColorButton to select a predefined color by clicking on this button.
 - If the color is not valid or transparent a crossed background is displayed.
  */
-const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, ...props }) => {
+const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, disableAlpha, ...props }) => {
   const { t, i18n } = useTranslate();
-  const color = ColorTool.validateColor(c, t, i18n.language);
+  const color = ColorTool.validateColor(c, t, disableAlpha, i18n.language);
   const translated = t(tooltip);
   const style = color.css; // || { backgroundColor: ColorTool.getCssColor(color) };
   let l = color.hsl[2] - 10;
@@ -93,6 +93,10 @@ ColorButton.propTypes = {
    */
   size: PropTypes.number,
   /**
+    Don't use alpha
+   */
+  disableAlpha: PropTypes.bool,
+  /**
     The width of the button's border, not displayed if borderWidth=0
    */
   borderWidth: PropTypes.number,
@@ -116,6 +120,7 @@ ColorButton.defaultProps = {
   borderColor: undefined,
   forwardRef: undefined,
   tooltip: undefined,
+  disableAlpha: false,
 };
 
 export default ColorButton;

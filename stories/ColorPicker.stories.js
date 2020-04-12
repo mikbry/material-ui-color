@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions';
 import Button from '@material-ui/core/Button';
-import { useTheme } from '@material-ui/styles';
+// import { useTheme } from '@material-ui/styles';
 import { ColorPicker, useTranslate } from '../src';
 
 import frFR from '../translations/frFR.json';
@@ -35,6 +35,11 @@ const style = { margin: '48px' };
 export const Basic = () => <ColorPicker defaultValue="#000" />;
 Basic.story = {
   parameters: { defaultValue: '#000' },
+};
+
+export const DisableAlpha = () => <ColorPicker defaultValue="#000" disableAlpha />;
+DisableAlpha.story = {
+  parameters: { defaultValue: '#000', disableAlpha: true },
 };
 
 export const Palette = () => (
@@ -97,8 +102,8 @@ Controlled.story = {
 
 export const Localization = () => {
   const [language, setLanguage] = useState('enUS');
-  const theme = useTheme();
-  console.log('theme', theme);
+  // TODO can't access MUi theme
+  // const theme = useTheme();
   const handleChange = () => {
     const newLanguage = language === 'enUS' ? 'frFR' : 'enUS';
     setLanguage(newLanguage);
@@ -112,7 +117,7 @@ export const Localization = () => {
   useTranslate(() => ({ i18n: { language }, t: translate }));
   return (
     <div style={style}>
-      <ColorPicker defaultValue="red" deferred palette={paletteObj} translate={v => translate(v)} />
+      <ColorPicker defaultValue="#fe0" deferred palette={paletteObj} translate={v => translate(v)} />
       <Button variant="outlined" style={{ marginTop: '100px' }} onClick={handleChange}>
         {language === 'enUS' ? 'english' : 'français'}
       </Button>

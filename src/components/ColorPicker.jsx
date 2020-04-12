@@ -54,11 +54,12 @@ const ColorPicker = ({
   onChange,
   onOpen,
   doPopup,
+  disableAlpha,
 }) => {
   const refPicker = React.useRef();
   const [open, setOpen] = React.useState(openAtStart);
   const { t, i18n } = useTranslate();
-  const color = ColorTool.validateColor(value, t, i18n.language);
+  const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language);
   const raw = getColorText(color);
   const handleClick = () => {
     const b = Boolean(refPicker.current);
@@ -89,6 +90,7 @@ const ColorPicker = ({
       deferred={deferred}
       palette={palette}
       inputFormats={inputFormats}
+      disableAlpha={disableAlpha}
       onChange={handleColorChange}
     />
   );
@@ -145,6 +147,10 @@ ColorPicker.propTypes = {
   onOpen: PropTypes.func,
   openAtStart: PropTypes.bool,
   doPopup: PropTypes.func,
+  /**
+    Don't use alpha
+   */
+  disableAlpha: PropTypes.bool,
 };
 
 ColorPicker.defaultProps = {
@@ -156,6 +162,7 @@ ColorPicker.defaultProps = {
   onOpen: undefined,
   openAtStart: false,
   doPopup: undefined,
+  disableAlpha: false,
 };
 
 export default uncontrolled(ColorPicker);

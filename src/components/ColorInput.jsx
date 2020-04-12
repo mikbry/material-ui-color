@@ -35,9 +35,9 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
+const ColorInput = ({ value, format, onChange, disableAlpha, forwardRef, ...props }) => {
   const { t, i18n } = useTranslate();
-  const color = ColorTool.validateColor(value, t, i18n.language);
+  const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language);
   let field;
   let components;
 
@@ -87,7 +87,7 @@ const ColorInput = ({ value, format, onChange, forwardRef, ...props }) => {
   if (format === 'plain') {
     field = buildInput('color-plain', 'Color', color.raw);
   } else {
-    components = ColorTool.getComponents(color, format, t);
+    components = ColorTool.getComponents(color, format, disableAlpha, t);
     const names = Object.keys(components);
     field = (
       <StyledRoot ref={forwardRef}>
@@ -112,6 +112,10 @@ ColorInput.propTypes = {
   format: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   /**
+    Don't use alpha
+   */
+  disableAlpha: PropTypes.bool,
+  /**
     Internal usage
    */
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
@@ -121,6 +125,7 @@ ColorInput.defaultProps = {
   value: '',
   format: 'plain',
   forwardRef: undefined,
+  disableAlpha: false,
 };
 
 export default uncontrolled(ColorInput);

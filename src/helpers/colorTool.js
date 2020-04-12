@@ -296,7 +296,7 @@ const colorsCssConditions = [
   value => value.startsWith('hsl(') || value.startsWith('hsla('),
 ];
 
-const parse = (raw, _format) => {
+const parse = (raw, _format, disableAlpha = false) => {
   const color = { raw };
   let value;
   let alpha;
@@ -363,7 +363,14 @@ const parse = (raw, _format) => {
   color.value = value;
   color.alpha = Number.isNaN(alpha) || alpha === undefined ? 1 : alpha / 255;
   color.format = format;
-  const hex = getCssHexa(value, alpha);
+  let alpha255;
+  if (!disableAlpha && color.alpha !== 1) {
+    alpha255 = Math.floor(color.alpha * 255);
+  } else if (color.alpha === 1 && color.value === -16777216) {
+    // special case to distinguish between black 0x000000FF and transparent 0x000
+    alpha255 = 255;
+  }
+  const hex = getCssHexa(value, alpha255);
   color.hex = hex;
   rgb = rgb || getRgb(value);
   color.rgb = rgb;
@@ -379,10 +386,13 @@ const parse = (raw, _format) => {
   return color;
 };
 
-const getCssColor = (color, format, noAlpha) => {
+const getCssColor = (color, format, disableAlpha) => {
   let value;
   if (format === 'hex') {
-    value = `#${getCssHexa(color.value, noAlpha || color.alpha === 1 ? undefined : Math.floor(color.alpha * 255))}`;
+    value = `#${getCssHexa(
+      color.value,
+      disableAlpha || color.alpha === 1 ? undefined : Math.floor(color.alpha * 255),
+    )}`;
   }
   return value;
 };
@@ -390,7 +400,7 @@ const getCssColor = (color, format, noAlpha) => {
 let cssColorsTranslated;
 let language;
 
-const validateColor = (_color, translate, translateLanguage) => {
+const validateColor = (_color, disableAlpha, translate, translateLanguage) => {
   let color = _color;
   let isTranslated = false;
   if (!(_color && _color.format && _color.name)) {
@@ -406,7 +416,7 @@ const validateColor = (_color, translate, translateLanguage) => {
       color = cssColorsTranslated[color] || color;
       isTranslated = color !== _color;
     }
-    color = parse(color);
+    color = parse(color, null, disableAlpha);
     if (color.name && translate) {
       color.translated = translate(color.name);
       if (isTranslated && color.translated) {
@@ -420,8 +430,8 @@ const validateColor = (_color, translate, translateLanguage) => {
   return color;
 };
 
-const getComponents = (_color, format, translate = value => value) => {
-  const color = validateColor(_color, translate);
+const getComponents = (_color, format, disableAlpha, translate = value => value) => {
+  const color = validateColor(_color, disableAlpha, translate);
   const components = {};
   if (format === 'rgb') {
     components.r = { value: color.rgb[0], format: 'integer', min: 0, max: 255, name: translate('R') };
