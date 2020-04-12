@@ -35,7 +35,7 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format, onChange, disableAlpha, forwardRef, ...props }) => {
+const ColorInput = ({ value, format, onChange, disableAlpha, enableErrorDisplay, forwardRef, ...props }) => {
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language);
   let field;
@@ -102,7 +102,7 @@ const ColorInput = ({ value, format, onChange, disableAlpha, forwardRef, ...prop
   return (
     <StyledFormControl error={!!color.error} data-testid="colorinput">
       {field}
-      {color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
+      {enableErrorDisplay && color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
     </StyledFormControl>
   );
 };
@@ -118,6 +118,7 @@ ColorInput.propTypes = {
   /**
     Internal usage
    */
+  enableErrorDisplay: PropTypes.bool,
   forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
 };
 
@@ -126,6 +127,7 @@ ColorInput.defaultProps = {
   format: 'plain',
   forwardRef: undefined,
   disableAlpha: false,
+  enableErrorDisplay: true,
 };
 
 export default uncontrolled(ColorInput);

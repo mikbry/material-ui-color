@@ -79,9 +79,16 @@ const StyledBox = styled.div`
   }
   & .muicc-colorbox-controls {
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     flex-wrap: wrap;
     padding: 8px;
+  }
+  & .muicc-colorbox-error {
+    color: #f44336;
+    line-height: 36.5px;
+  }
+  & .muicc-colorbox-controls > button {
+    margin-left: auto;
   }
 `;
 
@@ -139,6 +146,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
             value={color}
             format={input}
             disableAlpha
+            enableErrorDisplay={false}
             className="muicc-colorbox-input"
             onChange={handleInputChange}
           />
@@ -190,11 +198,14 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
             />
           </>
         )}
-        {deferred && (
-          <div className="muicc-colorbox-controls">
-            <Button onClick={handleSet}>{t('Set')}</Button>
-          </div>
-        )}
+        <div className="muicc-colorbox-controls">
+          {color.error && (
+            <span className="muicc-colorbox-error" data-testid="colorbox-error">
+              {t(color.error)}
+            </span>
+          )}
+          {deferred && <Button onClick={handleSet}>{t('Set')}</Button>}
+        </div>
       </StyledBox>
     </Box>
   );
