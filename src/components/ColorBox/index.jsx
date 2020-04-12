@@ -85,9 +85,9 @@ const StyledBox = styled.div`
   }
 `;
 
-const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, ...props }) => {
+const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, disableAlpha, ...props }) => {
   const { t, i18n } = useTranslate();
-  let color = validateColor(value, t, i18n.language);
+  let color = validateColor(value, disableAlpha, t, i18n.language);
   let onChange = _onChange;
   let onDeferredChange;
   if (deferred) {
@@ -138,6 +138,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
             key={input}
             value={color}
             format={input}
+            disableAlpha
             className="muicc-colorbox-input"
             onChange={handleInputChange}
           />
@@ -164,22 +165,29 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
             max={360}
             onChange={handleHueChange}
           />
-          <AlphaSlider
-            data-testid="alphaslider"
-            color={cssColor}
-            valueLabelDisplay="auto"
-            aria-label="alpha slider"
-            value={alpha}
-            min={0}
-            max={100}
-            onChange={handleAlphaChange}
-          />
+          {!disableAlpha && (
+            <AlphaSlider
+              data-testid="alphaslider"
+              color={cssColor}
+              valueLabelDisplay="auto"
+              aria-label="alpha slider"
+              value={alpha}
+              min={0}
+              max={100}
+              onChange={handleAlphaChange}
+            />
+          )}
         </div>
         {displayInput(inputFormats)}
         {palette && (
           <>
             <Divider />
-            <ColorPalette size={26.65} palette={palette} onSelect={handlePaletteSelection} />
+            <ColorPalette
+              size={26.65}
+              palette={palette}
+              onSelect={handlePaletteSelection}
+              disableAlpha={disableAlpha}
+            />
           </>
         )}
         {deferred && (
@@ -198,6 +206,10 @@ ColorBox.propTypes = {
   palette: CommonTypes.palette,
   inputFormats: CommonTypes.inputFormats,
   onChange: PropTypes.func.isRequired,
+  /**
+    Don't use alpha
+   */
+  disableAlpha: PropTypes.bool,
 };
 
 ColorBox.defaultProps = {
@@ -205,6 +217,7 @@ ColorBox.defaultProps = {
   deferred: false,
   palette: undefined,
   inputFormats: ['hex', 'rgb'],
+  disableAlpha: false,
 };
 
 export default uncontrolled(ColorBox);

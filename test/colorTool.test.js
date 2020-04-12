@@ -261,20 +261,20 @@ test('ColorTool parse css rgb / rgba', () => {
   expect(rgb.hex).toEqual('FF0099AA');
   // Functional syntax with alpha value
   rgb = ColorTool.parse('rgb(255, 0, 153, 1)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
   rgb = ColorTool.parse('rgb(255, 0, 153, 100%)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
   rgb = ColorTool.parse('rgb(255 0 153 / 1)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
   rgb = ColorTool.parse('rgb(255 0 153 / 100%)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
   // Functional syntax with floats value
   rgb = ColorTool.parse('rgb(255, 0, 153, 1.0)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
   rgb = ColorTool.parse('rgb(255, 0, 153, 100.0%)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
   rgb = ColorTool.parse('rgb(2.55e2, 0e0, 1.53e2, +1e2%)');
-  expect(rgb.hex).toEqual('FF0099FF');
+  expect(rgb.hex).toEqual('FF0099');
 
   // TODO RGBA variations
   // Functional syntax
@@ -285,7 +285,7 @@ test('ColorTool parse css rgb / rgba', () => {
   rgb = ColorTool.parse('rgba(51, 170, 51, .7)');
   expect(rgb.hex).toEqual('33AA33B3');
   rgb = ColorTool.parse('rgba(51, 170, 51,  1)');
-  expect(rgb.hex).toEqual('33AA33FF');
+  expect(rgb.hex).toEqual('33AA33');
   // Whitespace syntax
   rgb = ColorTool.parse('rgba(51 170 51 / 0.4)');
   expect(rgb.hex).toEqual('33AA3366');
@@ -294,7 +294,7 @@ test('ColorTool parse css rgb / rgba', () => {
 
   // Functional syntax with floats value
   rgb = ColorTool.parse('rgba(255, 0, 153.6, 1)');
-  expect(rgb.hex).toEqual('FF009AFF');
+  expect(rgb.hex).toEqual('FF009A');
   rgb = ColorTool.parse('rgba(1e2, .5e1, .5e0, +.25e2%)');
   expect(rgb.hex).toEqual('64050140');
 
@@ -368,7 +368,7 @@ test('ColorTool parse css hsl / hsla', () => {
   hsl = ColorTool.parse('hsla(240, 100%, 50%, .7)');
   expect(hsl.hex).toEqual('0000FFB2');
   hsl = ColorTool.parse('hsla(240, 100%, 50%, 1)');
-  expect(hsl.hex).toEqual('0000FFFF');
+  expect(hsl.hex).toEqual('0000FF');
   hsl = ColorTool.parse('hsla(240 100% 50% / .05)');
   expect(hsl.hex).toEqual('0000FF0C');
   hsl = ColorTool.parse('hsla(240 100% 50% / 5%)');
@@ -431,15 +431,18 @@ test('ColorTool parse rgb objects', () => {
 
   color = ColorTool.parse({ r: 0xff, g: 0, b: 0, a: '100%' });
   expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0, a: '100%' });
-  expect(color.hex).toEqual('FF0000FF');
+  expect(color.hex).toEqual('FF0000');
 
   color = ColorTool.parse({ r: 0xff, g: 0, b: 0, a: 1 });
   expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0, a: 1 });
-  expect(color.hex).toEqual('FF0000FF');
+  expect(color.hex).toEqual('FF0000');
 
   color = ColorTool.parse({ r: 0xff, g: 0, b: 0, a: '0%' });
   expect(color.raw).toEqual({ r: 0xff, g: 0, b: 0, a: '0%' });
   expect(color.hex).toEqual('FF000000');
+
+  color = ColorTool.parse({ r: '0', g: 0, b: 0, a: '1' });
+  expect(color.hex).toEqual('000000FF');
 
   // parse non valid rgb object
   color = ColorTool.parse({ r: 'a', g: 0, b: 0 });
@@ -461,7 +464,7 @@ test('ColorTool parse hsl objects', () => {
   hsl = ColorTool.parse({ h: '180deg', s: 100, l: 50 });
   expect(hsl.hex).toEqual('00FFFF');
   hsl = ColorTool.parse({ h: '180deg', s: 100, l: 50, a: 1 });
-  expect(hsl.hex).toEqual('00FFFFFF');
+  expect(hsl.hex).toEqual('00FFFF');
 
   // parse non valid hsl object
   hsl = ColorTool.parse({ h: 'a', s: 0, l: 0 });
@@ -476,7 +479,7 @@ test('ColorTool parse hsv objects', () => {
   hsv = ColorTool.parse({ h: 240, s: 8, v: 98 });
   expect(hsv.hex).toEqual('E6E6FA');
   hsv = ColorTool.parse({ h: 240, s: 8, v: 98, a: 1 });
-  expect(hsv.hex).toEqual('E6E6FAFF');
+  expect(hsv.hex).toEqual('E6E6FA');
 });
 
 test('ColorTool parse rgb array', () => {
@@ -496,7 +499,7 @@ test('ColorTool parse hsl array', () => {
   hsl = ColorTool.parse(['180deg', 100, 50], 'hsl');
   expect(hsl.hex).toEqual('00FFFF');
   hsl = ColorTool.parse(['180deg', 100, 50, 1], 'hsl');
-  expect(hsl.hex).toEqual('00FFFFFF');
+  expect(hsl.hex).toEqual('00FFFF');
 });
 
 test('ColorTool parse hsv array', () => {
@@ -505,22 +508,22 @@ test('ColorTool parse hsv array', () => {
   hsv = ColorTool.parse([240, 8, 98], 'hsv');
   expect(hsv.hex).toEqual('E6E6FA');
   hsv = ColorTool.parse([240, 8, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('E6E6FAFF');
+  expect(hsv.hex).toEqual('E6E6FA');
 
   // s = 0
   hsv = ColorTool.parse([240, 0, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('FAFAFAFF');
+  expect(hsv.hex).toEqual('FAFAFA');
 
   hsv = ColorTool.parse([0, 50, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('FA7D7DFF');
+  expect(hsv.hex).toEqual('FA7D7D');
   hsv = ColorTool.parse([70, 50, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('E5FA7DFF');
+  expect(hsv.hex).toEqual('E5FA7D');
   hsv = ColorTool.parse([130, 50, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('7DFA92FF');
+  expect(hsv.hex).toEqual('7DFA92');
   hsv = ColorTool.parse([190, 50, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('7DE5FAFF');
+  expect(hsv.hex).toEqual('7DE5FA');
   hsv = ColorTool.parse([320, 50, 98, 1], 'hsv');
-  expect(hsv.hex).toEqual('FA7DD0FF');
+  expect(hsv.hex).toEqual('FA7DD0');
 
   hsv = ColorTool.parse([320, 50, 98, '10%'], 'hsv');
   expect(hsv.hex).toEqual('FA7DD019');
@@ -590,15 +593,15 @@ test('ColorTool validateColor translate', () => {
     return value;
   };
 
-  let color = ColorTool.validateColor('rouge', translate, 'frFR');
+  let color = ColorTool.validateColor('rouge', false, translate, 'frFR');
   expect(color.raw).toEqual('red');
   expect(color.hex).toEqual('FF0000');
   color = ColorTool.validateColor('red');
   expect(color.raw).toEqual('red');
   expect(color.hex).toEqual('FF0000');
-  color = ColorTool.validateColor('#FFX0', translate);
+  color = ColorTool.validateColor('#FFX0', false, translate);
   expect(color.raw).toEqual('#FFX0');
   expect(color.error).toEqual('Valeur non hexa');
-  color = ColorTool.validateColor({ error: 'Wrong format', format: 'unknown', name: '#ffu' }, translate);
+  color = ColorTool.validateColor({ error: 'Wrong format', format: 'unknown', name: '#ffu' }, false, translate);
   expect(color.error).toEqual('Format non valide');
 });
