@@ -176,18 +176,25 @@ export const Container = () => (
 
 ## Roadmap
 
-### v0.3.0 - [Current project](https://github.com/mikbry/material-ui-color-components/projects/1)
+### v0.3.0 - [Current version](https://github.com/mikbry/material-ui-color-components/projects/1)
 - add Typescript support
 - accessibility : keyboard and touch support
 - localization
 - disable alpha property
 - #30, #29, #22 resolved
-- better documentation (colorType explained)
+- WIP - better documentation: colorType explained, i18n, typescript examples
 
-### v0.4.0
+### v0.4.0 - WIP
 - optimize code
-- more controls for inputs in ColorBox
+- redesign inputs in ColorBox
 - remove `styled-components` to have less dependencies and reduce size
+- bugs fixes
+
+### v0.5.0  - planned
+- rtl support
+- ColorInput : display alpha and size according to  MUi
+- ColorInput : optional color box as left or right icon
+- ColorPicker: left or right Colorbox
 - bugs fixes
 
 ## Contribute
