@@ -56,7 +56,7 @@ const ColorPicker = ({
   doPopup,
   disableAlpha,
 }) => {
-  const refPicker = React.useRef();
+  const refPicker = React.useRef(null);
   const [open, setOpen] = React.useState(openAtStart);
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language);
