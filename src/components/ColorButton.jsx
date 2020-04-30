@@ -111,7 +111,7 @@ ColorButton.propTypes = {
   /**
     Internal usage
    */
-  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  forwardRef: PropTypes.shape({ current: PropTypes.elementType }),
 };
 
 ColorButton.defaultProps = {

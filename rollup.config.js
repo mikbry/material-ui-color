@@ -25,7 +25,11 @@ export default {
     'react-is',
     'hoist-non-react-statics',
     'styled-components',
+    'Element',
   ],
-  output: [{ file: './dist/index.js', format: 'esm', sourcemap: true }],
+  output: [
+    { file: './dist/esm/index.js', format: 'esm', sourcemap: true },
+    { file: './dist/index.js', format: 'cjs', sourcemap: true },
+  ],
   plugins: [babel(), resolve({ extensions: ['.js', '.jsx'] }), terser()],
 };

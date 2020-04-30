@@ -7,3 +7,4 @@ coverage
 yarn-error.log
 dist
 test/__snapshots__
+tmp
