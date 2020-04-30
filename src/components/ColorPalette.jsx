@@ -54,7 +54,7 @@ ColorPalette.propTypes = {
   borderWidth: PropTypes.number,
   size: PropTypes.number,
   palette: CommonTypes.palette.isRequired,
-  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  forwardRef: PropTypes.shape({ current: PropTypes.elementType }),
   onSelect: PropTypes.func,
   /**
     Don't use alpha

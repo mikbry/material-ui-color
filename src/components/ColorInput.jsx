@@ -119,7 +119,7 @@ ColorInput.propTypes = {
     Internal usage
    */
   enableErrorDisplay: PropTypes.bool,
-  forwardRef: PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  forwardRef: PropTypes.shape({ current: PropTypes.elementType }),
 };
 
 ColorInput.defaultProps = {
