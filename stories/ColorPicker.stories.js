@@ -71,7 +71,7 @@ const Controller = ({ value }) => {
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>
         <div style={{ marginLeft: '-28px', marginTop: '-8px', paddingBottom: '28px', color: '#777', fontSize: '10px' }}>
-          <h1>material-ui-color-components</h1>
+          <h1>material-ui-color</h1>
           <h2>ColorPicker example</h2>
         </div>
         <ColorPicker value={color} palette={paletteObj} onChange={handleChange} />
@@ -79,7 +79,7 @@ const Controller = ({ value }) => {
           set rgb(255, 0, 0)
         </Button>
         <div style={{ paddingTop: '180px', marginLeft: '-28px', color: '#999', fontSize: '12px' }}>
-          https://github.com/mikbry/material-ui-color-components
+          https://github.com/mikbry/material-ui-color
         </div>
       </div>
       <div
