@@ -1,4 +1,4 @@
-# `material-ui-color`
+# `material-ui-color` picker and other components
 
 [![Build Status][action-image]][action-url]
 [![codecov][codecov-image]][codecov-url]
