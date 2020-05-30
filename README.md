@@ -1,4 +1,4 @@
-# `material-ui-color-components`
+# `material-ui-color`
 
 [![Build Status][action-image]][action-url]
 [![codecov][codecov-image]][codecov-url]
@@ -6,16 +6,16 @@
 [![License][license-image]][license-url]
 [![minisize][min-image]][min-url]
 
-[action-image]: https://github.com/mikbry/material-ui-color-components/workflows/Build%20and%20Deploy/badge.svg
-[action-url]: https://mikbry.github.io/material-ui-color-components/
-[codecov-image]: https://codecov.io/gh/mikbry/material-ui-color-components/branch/master/graph/badge.svg?token=K4P0vnM5fh
-[codecov-url]: https://codecov.io/gh/mikbry/material-ui-color-components
-[npm-image]: https://img.shields.io/npm/v/material-ui-color-components.svg
-[npm-url]: https://npmjs.org/package/material-ui-color-components
-[license-image]: https://img.shields.io/github/license/mikbry/material-ui-color-components
-[License-url]:https://github.com/mikbry/material-ui-color-components/blob/master/LICENSE
-[min-image]:https://badgen.net/bundlephobia/min/material-ui-color-components
-[min-url]:https://bundlephobia.com/result?p=material-ui-color-components
+[action-image]: https://github.com/mikbry/material-ui-color/workflows/Build%20and%20Deploy/badge.svg
+[action-url]: https://mikbry.github.io/material-ui-color/
+[codecov-image]: https://codecov.io/gh/mikbry/material-ui-color/branch/master/graph/badge.svg?token=K4P0vnM5fh
+[codecov-url]: https://codecov.io/gh/mikbry/material-ui-color
+[npm-image]: https://img.shields.io/npm/v/material-ui-color.svg
+[npm-url]: https://npmjs.org/package/material-ui-color
+[license-image]: https://img.shields.io/github/license/mikbry/material-ui-color
+[License-url]:https://github.com/mikbry/material-ui-color/blob/master/LICENSE
+[min-image]:https://badgen.net/bundlephobia/min/material-ui-color
+[min-url]:https://bundlephobia.com/result?p=material-ui-color
 
 > Collections of color components for `material-ui`. No dependencies, small, highly customizable and theming support !
 
@@ -45,7 +45,7 @@
 
 Full documentation is available here :
 
-https://mikbry.github.io/material-ui-color-components/
+https://mikbry.github.io/material-ui-color/
 
 
 ## Requirements
@@ -55,12 +55,12 @@ https://mikbry.github.io/material-ui-color-components/
 ## Install
 
 ```bash
-yarn add material-ui-color-components
+yarn add material-ui-color
 ```
 
 Or using npm
 ```bash
-npm install material-ui-color-components
+npm install material-ui-color
 ```
 
 ## Usage
@@ -76,13 +76,13 @@ you need to have in your dependencies:
     "styled-components": "^5.0.1"
 ```
 
-`material-ui-color-components` bring 5 components.
+`material-ui-color` bring 5 components.
 
 ### `<ColorPicker/>`
 
 A popover component to display a color tool box (use `ColorBox`)
 ```javascript
-import { ColorPicker } from 'material-ui-color-components';
+import { ColorPicker } from 'material-ui-color';
 
 export const Container = () => (
   <div>
@@ -93,13 +93,13 @@ export const Container = () => (
 
 At first it display a button + an input
 
-[ColorPicker documentation](https://mikbry.github.io/material-ui-color-components/?path=/story/components-colorpicker--basic)
+[ColorPicker documentation](https://mikbry.github.io/material-ui-color/?path=/story/components-colorpicker--basic)
 
 ### `<ColorBox />`
 
 A component to display a color tool box
 ```javascript
-import { ColorBox } from 'material-ui-color-components';
+import { ColorBox } from 'material-ui-color';
 
 export const Container = () => (
   <div>
@@ -108,14 +108,14 @@ export const Container = () => (
 );
 ```
 
-[ColorBox documentation](https://mikbry.github.io/material-ui-color-components/?path=/story/components-colorbox--basic)
+[ColorBox documentation](https://mikbry.github.io/material-ui-color/?path=/story/components-colorbox--basic)
 
 ### `<ColorInput />`
 
 An input component to display/edit color values in different format (plain, hex, rgb, hsl, hsv).
 
 ```javascript
-import { ColorInput } from 'material-ui-color-components';
+import { ColorInput } from 'material-ui-color';
 
 export const Container = () => (
   <div>
@@ -124,14 +124,14 @@ export const Container = () => (
 );
 ```
 
-[ColorInput documentation](https://mikbry.github.io/material-ui-color-components/?path=/story/components-colorinput--basic)
+[ColorInput documentation](https://mikbry.github.io/material-ui-color/?path=/story/components-colorinput--basic)
 
 ### `<ColorPalette />`
 
 A component to display a grid of color buckets.
 
 ```javascript
-import { ColorPalette } from 'material-ui-color-components';
+import { ColorPalette } from 'material-ui-color';
 
 const palette = {
   red: '#ff0000',
@@ -156,14 +156,14 @@ export const Container = () => (
 );
 ```
 
-[ColorPalette documentation](https://mikbry.github.io/material-ui-color-components/?path=/story/components-colorpalette--basic)
+[ColorPalette documentation](https://mikbry.github.io/material-ui-color/?path=/story/components-colorpalette--basic)
 
 ### `<ColorButton />`
 
 Displays a button filled with a color
 
 ```javascript
-import { ColorButton } from 'material-ui-color-components';
+import { ColorButton } from 'material-ui-color';
 
 export const Container = () => (
   <div>
@@ -172,11 +172,11 @@ export const Container = () => (
 );
 ```
 
-[ColorButton documentation](https://mikbry.github.io/material-ui-color-components/?path=/story/components-colorbutton--basic)
+[ColorButton documentation](https://mikbry.github.io/material-ui-color/?path=/story/components-colorbutton--basic)
 
 ## Roadmap
 
-### v0.3.0 - [Current version](https://github.com/mikbry/material-ui-color-components/projects/1)
+### v0.3.0 - [Current version](https://github.com/mikbry/material-ui-color/projects/1)
 - add Typescript support
 - accessibility : keyboard and touch support
 - localization
