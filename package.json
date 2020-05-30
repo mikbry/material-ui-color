@@ -1,5 +1,5 @@
 {
-  "name": "material-ui-color-components",
+  "name": "material-ui-color",
   "version": "0.3.0",
   "description": "Color components (ColorPicker) for React Material-Ui. No dependencies. It uses Hooks and support RGBA, HSVA, and more !",
   "main": "index.js",
