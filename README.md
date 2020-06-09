@@ -167,7 +167,7 @@ import { ColorButton } from 'material-ui-color';
 
 export const Container = () => (
   <div>
-    <ColorButton red="red"/>
+    <ColorButton color="red"/>
   </div>
 );
 ```
