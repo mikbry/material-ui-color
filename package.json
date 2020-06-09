@@ -1,6 +1,6 @@
 {
   "name": "material-ui-color",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "description": "The lightest colorpicker for React Material-Ui. No dependencies. It uses Hooks and support RGBA, HSVA, and more !",
   "main": "index.js",
   "module": "./esm/index.js",
@@ -88,8 +88,7 @@
     "react-dom": "^16.13.1",
     "styled-components": "^5.1.1"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "jest": {
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest",
