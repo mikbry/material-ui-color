@@ -80,7 +80,8 @@ you need to have in your dependencies:
 
 ### `<ColorPicker/>`
 
-A popover component to display a color tool box (use `ColorBox`)
+A popover component to display a color tool box. It uses `ColorBox` and `material-ui-popup-state`.
+
 ```javascript
 import { ColorPicker } from 'material-ui-color';
 
