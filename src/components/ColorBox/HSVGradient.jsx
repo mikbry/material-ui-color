@@ -157,18 +157,20 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
       event.preventDefault();
     };
     const handleUp = event => {
-      convertMousePosition({ x: event.pageX, y: event.pageY }, ref);
+      const xy = { x: event.pageX - window.scrollX, y: event.pageY - window.scrollY };
+      convertMousePosition(xy, ref);
       setPressed(false);
       event.preventDefault();
     };
     const handleMove = event => {
       if (pressed || event.buttons) {
-        convertMousePosition({ x: event.pageX, y: event.pageY }, ref);
+        const xy = { x: event.pageX - window.scrollX, y: event.pageY - window.scrollY };
+        convertMousePosition(xy, ref);
         event.preventDefault();
       }
     };
     const handleTouch = event => {
-      const xy = { x: event.touches[0].pageX, y: event.touches[0].pageY };
+      const xy = { x: event.touches[0].pageX - window.scrollX, y: event.touches[0].pageY - window.scrollY };
       convertMousePosition(xy, ref);
       event.preventDefault();
     };
