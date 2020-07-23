@@ -127,3 +127,12 @@ export const Localization = () => {
 Localization.story = {
   parameters: { defaultValue: 'red', palette: paletteObj, deferred: true },
 };
+
+export const HideTextfield = () => (
+  <div style={style}>
+    <ColorPicker defaultValue="red" hideTextfield />
+  </div>
+);
+HideTextfield.story = {
+  parameters: { defaultValue: 'red', hideTextfield: true },
+};
