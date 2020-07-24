@@ -55,6 +55,7 @@ const ColorPicker = ({
   onOpen,
   doPopup,
   disableAlpha,
+  hideTextfield,
 }) => {
   const refPicker = React.useRef(null);
   const [open, setOpen] = React.useState(openAtStart);
@@ -117,6 +118,17 @@ const ColorPicker = ({
     );
   }
 
+  let textField = null;
+  if (!hideTextfield) {
+    textField = disableTextfield ? (
+      <div role="button" data-testid="colorpicker-noinput" onClick={handleClick}>
+        {color.raw}
+      </div>
+    ) : (
+      <TextField color="primary" value={raw} onChange={handleChange} data-testid="colorpicker-input" />
+    );
+  }
+
   return (
     <StyledRoot ref={refPicker}>
       <ColorButton
@@ -125,13 +137,7 @@ const ColorPicker = ({
         color={color}
         onClick={handleClick}
       />
-      {disableTextfield ? (
-        <div role="button" data-testid="colorpicker-noinput" onClick={handleClick}>
-          {color.raw}
-        </div>
-      ) : (
-        <TextField color="primary" value={raw} onChange={handleChange} data-testid="colorpicker-input" />
-      )}
+      {textField}
       {box}
     </StyledRoot>
   );
@@ -151,6 +157,7 @@ ColorPicker.propTypes = {
     Don't use alpha
    */
   disableAlpha: PropTypes.bool,
+  hideTextfield: PropTypes.bool,
 };
 
 ColorPicker.defaultProps = {
@@ -163,6 +170,7 @@ ColorPicker.defaultProps = {
   openAtStart: false,
   doPopup: undefined,
   disableAlpha: false,
+  hideTextfield: false,
 };
 
 export default uncontrolled(ColorPicker);
