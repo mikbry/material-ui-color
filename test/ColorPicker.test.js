@@ -140,5 +140,6 @@ test('ColorPicker open', async () => {
 
 test('ColorPicker hideTextfield', async () => {
   const { queryAllByTestId } = render(<ColorPicker value="red" hideTextfield />);
+  expect(await queryAllByTestId('colorpicker-input')).toEqual([]);
   expect(await queryAllByTestId('colorpicker-noinput')).toEqual([]);
 });
