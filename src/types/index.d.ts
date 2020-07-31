@@ -29,6 +29,7 @@
   interface ColorPickerProps {
     value?: Color | string | number;
     disableTextfield?: boolean;
+    hideTextfield?: boolean;
     deferred?: boolean;
     palette?: null;
     inputFormats?: string[];
