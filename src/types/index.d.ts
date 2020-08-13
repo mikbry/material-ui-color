@@ -19,6 +19,7 @@ declare module 'material-ui-color' {
     hsv: [number, number, number];
     hsl: [number, number, number];
   }
+  
   interface ColorError extends ColorObject {
     name: "none";
     error: "Wrong format" | "Not an hex value";
