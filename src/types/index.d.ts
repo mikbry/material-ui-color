@@ -1,9 +1,17 @@
+declare module 'material-ui-color' {
+
+  enum ColorFormat {
+    "plain",
+    "hex",
+    "hsl",
+    "rgb",
+    "hsv"
+  }
 
   interface ColorObject {
     css: React.CSSProperties;
     value: number;
     hex: string;
-    format: "hsl" | "rgb" | "hex";
     raw: string | number | object | string[] | number[];
     name: string;
     aplha: number;
@@ -11,9 +19,8 @@
     hsv: [number, number, number];
     hsl: [number, number, number];
   }
-  interface ColorError {
-    raw: string | number | object | string[] | number[];
-    css: React.CSSProperties;
+  
+  interface ColorError extends ColorObject {
     name: "none";
     error: "Wrong format" | "Not an hex value";
     value: 0;
@@ -24,41 +31,41 @@
     hsv: [0, 0, 0];
     hsl: [0, 0, 0];
   }
-  type Color = ColorObject | ColorError;
+
+  interface ColorType extends ColorObject {
+    format: ColorFormat;
+  }
+  
+  type Color = ColorType | ColorError;
+  type ColorValue = Color | string | number | Array<string | number>;
 
   interface ColorPickerProps {
-    value?: Color | string | number;
+    value?: ColorValue;
+    defaultValue?: ColorValue;
     disableTextfield?: boolean;
     hideTextfield?: boolean;
     deferred?: boolean;
     palette?: null;
     inputFormats?: string[];
+    disableAlpha?: boolean;
     onChange: (color: Color) => void;
     onOpen?: () => void;
     openAtStart?: boolean;
     doPopup?: () => void;
   }
-  interface ColorPickerPalettenProps<T extends Record<string, string>> {
-    value?: Color | string | number;
-    disableTextfield?: boolean;
-    deferred?: boolean;
+  interface ColorPickerPaletteProps<T extends Record<string, string>> extends ColorPickerProps {
     palette: T;
-    inputFormats?: string[];
-    onChange: (color: Color | keyof T) => void;
-    onOpen?: () => void;
-    openAtStart?: boolean;
-    doPopup?: () => void;
   }
 
-  declare function ColorPicker<T extends Record<string, string> | null>(
-    props: ColorPickerPalettenProps<T> | ColorPickerProps
+  function ColorPicker<T extends Record<string, string> | null>(
+    props: ColorPickerPaletteProps<T> | ColorPickerProps
   ): JSX.Element;
 
   interface ColorButtonProps {
     /**
     The color to display, could be a css valid string, an integer, or a Color object see  ColorType
    */
-    color: Color | string | number;
+    color: ColorValue;
     /**
     The size of the button in pixel
    */
@@ -77,15 +84,15 @@
     tooltip?: string;
   }
 
-  declare function ColorButton(props: ColorButtonProps): JSX.Element;
+  function ColorButton(props: ColorButtonProps): JSX.Element;
 
   interface ColorInputProps {
-    value?: Color | string | number;
+    value?: ColorValue;
     format?: string;
     onChange: (color: Color) => void;
   }
 
-  declare function ColorInput(props: ColorInputProps): JSX.Element;
+  function ColorInput(props: ColorInputProps): JSX.Element;
 
   interface ColorPaletteProps<T> {
     borderWidth?: number;
@@ -93,19 +100,20 @@
     onSelect?: (color: keyof T) => void;
   }
 
-  declare function ColorPalette<T extends Record<string, string>>(
+  function ColorPalette<T extends Record<string, string>>(
     props: ColorPaletteProps<T>
   ): JSX.Element;
 
   interface ColorBoxProps {
-    value?: Color | string | number;
+    defaultValue?: ColorValue;
+    value?: ColorValue;
     deferred?: boolean;
     palette?: Record<string, string>;
     inputFormats?: string[];
     onChange: (color: Color) => void;
   }
 
-  declare function ColorBox(props: ColorBoxProps): JSX.Element;
+  function ColorBox(props: ColorBoxProps): JSX.Element;
 
   export {
     ColorPicker,
@@ -119,5 +127,7 @@
     ColorBox,
     ColorBoxProps,
     Color,
-    ColorObject
+    ColorType,
+    ColorValue,
   };
+}
