@@ -17,7 +17,7 @@
 [min-image]:https://badgen.net/bundlephobia/min/material-ui-color
 [min-url]:https://bundlephobia.com/result?p=material-ui-color
 
-> Collections of color components for `material-ui`. No dependencies, small, highly customizable and theming support !
+> Collections of color components for [material-ui](https://github.com/mui-org/material-ui). No dependencies, small, highly customizable and theming support !
 
 ![Video of ColorPicker](./images/muicc-v0-2.webp)
 
