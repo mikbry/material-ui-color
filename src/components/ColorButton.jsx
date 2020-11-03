@@ -51,7 +51,7 @@ const Styleddiv = styled.div`
  */
 const ColorButton = ({ color: c, size, borderWidth, borderColor, forwardRef, tooltip, disableAlpha, ...props }) => {
   const { t, i18n } = useTranslate();
-  const color = ColorTool.validateColor(c, t, disableAlpha, i18n.language);
+  const color = ColorTool.validateColor(ci, disableAlpha, t, i18n.language);
   const translated = t(tooltip);
   const style = color.css; // || { backgroundColor: ColorTool.getCssColor(color) };
   let l = color.hsl[2] - 10;
