@@ -296,7 +296,7 @@ const colorsCssConditions = [
   value => value.startsWith('hsl(') || value.startsWith('hsla('),
 ];
 
-const parse = (raw, _format, disableAlpha = false) => {
+const parse = (raw, _format, disableAlpha = false, enablePlainColor = true) => {
   const color = { raw };
   let value;
   let alpha;
@@ -381,7 +381,7 @@ const parse = (raw, _format, disableAlpha = false) => {
   }
   if (!color.name) {
     // find color name
-    color.name = Object.keys(cssColors).find(n => cssColors[n] === value) || `color-${hex}`;
+    color.name = (enablePlainColor && Object.keys(cssColors).find(n => cssColors[n] === value)) || `color-${hex}`;
   }
   return color;
 };
@@ -400,7 +400,7 @@ const getCssColor = (color, format, disableAlpha) => {
 let cssColorsTranslated;
 let language;
 
-const validateColor = (_color, disableAlpha, translate, translateLanguage) => {
+const validateColor = (_color, disableAlpha, translate, translateLanguage, disablePlainColor = false) => {
   let color = _color;
   let isTranslated = false;
   if (!(_color && _color.format && _color.name)) {
@@ -416,7 +416,7 @@ const validateColor = (_color, disableAlpha, translate, translateLanguage) => {
       color = cssColorsTranslated[color] || color;
       isTranslated = color !== _color;
     }
-    color = parse(color, null, disableAlpha);
+    color = parse(color, null, disableAlpha, !disablePlainColor);
     if (color.name && translate) {
       color.translated = translate(color.name);
       if (isTranslated && color.translated) {

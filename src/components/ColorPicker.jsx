@@ -56,11 +56,12 @@ const ColorPicker = ({
   doPopup,
   disableAlpha,
   hideTextfield,
+  disablePlainColor,
 }) => {
   const refPicker = React.useRef(null);
   const [open, setOpen] = React.useState(openAtStart);
   const { t, i18n } = useTranslate();
-  const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language);
+  const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language, disablePlainColor);
   const raw = getColorText(color);
   const handleClick = () => {
     const b = Boolean(refPicker.current);
@@ -158,6 +159,7 @@ ColorPicker.propTypes = {
    */
   disableAlpha: PropTypes.bool,
   hideTextfield: PropTypes.bool,
+  disablePlainColor: PropTypes.bool,
 };
 
 ColorPicker.defaultProps = {
@@ -171,6 +173,7 @@ ColorPicker.defaultProps = {
   doPopup: undefined,
   disableAlpha: false,
   hideTextfield: false,
+  disablePlainColor: false,
 };
 
 export default uncontrolled(ColorPicker);

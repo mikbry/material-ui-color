@@ -35,9 +35,18 @@ const StyledRoot = styled.div`
   }
 `;
 
-const ColorInput = ({ value, format, onChange, disableAlpha, enableErrorDisplay, forwardRef, ...props }) => {
+const ColorInput = ({
+  value,
+  format,
+  onChange,
+  disableAlpha,
+  enableErrorDisplay,
+  forwardRef,
+  disablePlainColor,
+  ...props
+}) => {
   const { t, i18n } = useTranslate();
-  const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language);
+  const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language, disablePlainColor);
   let field;
   let components;
 
@@ -120,6 +129,7 @@ ColorInput.propTypes = {
    */
   enableErrorDisplay: PropTypes.bool,
   forwardRef: PropTypes.shape({ current: PropTypes.elementType }),
+  disablePlainColor: PropTypes.bool,
 };
 
 ColorInput.defaultProps = {
@@ -128,6 +138,7 @@ ColorInput.defaultProps = {
   forwardRef: undefined,
   disableAlpha: false,
   enableErrorDisplay: true,
+  disablePlainColor: false,
 };
 
 export default uncontrolled(ColorInput);
