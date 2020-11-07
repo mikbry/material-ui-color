@@ -131,3 +131,20 @@ declare module 'material-ui-color' {
     ColorValue,
   };
 }
+
+function TFunction(value: string): string;
+
+export interface i18n {
+  language: string;
+}
+
+export interface TranslationProps {
+  t: TFunction,
+  i18n?: i18n;
+}
+export interface Translation {
+  t: TFunction,
+  i18n?: i18n;
+}
+
+export function useTranslate(translation: TranslationProps): Translation;
