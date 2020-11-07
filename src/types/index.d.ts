@@ -14,7 +14,7 @@ declare module 'material-ui-color' {
     hex: string;
     raw: string | number | object | string[] | number[];
     name: string;
-    aplha: number;
+    alpha: number;
     rgb: [number, number, number];
     hsv: [number, number, number];
     hsl: [number, number, number];
