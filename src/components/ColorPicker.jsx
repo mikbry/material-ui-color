@@ -9,7 +9,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
@@ -58,8 +58,8 @@ const ColorPicker = ({
   hideTextfield,
   disablePlainColor,
 }) => {
-  const refPicker = React.useRef(null);
-  const [open, setOpen] = React.useState(openAtStart);
+  const refPicker = useRef(null);
+  const [open, setOpen] = useState(openAtStart);
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language, disablePlainColor);
   const raw = getColorText(color);
