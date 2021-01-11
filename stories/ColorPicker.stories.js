@@ -42,6 +42,11 @@ DisableAlpha.story = {
   parameters: { defaultValue: '#000', disableAlpha: true },
 };
 
+export const DisablePlain = () => <ColorPicker defaultValue="#000" disablePlainColor />;
+DisablePlain.story = {
+  parameters: { defaultValue: '#000', disablePlainColor: true },
+};
+
 export const Palette = () => (
   <div>
     <ColorPicker defaultValue="transparent" palette={paletteObj} />

@@ -67,6 +67,12 @@ test('ColorPicker disableTextfield', async () => {
   expect(await findByTestId('colorpicker-noinput')).toBeTruthy();
 });
 
+test('ColorPicker disablePlainColor', async () => {
+  const { findByTestId } = render(<ColorPicker value="red" disablePlainColor />);
+  const input = (await findByTestId('colorpicker-input')).querySelector('input');
+  expect(input.value).toBe('#FF0000');
+});
+
 test('ColorPicker disableTextfield click', async () => {
   const onOpen = jest.fn();
   const { findByTestId } = render(<ColorPicker value="#ff0a" disableTextfield onOpen={onOpen} />);

@@ -30,8 +30,8 @@ const StyledRoot = styled.div`
   }
 `;
 
-const getColorText = color => {
-  let text = color.name;
+const getColorText = (color, disablePlainColor) => {
+  let text = disablePlainColor  ? `color-${color.hex}` : color.name;
   if (text.startsWith('color-')) {
     if (typeof color.raw !== 'string' || !color.raw.startsWith('#')) {
       text = ColorTool.getCssColor(color, 'hex');
@@ -41,6 +41,7 @@ const getColorText = color => {
   } else if (text === 'none') {
     text = color.raw;
   }
+  console.log('colortext=', text, color);
   return text;
 };
 
@@ -62,7 +63,7 @@ const ColorPicker = ({
   const [open, setOpen] = useState(openAtStart);
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language, disablePlainColor);
-  const raw = getColorText(color);
+  const raw = getColorText(color, disablePlainColor);
   const handleClick = () => {
     const b = Boolean(refPicker.current);
     setOpen(b);
