@@ -59,7 +59,7 @@ const StyledBox = styled.div`
     justify-content: space-between;
   }
   & .muicc-colorbox-input {
-    marginright: 14px;
+    margin-right: 14px;
   }
   & .muicc-colorbox-colorBg {
     width: 48px;

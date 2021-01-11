@@ -133,7 +133,7 @@ ColorInput.propTypes = {
 };
 
 ColorInput.defaultProps = {
-  value: '',
+  value: 'none',
   format: 'plain',
   forwardRef: undefined,
   disableAlpha: false,
