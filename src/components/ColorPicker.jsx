@@ -31,7 +31,7 @@ const StyledRoot = styled.div`
 `;
 
 const getColorText = (color, disablePlainColor) => {
-  let text = disablePlainColor  ? `color-${color.hex}` : color.name;
+  let text = disablePlainColor ? `color-${color.hex}` : color.name;
   if (text.startsWith('color-')) {
     if (typeof color.raw !== 'string' || !color.raw.startsWith('#')) {
       text = ColorTool.getCssColor(color, 'hex');
@@ -63,7 +63,7 @@ const ColorPicker = ({
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language, disablePlainColor);
   const raw = getColorText(color, disablePlainColor);
-  
+
   useEffect(() => {
     if (openAtStart) {
       setOpen(true);

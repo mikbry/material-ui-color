@@ -9,17 +9,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 // eslint-disable-next-line react/prop-types
-const Uncontrolled = ({ element, defaultValue, ...props }) => {
+const Uncontrolled = ({ Element, defaultValue, ...props }) => {
   const [value, onChange] = React.useState(defaultValue);
-  return React.createElement(element, { ...props, value, onChange });
+  return React.createElement(Element, { ...props, value, onChange });
 };
 
 export default Element => {
   const Composite = ({ defaultValue, value, onChange, ...props }) =>
-    defaultValue && !onChange
-      ? React.createElement(Uncontrolled, { element: Element, defaultValue, ...props })
-      : React.createElement(Element, { value: value || defaultValue, onChange, ...props });
+    onChange || value !== 'none'
+      ? React.createElement(Element, { value: value || defaultValue, onChange: onChange || (() => {}), ...props })
+      : React.createElement(Uncontrolled, { Element, defaultValue, ...props });
   Composite.propTypes = { ...Element.propTypes, defaultValue: Element.propTypes.value, onChange: PropTypes.func };
-  Composite.defaultProps = { ...Element.defaultProps, defaultValue: undefined, onChange: () => {} };
+  Composite.defaultProps = { ...Element.defaultProps, defaultValue: undefined, onChange: undefined };
   return Composite;
 };

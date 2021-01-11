@@ -52,7 +52,7 @@ test('ColorPicker onChange controlled', async () => {
     // Should not be called
     value = newValue;
   });
-  const { findByTestId } = render(<ColorPicker defaultValue="red" onChange={onChange} />);
+  const { findByTestId } = render(<ColorPicker defaultValue="red" />);
   let input = (await findByTestId('colorpicker-input')).querySelector('input');
   expect(input.value).toBe('red');
   fireEvent.change(input, { target: { value: 'blue' } });
