@@ -182,12 +182,13 @@ export const Container = () => (
 
 ## Roadmap
 
-### v0.4.7 - [Current version](https://github.com/mikbry/material-ui-color/projects/3)
+### v0.4.7 - [Latest version](https://github.com/mikbry/material-ui-color/projects/3)
 - feat: ColorPicker when using onChange with defaultValue don't create a controlled component #100
 - fix: openAtStart=true wrong positionning #68
 - feat: ColorPicker support disable 'plain' textfield format #82
 - fix: Can't make localisation to work (Typescript) #84
-
+### v0.4.8 - [Current version](https://github.com/mikbry/material-ui-color/releases/tag/v0.4.8)
+- fix: wrong margin for Inputs #105
 ### v0.5.0  - planned
 - rtl support
 - ColorInput : display alpha and size according to  MUi
