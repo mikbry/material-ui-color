@@ -261,7 +261,7 @@ test('ColorBox hsvgradient focus/blur', async () => {
   expect(onChange).toHaveBeenCalledTimes(1);
   fireEvent(
     component,
-    new FakeMouseEvent('blur', {
+    new FocusEvent('blur', {
       bubbles: true,
     }),
   );
