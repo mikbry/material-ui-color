@@ -37,7 +37,7 @@
 - Fully compatible with Material-UI : theming and low level components
 - Styled with `styled-components`
 - Highly customizable ColorPicker : gradient picker, palette, input format, deferred mode
--  Small in size (<30kb) without any extra dependencies
+-  Small in size (<30kb) without any direct dependencies
 - Use modern React hook and coding conventions
 - Documentation made with Storybook, using Component Story Format and MDX
 
@@ -47,10 +47,15 @@ Full documentation is available here :
 
 https://mikbry.github.io/material-ui-color/
 
+### Examples availables
+
+- Javascript : https://codesandbox.io/s/material-ui-color-qb4vm?file=/src/App.tsx
+
+- Typescript : https://codesandbox.io/s/material-ui-color-picker-qvcg3?file=/src/App.tsx
 
 ## Requirements
 - Works on modern browsers supporting ES6+ (Not compatible with IE)
-- Latest React, Styled-Component and Material-UI frameworks
+- React, Styled-Component and Material-UI frameworks
 
 ## Install
 
@@ -70,7 +75,7 @@ you need to have in your dependencies:
 ```
     "@material-ui/core": "^4.9.5",
     "material-ui-popup-state": "^1.5.3",
-    "prop-types": "15.7.2",
+    "prop-types": "^15.7.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "styled-components": "^5.0.1"
@@ -177,25 +182,19 @@ export const Container = () => (
 
 ## Roadmap
 
-### v0.3.0 - [Current version](https://github.com/mikbry/material-ui-color/projects/1)
-- add Typescript support
-- accessibility : keyboard and touch support
-- localization
-- disable alpha property
-- #30, #29, #22 resolved
-- WIP - better documentation: colorType explained, i18n, typescript examples
-
-### v0.4.0 - WIP
-- optimize code
-- redesign inputs in ColorBox
-- remove `styled-components` to have less dependencies and reduce size
-- bugs fixes
+### v0.4.7 - [Current version](https://github.com/mikbry/material-ui-color/projects/3)
+- feat: ColorPicker when using onChange with defaultValue don't create a controlled component #100
+- fix: openAtStart=true wrong positionning #68
+- feat: ColorPicker support disable 'plain' textfield format #82
+- fix: Can't make localisation to work (Typescript) #84
 
 ### v0.5.0  - planned
 - rtl support
 - ColorInput : display alpha and size according to  MUi
 - ColorInput : optional color box as left or right icon
 - ColorPicker: left or right Colorbox
+- redesign inputs in ColorBox
+- remove `styled-components` to have less dependencies and reduce size
 - bugs fixes
 
 ## Contribute
