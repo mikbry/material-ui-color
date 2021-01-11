@@ -16,9 +16,9 @@ const Uncontrolled = ({ element, defaultValue, ...props }) => {
 
 export default Element => {
   const Composite = ({ defaultValue, value, onChange, ...props }) =>
-    defaultValue
+    defaultValue && !onChange
       ? React.createElement(Uncontrolled, { element: Element, defaultValue, ...props })
-      : React.createElement(Element, { value, onChange, ...props });
+      : React.createElement(Element, { value: value || defaultValue, onChange, ...props });
   Composite.propTypes = { ...Element.propTypes, defaultValue: Element.propTypes.value, onChange: PropTypes.func };
   Composite.defaultProps = { ...Element.defaultProps, defaultValue: undefined, onChange: () => {} };
   return Composite;
