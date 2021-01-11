@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{1474:function(o,n,e){"use strict";e.r(n);var t=e(67),s=(e(398),e(458),e(1293),e(507)),i=Object(s.create)({base:"light",brandTitle:"Material-UI<br/>Color Components"});t.addons.setConfig({theme:i,isToolshown:!0})},511:function(o,n,e){e(512),e(1474),e(1369),e(1468),e(398),o.exports=e(458)},583:function(o,n){}},[[511,1,2]]]);
