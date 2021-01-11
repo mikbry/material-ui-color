@@ -73,12 +73,12 @@ npm install material-ui-color
 you need to have in your dependencies:
 
 ```
-    "@material-ui/core": "^4.9.5",
-    "material-ui-popup-state": "^1.5.3",
+    "@material-ui/core": "^4.11.2",
+    "material-ui-popup-state": "^1.7.1",
     "prop-types": "^15.7.2",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "styled-components": "^5.0.1"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "styled-components": "^5.2.1"
 ```
 
 `material-ui-color` bring 5 components.
