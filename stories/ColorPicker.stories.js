@@ -37,6 +37,11 @@ Basic.story = {
   parameters: { defaultValue: '#000' },
 };
 
+export const OpenAtStart = () => <ColorPicker defaultValue="#000" openAtStart />;
+OpenAtStart.story = {
+  parameters: { defaultValue: '#000', openAtStart: true },
+};
+
 export const DisableAlpha = () => <ColorPicker defaultValue="#000" disableAlpha />;
 DisableAlpha.story = {
   parameters: { defaultValue: '#000', disableAlpha: true },

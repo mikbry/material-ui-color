@@ -48,6 +48,7 @@ declare module 'material-ui-color' {
     palette?: any;
     inputFormats?: string[];
     disableAlpha?: boolean;
+    disablePlainColor?: boolean;
     onChange: (color: Color) => void;
     onOpen?: () => void;
     openAtStart?: boolean;
