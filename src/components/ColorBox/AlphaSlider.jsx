@@ -56,7 +56,6 @@ function AlphaSlider({ color, ...props }) {
 
   return (
     <Slider
-      // eslint-disable-next-line react/jsx-props-no-spreading
       {...props}
       classes={{
         root: classes.root,

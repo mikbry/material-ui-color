@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-props-no-spreading */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
