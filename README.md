@@ -35,7 +35,6 @@
 ## Why another ColorPicker ?
 
 - Fully compatible with Material-UI : theming and low level components
-- Styled with `styled-components`
 - Highly customizable ColorPicker : gradient picker, palette, input format, deferred mode
 -  Small in size (<30kb) without any direct dependencies
 - Use modern React hook and coding conventions
