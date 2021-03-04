@@ -54,7 +54,7 @@ https://mikbry.github.io/material-ui-color/
 
 ## Requirements
 - Works on modern browsers supporting ES6+ (Not compatible with IE)
-- React, Styled-Component and Material-UI frameworks
+- React and Material-UI frameworks
 
 ## Install
 
@@ -77,7 +77,6 @@ you need to have in your dependencies:
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "styled-components": "^5.2.1"
 ```
 
 `material-ui-color` bring 5 components.

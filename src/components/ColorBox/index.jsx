@@ -155,7 +155,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
 
   return (
     <Box p={2} className={classes.root} {...props}>
-      <Box className={classes.container} boxWidth={boxWidth} backgroundColor={backgroundColor}>
+      <Box className={classes.container}>
         <HSVGradient
           className={`muicc-colorbox-hsvgradient ${classes.colorboxHsvGradient}`}
           color={color}

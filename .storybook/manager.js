@@ -1,7 +1,7 @@
 import { addons } from '@storybook/addons';
 import '@storybook/addon-actions/register';
 import '@storybook/addon-links/register';
-import 'storybook-addon-styled-component-theme/dist/register';
+import '@react-theming/storybook-addon';
 import muiccTheme from './muiccTheme';
 
 addons.setConfig({

@@ -3,14 +3,14 @@ import { addParameters } from '@storybook/react';
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 import { addDecorator } from '@storybook/react';
 import { withKnobs } from "@storybook/addon-knobs";
-import { withThemesProvider } from 'storybook-addon-styled-component-theme';
+import { withThemes } from '@react-theming/storybook-addon/dist/preview';
 import ThemeProvider from './ThemeProvider';
 import lightTheme from './lightTheme';
 import darkTheme from './darkTheme';
 import frenchTheme from './frenchTheme';
 
 const themes = [lightTheme, darkTheme, frenchTheme];
-addDecorator(withThemesProvider(themes, ThemeProvider));
+addDecorator(withThemes(ThemeProvider, themes));
 addDecorator(withKnobs);
 addDecorator(storyFn => <div style={{ padding: '48px' }}>{storyFn()}</div>);
 addParameters({

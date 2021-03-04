@@ -24,7 +24,6 @@ export default {
     'prop-types',
     'react-is',
     'hoist-non-react-statics',
-    'styled-components',
     'Element',
   ],
   output: [
