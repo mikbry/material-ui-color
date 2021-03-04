@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/jsx-props-no-spreading */
 /**
  * Copyright (c) Mik BRY
  * mik@mikbry.com
