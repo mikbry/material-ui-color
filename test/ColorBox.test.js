@@ -7,7 +7,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import ColorBox from '../src/components/ColorBox';
 import * as ColorTool from '../src/helpers/colorTool';
 
@@ -85,10 +85,12 @@ test('ColorBox props', async () => {
   expect(labels[2].textContent).toBe('G');
   expect(labels[3].textContent).toBe('B');
   let component = await findByTestId('hsvgradient-color');
-  expect(component).toHaveStyleRule('background', 'rgb(255,0,0) none repeat scroll 0% 0%');
+  expect(component).toHaveStyle({ background: 'rgb(255, 0, 0) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
-  expect(component).toHaveStyle('left: 282px');
-  expect(component).toHaveStyle('top: 56px');
+  expect(component).toHaveStyle({
+    left: '282px',
+    top: '56px',
+  });
   component = await findByTestId('hueslider');
   let span = component.querySelector('.MuiSlider-track');
   expect(span).toHaveStyle('width: 0%');
@@ -145,10 +147,12 @@ test('ColorBox hsvgradient cursor changes', async () => {
   });
   const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
   let component = await findByTestId('hsvgradient-color');
-  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  expect(component).toHaveStyle({ background: 'rgb(255, 0, 81) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
-  expect(component).toHaveStyle('left: 273px');
-  expect(component).toHaveStyle('top: 60px');
+  expect(component).toHaveStyle({
+    left: '273px',
+    top: '60px',
+  });
   expect(value).toBe(undefined);
   fireEvent(
     component,
@@ -201,10 +205,12 @@ test('ColorBox hsvgradient touch move', async () => {
   });
   const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
   let component = await findByTestId('hsvgradient-color');
-  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  expect(component).toHaveStyle({ background: 'rgb(255, 0, 81) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
-  expect(component).toHaveStyle('left: 273px');
-  expect(component).toHaveStyle('top: 60px');
+  expect(component).toHaveStyle({
+    left: '273px',
+    top: '60px',
+  });
   expect(value).toBe(undefined);
   fireEvent(
     component,
@@ -232,10 +238,12 @@ test('ColorBox hsvgradient focus/blur', async () => {
   });
   const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
   let component = await findByTestId('hsvgradient-color');
-  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  expect(component).toHaveStyle({ background: 'rgb(255, 0, 81) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
-  expect(component).toHaveStyle('left: 273px');
-  expect(component).toHaveStyle('top: 60px');
+  expect(component).toHaveStyle({
+    left: '273px',
+    top: '60px',
+  });
   expect(value).toBe(undefined);
   fireEvent(
     component,
@@ -275,10 +283,12 @@ test('ColorBox hsvgradient keys', async () => {
   });
   const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} />);
   let component = await findByTestId('hsvgradient-color');
-  expect(component).toHaveStyleRule('background', 'rgb(255,0,81) none repeat scroll 0% 0%');
+  expect(component).toHaveStyle({ background: 'rgb(255, 0, 81) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
-  expect(component).toHaveStyle('left: 273px');
-  expect(component).toHaveStyle('top: 60px');
+  expect(component).toHaveStyle({
+    left: '273px',
+    top: '60px',
+  });
   expect(value).toBe(undefined);
   fireEvent(
     component,
