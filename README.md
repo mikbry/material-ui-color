@@ -5,6 +5,9 @@
 [![NPM version][npm-image]][npm-url]
 [![License][license-image]][license-url]
 [![minisize][min-image]][min-url]
+[![dependency status][deps-svg]][deps-url]
+[![dev dependency status][dev-deps-svg]][dev-deps-url]
+[![peer dependency status][peer-deps-svg]][peer-deps-url]
 
 [action-image]: https://github.com/mikbry/material-ui-color/workflows/Build%20and%20Deploy/badge.svg
 [action-url]: https://mikbry.github.io/material-ui-color/
@@ -16,6 +19,12 @@
 [License-url]:https://github.com/mikbry/material-ui-color/blob/master/LICENSE
 [min-image]:https://badgen.net/bundlephobia/min/material-ui-color
 [min-url]:https://bundlephobia.com/result?p=material-ui-color
+[deps-svg]: https://david-dm.org/mikbry/material-ui-color.svg
+[deps-url]: https://david-dm.org/mikbry/material-ui-color
+[dev-deps-svg]: https://david-dm.org/mikbry/material-ui-color/dev-status.svg
+[dev-deps-url]: https://david-dm.org/mikbry/material-ui-color#info=devDependencies
+[peer-deps-svg]: https://david-dm.org/mikbry/material-ui-color/peer-status.svg
+[peer-deps-url]: https://david-dm.org/mikbry/material-ui-color#info=peerDependencies
 
 > Collections of color components for [material-ui](https://github.com/mui-org/material-ui). No dependencies, small, highly customizable and theming support !
 
@@ -182,14 +191,8 @@ export const Container = () => (
 
 ## Roadmap
 
-### v0.4.7 - [Latest version](https://github.com/mikbry/material-ui-color/projects/3)
-- feat: ColorPicker when using onChange with defaultValue don't create a controlled component #100
-- fix: openAtStart=true wrong positionning #68
-- feat: ColorPicker support disable 'plain' textfield format #82
-- fix: Can't make localisation to work (Typescript) #84
-### v0.4.8 - [Current version](https://github.com/mikbry/material-ui-color/releases/tag/v0.4.8)
-- fix: wrong margin for Inputs #105
-### v0.5.0  - planned
+### v0.4.11 - [Current version](https://github.com/mikbry/material-ui-color/releases/tag/v0.4.11)
+### v1.0.0  - soon
 - rtl support
 - ColorInput : display alpha and size according to  MUi
 - ColorInput : optional color box as left or right icon
