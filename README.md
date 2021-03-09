@@ -8,6 +8,7 @@
 [![dependency status][deps-svg]][deps-url]
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
 [![peer dependency status][peer-deps-svg]][peer-deps-url]
+[![Downloads][downloads-image]][downloads-url]
 
 [action-image]: https://github.com/mikbry/material-ui-color/workflows/Build%20and%20Deploy/badge.svg
 [action-url]: https://mikbry.github.io/material-ui-color/
@@ -25,6 +26,8 @@
 [dev-deps-url]: https://david-dm.org/mikbry/material-ui-color#info=devDependencies
 [peer-deps-svg]: https://david-dm.org/mikbry/material-ui-color/peer-status.svg
 [peer-deps-url]: https://david-dm.org/mikbry/material-ui-color#info=peerDependencies
+[downloads-image]: http://img.shields.io/npm/dm/material-ui-color.svg
+[downloads-url]: http://npm-stat.com/charts.html?package=material-ui-color
 
 > Collections of color components for [material-ui](https://github.com/mui-org/material-ui). No dependencies, small, highly customizable and theming support !
 
