@@ -194,7 +194,7 @@ test('ColorBox hsvgradient cursor changes', async () => {
       pageY: -600,
     }),
   );
-  expect(onChange).toHaveBeenCalledTimes(3);
+  expect(onChange).toHaveBeenCalledTimes(1);
   expect(value.name).toBe('white');
 });
 
