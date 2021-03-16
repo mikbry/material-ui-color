@@ -160,7 +160,7 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
       event.preventDefault();
     };
     const handleMove = event => {
-      if (pressed || event.buttons) {
+      if (pressed && event.buttons) {
         const xy = { x: event.pageX - window.scrollX, y: event.pageY - window.scrollY };
         convertMousePosition(xy, ref);
         event.preventDefault();
