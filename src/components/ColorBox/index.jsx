@@ -80,7 +80,7 @@ const useStyles = makeStyles(theme => ({
   },
   colorboxError: {
     color: '#f44336',
-    lineHeight: 36.5,
+    lineHeight: '36.5px',
   },
 }));
 
