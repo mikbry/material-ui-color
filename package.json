@@ -31,7 +31,8 @@
     "lint": "eslint src",
     "test": "cross-env NODE_ENV=test  jest",
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
