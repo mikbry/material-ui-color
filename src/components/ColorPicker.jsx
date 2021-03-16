@@ -10,9 +10,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
+import { makeStyles } from '@material-ui/core/styles';
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';
 import * as ColorTool from '../helpers/colorTool';
@@ -20,14 +20,16 @@ import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
 import useTranslate from '../helpers/useTranslate';
 
-const StyledRoot = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: max-content;
-  & .muicc-colorpicker-button {
-    margin: 6px;
-  }
-`;
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: 'max-content',
+  },
+  colorpickerButton: {
+    margin: 6,
+  },
+});
 
 const getColorText = (color, disablePlainColor) => {
   let text = disablePlainColor ? `color-${color.hex}` : color.name;
@@ -57,6 +59,7 @@ const ColorPicker = ({
   hideTextfield,
   disablePlainColor,
 }) => {
+  const classes = useStyles();
   const refPicker = useRef(null);
   const [open, setOpen] = useState(false);
   const { t, i18n } = useTranslate();
@@ -137,16 +140,16 @@ const ColorPicker = ({
   }
 
   return (
-    <StyledRoot ref={refPicker}>
+    <div ref={refPicker} className={classes.root}>
       <ColorButton
         data-testid="colorpicker-button"
-        className="muicc-colorpicker-button"
+        className={`muicc-colorpicker-button ${classes.colorpickerButton}`}
         color={color}
         onClick={handleClick}
       />
       {textField}
       {box}
-    </StyledRoot>
+    </div>
   );
 };
 

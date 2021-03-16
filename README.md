@@ -47,7 +47,6 @@
 ## Why another ColorPicker ?
 
 - Fully compatible with Material-UI : theming and low level components
-- Styled with `styled-components`
 - Highly customizable ColorPicker : gradient picker, palette, input format, deferred mode
 -  Small in size (<30kb) without any direct dependencies
 - Use modern React hook and coding conventions
@@ -67,7 +66,7 @@ https://mikbry.github.io/material-ui-color/
 
 ## Requirements
 - Works on modern browsers supporting ES6+ (Not compatible with IE)
-- React, Styled-Component and Material-UI frameworks
+- React and Material-UI frameworks
 
 ## Install
 
@@ -90,7 +89,6 @@ you need to have in your dependencies:
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "styled-components": "^5.2.1"
 ```
 
 `material-ui-color` bring 5 components.

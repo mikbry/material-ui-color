@@ -1,11 +1,11 @@
-import { createMuiTheme } from "@material-ui/core/styles";
 import { frFR } from '@material-ui/core/locale';
 
-const frenchTheme = createMuiTheme({
+const frenchTheme = {
   name: 'Dark French Theme',
   palette: {
     type: 'dark',
   },
-}, frFR);
+  locale: frFR,
+};
 
 export default frenchTheme;

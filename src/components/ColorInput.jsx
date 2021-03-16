@@ -9,31 +9,33 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import * as ColorTool from '../helpers/colorTool';
 import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
 import useTranslate from '../helpers/useTranslate';
 
-const StyledFormControl = styled(FormControl)`
-  width: 100px;
-`;
+const StyledFormControl = withStyles({
+  root: {
+    width: 100,
+  },
+})(FormControl);
 
-const StyledRoot = styled.div`
-  display: flex;
-  flex-direction: row;
-  & .muicc-colorinput-value {
-    margin: 8px;
-  }
-  & .muicc-colorinput-raw {
-    padding-right: 4px;
-  }
-`;
+const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  colorinputRaw: {
+    paddingRight: 4,
+  },
+});
 
 const ColorInput = ({
   value,
@@ -45,6 +47,7 @@ const ColorInput = ({
   disablePlainColor,
   ...props
 }) => {
+  const classes = useStyles();
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(value, disableAlpha, t, i18n.language, disablePlainColor);
   let field;
@@ -99,13 +102,13 @@ const ColorInput = ({
     components = ColorTool.getComponents(color, format, disableAlpha, t);
     const names = Object.keys(components);
     field = (
-      <StyledRoot ref={forwardRef}>
+      <div ref={forwardRef} className={classes.root}>
         {names.map(cn => (
-          <FormControl key={cn} className="muicc-colorinput-raw" error={!!color.error}>
+          <FormControl key={cn} className={`muicc-colorinput-raw ${classes.colorinputRaw}`} error={!!color.error}>
             {buildInput(cn, components[cn].name, components[cn].value, components[cn].unit, names.length === 1)}
           </FormControl>
         ))}
-      </StyledRoot>
+      </div>
     );
   }
   return (
