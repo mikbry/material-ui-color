@@ -12,13 +12,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
+import { makeStyles } from '@material-ui/core/styles';
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';
 import * as ColorTool from '../helpers/colorTool';
 import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
 import useTranslate from '../helpers/useTranslate';
-import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
   root: {
