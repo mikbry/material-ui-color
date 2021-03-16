@@ -17,8 +17,8 @@ import useTranslate from '../helpers/useTranslate';
 
 const useStyles = makeStyles({
   root: {
-    backgroundImage: props => props.backgroundImage,
-    backgroundColor: props => props.backgroundColor,
+    backgroundImage: props => props.backgroundImage || 'none',
+    backgroundColor: props => props.backgroundColor || '#fff',
     backgroundSize: props => props.backgroundSize,
     backgroundPosition: props => props.backgroundPosition,
     boxShadow: '0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08)',
