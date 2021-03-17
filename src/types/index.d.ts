@@ -38,6 +38,7 @@ declare module 'material-ui-color' {
   
   type Color = ColorType | ColorError;
   type ColorValue = Color | string | number | Array<string | number>;
+  type PaletteRecord = Record<string,string>;
 
   interface ColorPickerProps {
     value?: ColorValue;
@@ -54,11 +55,11 @@ declare module 'material-ui-color' {
     openAtStart?: boolean;
     doPopup?: () => void;
   }
-  interface ColorPickerPaletteProps<T extends Record<string, string>> extends ColorPickerProps {
-    palette: T;
+  interface ColorPickerPaletteProps<T extends PaletteRecord | null> extends ColorPickerProps {
+    palette?: T;
   }
 
-  function ColorPicker<T extends Record<string, string> | null>(
+  function ColorPicker<T extends PaletteRecord | null>(
     props: ColorPickerPaletteProps<T> | ColorPickerProps
   ): JSX.Element;
 
