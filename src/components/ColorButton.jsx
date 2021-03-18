@@ -54,7 +54,7 @@ const useStyles = makeStyles({
       minWidth: props => props.minWidth,
       height: props => props.height,
       border: props =>
-        props.colorError ? '2px solid #f44336' : `${props.borderWidth || 0} solid ${props.borderColor || '#767676'}`,
+        props.colorError ? '2px solid #f44336' : `${props.borderWidth || 0}px solid ${props.borderColor || '#767676'}`,
       borderRadius: 4,
       padding: 0,
     },
