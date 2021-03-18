@@ -192,14 +192,9 @@ export const Container = () => (
 
 ## Roadmap
 
-### v0.4.11 - [Current version](https://github.com/mikbry/material-ui-color/releases/tag/v0.4.11)
-### v1.0.0  - soon
-- rtl support
-- ColorInput : display alpha and size according to  MUi
-- ColorInput : optional color box as left or right icon
-- ColorPicker: left or right Colorbox
-- redesign inputs in ColorBox
+### v1.0.0 - [Current version](https://github.com/mikbry/material-ui-color/releases/tag/v1.0.0)
 - remove `styled-components` to have less dependencies and reduce size
+- display wrong color using a red checked box
 - bugs fixes
 
 ## Contribute
