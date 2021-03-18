@@ -17,10 +17,17 @@ import useTranslate from '../helpers/useTranslate';
 
 const useStyles = makeStyles({
   root: {
-    backgroundImage: props => props.backgroundImage || 'none',
+    backgroundImage: props =>
+      props.alpha < 1
+        ? `
+    linear-gradient(45deg, #ccc 25%, transparent 25%), 
+    linear-gradient(135deg, #ccc 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ccc 75%),
+    linear-gradient(135deg, transparent 75%, #ccc 75%)`
+        : 'none',
+    backgroundSize: '8px 8px',
+    backgroundPosition: '0 0, 4px 0, 4px -4px, 0px 4px',
     backgroundColor: props => props.backgroundColor || '#fff',
-    backgroundSize: props => props.backgroundSize,
-    backgroundPosition: props => props.backgroundPosition,
     boxShadow: '0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08)',
     borderColor: props => props.borderColor || '#767676',
     borderStyle: 'solid',
@@ -30,11 +37,22 @@ const useStyles = makeStyles({
     width: props => props.width,
     minWidth: props => props.minWidth,
     height: props => props.height,
-
-    '&:hover': {
+    '& div': {
+      content: '" "',
+      backgroundColor: props => props.backgroundColor || '#fff',
+      backgroundSize: '8px 8px',
+      width: props => props.width,
+      minWidth: props => props.minWidth,
+      height: props => props.height,
+      borderColor: props => props.borderColor || '#767676',
+      borderStyle: 'solid',
+      borderWidth: props => props.borderWidth || 0,
+      borderRadius: 4,
+      padding: 0,
+    },
+    '&:hover div': {
       backgroundColor: props => props.hoverColor,
     },
-
     '&:active': {
       boxShadow: 'none',
     },
@@ -67,10 +85,10 @@ const ColorButton = ({
   const { t, i18n } = useTranslate();
   const color = ColorTool.validateColor(c, disableAlpha, t, i18n.language);
   const translated = t(tooltip);
-  const cssColor = color.css; // || { backgroundColor: ColorTool.getCssColor(color) };
+  const cssColor = color.css;
   let l = color.hsl[2] - 10;
   if (l < 30) l = color.hsl[2] + 50;
-  const a = color.alpha; // || 0.2;
+  const a = color.alpha;
   const hoverColor = `hsl(${color.hsl[0]}, ${color.hsl[1]}%, ${l}%, ${a})`;
   const classes = useStyles({
     width: size,
@@ -79,6 +97,7 @@ const ColorButton = ({
     hoverColor,
     borderColor,
     borderWidth,
+    alpha: a,
     ...cssColor,
   });
   const component = (
@@ -90,7 +109,7 @@ const ColorButton = ({
       aria-label={color.name}
       {...props}
     >
-      <span />
+      <div />
     </Button>
   );
   if (tooltip) {
