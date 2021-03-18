@@ -66,8 +66,19 @@ const useStyles = makeStyles(theme => ({
   colorboxColor: {
     width: 48,
     height: 48,
-    backgroundColor: props => props.backgroundColor,
+    background: props =>
+      props.colorError
+        ? `repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 29px,
+      #f44336 29px,
+      #f44336 32px
+    )`
+        : 'none',
+    backgroundColor: props => (props.colorError ? 'transparent' : props.backgroundColor),
     borderRadius: 4,
+    border: props => (props.colorError ? '2px solid #f44336' : 'none'),
   },
   colorboxControls: {
     display: 'flex',
@@ -100,7 +111,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
   const cssColor = getCssColor(color, 'hex', true);
   const { backgroundColor } = color.css;
   const boxWidth = 320;
-  const classes = useStyles({ boxWidth, backgroundColor });
+  const classes = useStyles({ boxWidth, backgroundColor, colorError: !!color.error });
 
   const handleSet = () => {
     onDeferredChange(color);
