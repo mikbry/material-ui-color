@@ -18,7 +18,7 @@ import useTranslate from '../helpers/useTranslate';
 const useStyles = makeStyles({
   root: {
     backgroundImage: props =>
-      props.alpha < 1
+      props.colorError || props.alpha < 1
         ? `
     linear-gradient(45deg, #ccc 25%, transparent 25%), 
     linear-gradient(135deg, #ccc 25%, transparent 25%),
@@ -39,14 +39,22 @@ const useStyles = makeStyles({
     height: props => props.height,
     '& div': {
       content: '" "',
-      backgroundColor: props => props.backgroundColor || '#fff',
-      backgroundSize: '8px 8px',
+      background: props =>
+        props.colorError
+          ? `repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent ${props.width / 2 + 2}px,
+      #f44336 ${props.width / 2 + 2}px,
+      #f44336 ${props.width / 2 + 4}px
+    )`
+          : 'none',
+      backgroundColor: props => (props.colorError ? 'transparent' : props.backgroundColor || '#fff'),
       width: props => props.width,
       minWidth: props => props.minWidth,
       height: props => props.height,
-      borderColor: props => props.borderColor || '#767676',
-      borderStyle: 'solid',
-      borderWidth: props => props.borderWidth || 0,
+      border: props =>
+        props.colorError ? '2px solid #f44336' : `${props.borderWidth || 0}px solid ${props.borderColor || '#767676'}`,
       borderRadius: 4,
       padding: 0,
     },
@@ -98,6 +106,7 @@ const ColorButton = ({
     borderColor,
     borderWidth,
     alpha: a,
+    colorError: !!color.error,
     ...cssColor,
   });
   const component = (
