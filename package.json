@@ -115,6 +115,9 @@
       "clover",
       "html"
     ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/examples"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
