@@ -60,7 +60,7 @@ https://mikbry.github.io/material-ui-color/
 
 ### Examples availables
 
-- Javascript : https://codesandbox.io/s/material-ui-color-qb4vm?file=/src/App.tsx
+- Javascript : https://codesandbox.io/s/material-ui-color-qb4vm?file=/src/App.jsx
 
 - Typescript : https://codesandbox.io/s/material-ui-color-picker-qvcg3?file=/src/App.tsx
 
@@ -90,6 +90,8 @@ you need to have in your dependencies:
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
 ```
+
+> You can find examples [here](EXAMPLES.md) and [here](/examples).
 
 `material-ui-color` bring 5 components.
 
