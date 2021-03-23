@@ -6,7 +6,7 @@ import blueGrey from "@material-ui/core/colors/blueGrey";
 import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import { Color, ColorPicker } from "material-ui-color";
+import { Color, ColorPicker, createColor } from "material-ui-color";
 import "./App.css";
 
 const theme = createMuiTheme({
@@ -18,10 +18,8 @@ const theme = createMuiTheme({
   }
 });
 
-type ColorState = Color | undefined
-
 export default function App() {
-  const [color, setColor] = useState(undefined as ColorState);
+  const [color, setColor] = useState(createColor('red'));
   const handleChange = (newValue: Color) => {
     console.log("change", newValue);
     // setColor(`#${newValue.hex}`);
