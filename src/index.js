@@ -12,5 +12,6 @@ import ColorBox from './components/ColorBox';
 import ColorInput from './components/ColorInput';
 import ColorPalette from './components/ColorPalette';
 import useTranslate from './helpers/useTranslate';
+import { parse as createColor } from './helpers/colorTool';
 
-export { ColorPicker, ColorButton, ColorBox, ColorInput, ColorPalette, useTranslate };
+export { ColorPicker, ColorButton, ColorBox, ColorInput, ColorPalette, createColor, useTranslate };

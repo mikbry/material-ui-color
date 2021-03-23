@@ -8,11 +8,13 @@ declare module 'material-ui-color' {
     "hsv"
   }
 
+  type Raw = string | number | object | string[] | number[]
+
   interface ColorObject {
     css: React.CSSProperties;
     value: number;
     hex: string;
-    raw: string | number | object | string[] | number[];
+    raw: Raw
     name: string;
     alpha: number;
     rgb: [number, number, number];
@@ -134,6 +136,8 @@ declare module 'material-ui-color' {
 
   function useTranslate(translation: TranslationProps): Translation;
 
+  function createColor(raw: Raw, format?: ColorFormat, disableAlpha?: boolean): Color;
+
   export {
     ColorPicker,
     ColorPickerProps,
@@ -146,11 +150,14 @@ declare module 'material-ui-color' {
     ColorBox,
     ColorBoxProps,
     Color,
+    ColorFormat,
     ColorType,
     ColorValue,
+    Raw,
     i18n,
     TranslationProps,
     Translation,
     useTranslate,
+    createColor,
   };
 }
