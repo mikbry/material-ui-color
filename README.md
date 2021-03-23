@@ -58,11 +58,16 @@ Full documentation is available here :
 
 https://mikbry.github.io/material-ui-color/
 
-### Examples availables
+### Examples 
+
+> You can find examples [here](EXAMPLES.md) and [here](/examples).
+
+Also in codesanbox
 
 - Javascript : https://codesandbox.io/s/material-ui-color-qb4vm?file=/src/App.jsx
 
 - Typescript : https://codesandbox.io/s/material-ui-color-picker-qvcg3?file=/src/App.tsx
+
 
 ## Requirements
 - Works on modern browsers supporting ES6+ (Not compatible with IE)
@@ -90,8 +95,6 @@ you need to have in your dependencies:
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
 ```
-
-> You can find examples [here](EXAMPLES.md) and [here](/examples).
 
 `material-ui-color` bring 5 components.
 
