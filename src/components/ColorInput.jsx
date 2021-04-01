@@ -21,12 +21,6 @@ import uncontrolled from '../helpers/uncontrolled';
 import * as CommonTypes from '../helpers/commonTypes';
 import useTranslate from '../helpers/useTranslate';
 
-const StyledFormControl = withStyles({
-  root: {
-    width: 100,
-  },
-})(FormControl);
-
 const useStyles = makeStyles({
   root: {
     display: 'flex',
@@ -35,6 +29,9 @@ const useStyles = makeStyles({
   colorinputRaw: {
     paddingRight: 4,
   },
+  formControl: {
+    width: 100,
+  }
 });
 
 const ColorInput = ({
@@ -112,10 +109,10 @@ const ColorInput = ({
     );
   }
   return (
-    <StyledFormControl error={!!color.error} data-testid="colorinput">
+    <FormControl className={classes.formControl} error={!!color.error} data-testid="colorinput">
       {field}
       {enableErrorDisplay && color.error && <FormHelperText id="component-error-text">{color.error}</FormHelperText>}
-    </StyledFormControl>
+    </FormControl>
   );
 };
 
