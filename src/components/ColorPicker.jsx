@@ -12,6 +12,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Popover from '@material-ui/core/Popover';
+import { StylesProvider, createGenerateClassName } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';
@@ -29,6 +30,10 @@ const useStyles = makeStyles({
   colorpickerButton: {
     margin: 6,
   },
+});
+
+const generateClassName = createGenerateClassName({
+  seed: 'ColorPicker',
 });
 
 const getColorText = (color, disablePlainColor) => {
@@ -140,16 +145,18 @@ const ColorPicker = ({
   }
 
   return (
-    <div ref={refPicker} className={classes.root}>
-      <ColorButton
-        data-testid="colorpicker-button"
-        className={`muicc-colorpicker-button ${classes.colorpickerButton}`}
-        color={color}
-        onClick={handleClick}
-      />
-      {textField}
-      {box}
-    </div>
+    <StylesProvider generateClassName={generateClassName}>
+      <div ref={refPicker} className={classes.root}>
+        <ColorButton
+          data-testid="colorpicker-button"
+          className={`muicc-colorpicker-button ${classes.colorpickerButton}`}
+          color={color}
+          onClick={handleClick}
+        />
+        {textField}
+        {box}
+      </div>
+    </StylesProvider>  
   );
 };
 
