@@ -127,7 +127,7 @@ export const Localization = () => {
   useTranslate(() => ({ i18n: { language }, t: translate }));
   return (
     <div style={style}>
-      <ColorPicker defaultValue="#fe0" deferred palette={paletteObj} translate={v => translate(v)} />
+      <ColorPicker defaultValue="#fe0" deferred palette={paletteObj} />
       <Button variant="outlined" style={{ marginTop: '100px' }} onClick={handleChange}>
         {language === 'enUS' ? 'english' : 'français'}
       </Button>
