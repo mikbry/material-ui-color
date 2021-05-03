@@ -146,7 +146,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
   };
 
   const displayInput = () =>
-    inputFormats && (
+    inputFormats.length > 0 && (
       <div className={`muicc-colorbox-inputs  ${classes.colorboxInputs}`}>
         <div className={`muicc-colorbox-colorBg ${classes.colorboxColorBg}`}>
           <div className={`muicc-colorbox-color ${classes.colorboxColor}`} />
