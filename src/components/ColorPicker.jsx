@@ -61,6 +61,7 @@ const ColorPicker = ({
   onOpen,
   doPopup,
   disableAlpha,
+  hslGradient,
   hideTextfield,
   disablePlainColor,
 }) => {
@@ -107,6 +108,7 @@ const ColorPicker = ({
       palette={palette}
       inputFormats={inputFormats}
       disableAlpha={disableAlpha}
+      hslGradient={hslGradient}
       onChange={handleColorChange}
     />
   );
@@ -174,6 +176,7 @@ ColorPicker.propTypes = {
     Don't use alpha
    */
   disableAlpha: PropTypes.bool,
+  hslGradient: PropTypes.bool,
   hideTextfield: PropTypes.bool,
   disablePlainColor: PropTypes.bool,
 };
@@ -188,6 +191,7 @@ ColorPicker.defaultProps = {
   openAtStart: false,
   doPopup: undefined,
   disableAlpha: false,
+  hslGradient: false,
   hideTextfield: false,
   disablePlainColor: false,
 };
