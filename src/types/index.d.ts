@@ -123,18 +123,13 @@ declare module 'material-ui-color' {
   interface i18n {
     language: string;
   }
-
-  interface TranslationProps {
-    t: typeof TFunction,
-    i18n?: i18n;
-  }
   
   interface Translation {
     t: typeof TFunction,
     i18n?: i18n;
   }
 
-  function useTranslate(translation: TranslationProps): Translation;
+  function useTranslate(translation: () => Translation): Translation;
 
   function createColor(raw: Raw, format?: ColorFormat, disableAlpha?: boolean): Color;
 
