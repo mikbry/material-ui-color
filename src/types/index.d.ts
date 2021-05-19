@@ -150,7 +150,6 @@ declare module 'material-ui-color' {
     ColorValue,
     Raw,
     i18n,
-    TranslationProps,
     Translation,
     useTranslate,
     createColor,
