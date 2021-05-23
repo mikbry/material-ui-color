@@ -49,13 +49,14 @@ declare module 'material-ui-color' {
     hideTextfield?: boolean;
     deferred?: boolean;
     palette?: any;
-    inputFormats?: string[];
+    inputFormats?: ColorFormat[];
     disableAlpha?: boolean;
     disablePlainColor?: boolean;
     onChange: (color: Color) => void;
     onOpen?: () => void;
     openAtStart?: boolean;
     doPopup?: () => void;
+    hslGradient?: boolean;
   }
   interface ColorPickerPaletteProps<T extends PaletteRecord | null> extends ColorPickerProps {
     palette?: T;
@@ -113,8 +114,9 @@ declare module 'material-ui-color' {
     value?: ColorValue;
     deferred?: boolean;
     palette?: Record<string, string>;
-    inputFormats?: string[];
+    inputFormats?: ColorFormat[];
     onChange: (color: Color) => void;
+    hslGradient?: boolean;
   }
 
   function ColorBox(props: ColorBoxProps): JSX.Element;
