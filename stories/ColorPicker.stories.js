@@ -48,7 +48,7 @@ DisableAlpha.story = {
 };
 
 export const HslGradient = () => <ColorPicker defaultValue="#000" hslGradient />;
-DisableAlpha.story = {
+HslGradient.story = {
   parameters: { defaultValue: '#000', hslGradient: true },
 };
 
