@@ -87,7 +87,7 @@ const useStyles = makeStyles({
 const HSVGradient = ({ className, color, onChange, ...props }) => {
   const latestColor = React.useRef(color);
   const [focus, onFocus] = React.useState(false);
-  const [pressed, setPressed] = React.useState(false);
+  const pressed = React.useRef(false);
   React.useEffect(() => {
     latestColor.current = color;
   });
@@ -150,17 +150,17 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
     initPosition(ref);
     const handleDown = event => {
       onFocus(true);
-      setPressed(true);
+      pressed.current = true;
       event.preventDefault();
     };
     const handleUp = event => {
       const xy = { x: event.pageX - window.scrollX, y: event.pageY - window.scrollY };
       convertMousePosition(xy, ref);
-      setPressed(false);
+      pressed.current = false;
       event.preventDefault();
     };
     const handleMove = event => {
-      if (pressed && event.buttons) {
+      if (pressed.current && event.buttons) {
         const xy = { x: event.pageX - window.scrollX, y: event.pageY - window.scrollY };
         convertMousePosition(xy, ref);
         event.preventDefault();
@@ -233,7 +233,7 @@ const HSVGradient = ({ className, color, onChange, ...props }) => {
               aria-valuemax={100}
               aria-valuemin={0}
               aria-valuenow={color.hsv[1]}
-              pressed={`${pressed}`}
+              pressed={`${pressed.current}`}
               data-testid="hsvgradient-cursor"
               className={`muicc-hsvgradient-cursor ${classes.hsvGradientCursor}`}
               onKeyDown={handleKey}
