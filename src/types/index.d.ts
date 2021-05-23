@@ -116,6 +116,7 @@ declare module 'material-ui-color' {
     palette?: Record<string, string>;
     inputFormats?: ColorFormat[];
     onChange: (color: Color) => void;
+    disableAlpha?: boolean;
     hslGradient?: boolean;
   }
 
