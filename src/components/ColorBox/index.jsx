@@ -95,7 +95,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, disableAlpha, ...props }) => {
+const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, disableAlpha, hslGradient, ...props }) => {
   const { t, i18n } = useTranslate();
   let color = validateColor(value, disableAlpha, t, i18n.language);
   let onChange = _onChange;
@@ -129,7 +129,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
   };
 
   const handleSVChange = hsvVal => {
-    const c = colorParse(hsvVal, 'hsv');
+    const c = colorParse(hsvVal, hslGradient ? 'hsl' : 'hsv');
     onChange(c);
   };
 
@@ -172,6 +172,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
           className={`muicc-colorbox-hsvgradient ${classes.colorboxHsvGradient}`}
           color={color}
           onChange={handleSVChange}
+          isHsl={hslGradient}
         />
         <div className={`muicc-colorbox-sliders ${classes.colorboxSliders}`}>
           <HueSlider
@@ -230,6 +231,7 @@ ColorBox.propTypes = {
     Don't use alpha
    */
   disableAlpha: PropTypes.bool,
+  hslGradient: PropTypes.bool,
 };
 
 ColorBox.defaultProps = {
@@ -238,6 +240,7 @@ ColorBox.defaultProps = {
   palette: undefined,
   inputFormats: ['hex', 'rgb'],
   disableAlpha: false,
+  hslGradient: false,
 };
 
 export default uncontrolled(ColorBox);
