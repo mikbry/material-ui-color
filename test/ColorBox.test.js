@@ -104,13 +104,13 @@ test('ColorBox props', async () => {
 });
 
 test('ColorBox HSL props', async () => {
-  const {  findByTestId } = render(<ColorBox defaultValue="#830A0A7D" hslGradient />);
+  const { findByTestId } = render(<ColorBox defaultValue="#830A0A7D" hslGradient />);
   let component = await findByTestId('hsvgradient-color');
   expect(component).toHaveStyle({ background: 'rgb(255, 0, 0) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
   expect(component).toHaveStyle({
-    left: '264px',
-    top: '83px',
+    left: '221px',
+    top: '99px',
   });
   component = await findByTestId('hueslider');
   let span = component.querySelector('.MuiSlider-track');
@@ -226,14 +226,18 @@ test('ColorBox hslgradient cursor changes', async () => {
   });
   const { findByTestId } = render(<ColorBox value="#7A0E30" onChange={onChange} hslGradient />);
   let component = await findByTestId('hsvgradient-color');
-  expect(component.clientWidth).toEqual(308);
-  expect(component.clientHeight).toEqual(116);
-  expect(component.getBoundingClientRect()).toEqual({ left: 22, top: 90 });
+  const left = 22;
+  const top = 90;
+  const width = 308;
+  const height = 116;
+  expect(component.clientWidth).toEqual(width);
+  expect(component.clientHeight).toEqual(height);
+  expect(component.getBoundingClientRect()).toEqual({ left, top });
   expect(component).toHaveStyle({ background: 'rgb(255, 0, 81) none repeat scroll 0%' });
   component = await findByTestId('hsvgradient-cursor');
   expect(component).toHaveStyle({
-    left: '243px',
-    top: '84px',
+    left: '224px',
+    top: '91px',
   });
   expect(value).toBe(undefined);
   fireEvent(
@@ -270,7 +274,7 @@ test('ColorBox hslgradient cursor changes', async () => {
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(2);
-  expect(value.name).toBe('black');
+  expect(value.name).toBe('white');
   fireEvent(
     component,
     new FakeMouseEvent('mousedown', {
@@ -304,7 +308,7 @@ test('ColorBox hslgradient cursor changes', async () => {
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(4);
-  expect(value.name).toBe('white');
+  expect(value.name).toBe('black');
   fireEvent(
     component,
     new FakeMouseEvent('mousedown', {
@@ -316,8 +320,8 @@ test('ColorBox hslgradient cursor changes', async () => {
     component,
     new FakeMouseEvent('mouseup', {
       bubbles: true,
-      pageX: 500,
-      pageY: 147.5,
+      pageX: left + (width - 1) / 2,
+      pageY: 600,
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(5);
@@ -333,8 +337,8 @@ test('ColorBox hslgradient cursor changes', async () => {
     component,
     new FakeMouseEvent('mouseup', {
       bubbles: true,
-      pageX: 0,
-      pageY: 147.5,
+      pageX: left + (width - 1) / 2,
+      pageY: 0,
     }),
   );
   expect(onChange).toHaveBeenCalledTimes(6);

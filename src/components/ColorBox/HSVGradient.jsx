@@ -54,11 +54,11 @@ const useStyles = makeStyles({
   },
   hslGradientS: {
     background:
-      'rgba(0, 0, 0, 0) linear-gradient(to right, rgb(128, 128, 128), rgba(255, 255, 255, 0)) repeat scroll 0% 0%',
+      'rgba(0, 0, 0, 0) linear-gradient(to bottom, rgb(128, 128, 128), rgba(255, 255, 255, 0)) repeat scroll 0% 0%',
   },
   hslGradientL: {
     background:
-      'rgba(0, 0, 0, 0) linear-gradient(to top, rgb(0, 0, 0), rgba(128, 128, 128, 0), rgb(255, 255, 255)) repeat scroll 0% 0%',
+      'rgba(0, 0, 0, 0) linear-gradient(to left, rgb(0, 0, 0), rgba(128, 128, 128, 0), rgb(255, 255, 255)) repeat scroll 0% 0%',
   },
   hsvGradientCursor: {
     position: 'absolute',
@@ -118,10 +118,9 @@ const HSVGradient = ({ className, color, onChange, isHsl, ...props }) => {
   const initPosition = ref => {
     if (ref) {
       const { hsv, hsl } = color;
-      const hsx = isHsl ? hsl : hsv;
       cursorPos = {
-        x: Math.round((hsx[1] / 100) * (ref.clientWidth - 1)),
-        y: Math.round((1 - hsx[2] / 100) * (ref.clientHeight - 1)),
+        x: Math.round(((isHsl ? 100 - hsl[2] : hsv[1]) / 100) * (ref.clientWidth - 1)),
+        y: Math.round(((isHsl ? hsl[1] : 100 - hsv[2]) / 100) * (ref.clientHeight - 1)),
       };
       setPosition(cursorPos);
     }
@@ -148,10 +147,16 @@ const HSVGradient = ({ className, color, onChange, isHsl, ...props }) => {
       pos.y = ref.clientHeight - 1;
     }
     setPosition(pos, true);
-    const s = (pos.x / (ref.clientWidth - 1)) * 100;
-    const v = (1 - pos.y / (ref.clientHeight - 1)) * 100;
     const c = latestColor.current;
-    onChange([c.hsv[0], s, v]);
+    if (isHsl) {
+      const s = (pos.y / (ref.clientHeight - 1)) * 100;
+      const l = (1 - pos.x / (ref.clientWidth - 1)) * 100;
+      onChange([c.hsl[0], s, l]);
+    } else {
+      const s = (pos.x / (ref.clientWidth - 1)) * 100;
+      const v = (1 - pos.y / (ref.clientHeight - 1)) * 100;
+      onChange([c.hsv[0], s, v]);
+    }
   };
 
   React.useEffect(() => {
