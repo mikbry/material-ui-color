@@ -28,7 +28,7 @@
     "build": "yarn clean &  cross-env NODE_ENV=production rollup -c && packito",
     "build-storybook": "build-storybook -c .storybook -o public",
     "storybook": "start-storybook -p 9005 -c .storybook",
-    "lint": "eslint src",
+    "lint": "eslint --ext js,jsx src",
     "test": "cross-env NODE_ENV=test  jest",
     "coverage": "cross-env NODE_ENV=test  jest --coverage --colors",
     "prepublishOnly": "yarn build",
