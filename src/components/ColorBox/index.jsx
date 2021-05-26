@@ -95,7 +95,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange, disableAlpha, hslGradient, ...props }) => {
+const ColorBox = ({
+  value,
+  palette,
+  inputFormats,
+  deferred,
+  onChange: _onChange,
+  disableAlpha,
+  hslGradient,
+  ...props
+}) => {
   const { t, i18n } = useTranslate();
   let color = validateColor(value, disableAlpha, t, i18n.language);
   let onChange = _onChange;
@@ -105,7 +114,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
     onDeferredChange = _onChange;
   }
 
-  const { hsv } = color;
+  const { hsv, hsl } = color;
   let { alpha } = color;
   alpha = alpha === undefined ? 100 : Math.floor(alpha * 100);
   const cssColor = getCssColor(color, 'hex', true);
@@ -178,7 +187,7 @@ const ColorBox = ({ value, palette, inputFormats, deferred, onChange: _onChange,
           <HueSlider
             data-testid="hueslider"
             aria-label="color slider"
-            value={hsv[0]}
+            value={hslGradient ? hsl[0] : hsv[0]}
             min={0}
             max={360}
             onChange={handleHueChange}
