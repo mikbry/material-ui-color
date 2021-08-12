@@ -53,7 +53,7 @@ declare module 'material-ui-color' {
     disableAlpha?: boolean;
     disablePlainColor?: boolean;
     onChange: (color: Color) => void;
-    onOpen?: () => void;
+    onOpen?: (open: boolean) => void;
     openAtStart?: boolean;
     doPopup?: () => void;
     hslGradient?: boolean;
