@@ -52,7 +52,7 @@ declare module 'material-ui-color' {
     inputFormats?: ColorFormat[];
     disableAlpha?: boolean;
     disablePlainColor?: boolean;
-    onChange: (color: Color) => void;
+    onChange: (color: ColorValue) => void;
     onOpen?: () => void;
     openAtStart?: boolean;
     doPopup?: () => void;
