@@ -3,8 +3,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import React, { useState } from 'react';
 import { action } from '@storybook/addon-actions';
-import Button from '@material-ui/core/Button';
-// import { useTheme } from '@material-ui/styles';
+import Button from '@mui/material/Button';
+// import { useTheme } from '@mui/styles';
 import { ColorPicker, useTranslate } from '../src';
 
 import frFR from '../translations/frFR.json';
