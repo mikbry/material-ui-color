@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import Slider from '@material-ui/core/Slider';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import * as CommonTypes from '../../helpers/commonTypes';
 
 const useStyles = makeStyles({

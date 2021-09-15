@@ -7,7 +7,7 @@ export default {
   external: [
     'react',
     'react-dom',
-    '@material-ui/core/styles',
+    '@material-ui/styles',
     '@material-ui/core/Slider',
     '@material-ui/core/Box',
     '@material-ui/core/Button',
