@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider as StyledThemeProvider } from '@material-ui/core/styles';
-import { StylesProvider } from '@material-ui/styles';
-import { createMuiTheme } from '@material-ui/core';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider as StyledThemeProvider } from '@mui/styles';
+import { StylesProvider } from '@mui/styles';
+import { createMuiTheme } from '@mui/material';
 
 const ThemeProvider = ({ theme, children }) => {
   const { locale, ...options } = theme;

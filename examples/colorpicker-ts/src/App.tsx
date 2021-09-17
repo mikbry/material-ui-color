@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import deepOrange from "@material-ui/core/colors/deepOrange";
-import blueGrey from "@material-ui/core/colors/blueGrey";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import { ThemeProvider, createMuiTheme } from "@mui/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import deepOrange from "@mui/material/colors/deepOrange";
+import blueGrey from "@mui/material/colors/blueGrey";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { Color, ColorPicker, createColor } from "material-ui-color";
 import "./App.css";
 

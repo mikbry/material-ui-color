@@ -1,4 +1,4 @@
-import { frFR } from '@material-ui/core/locale';
+import { frFR } from '@mui/material/locale';
 
 const frenchTheme = {
   name: 'Dark French Theme',

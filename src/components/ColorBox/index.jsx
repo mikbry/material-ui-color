@@ -8,10 +8,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
+import { makeStyles } from '@mui/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
 import HSVGradient from './HSVGradient';
 import ColorInput from '../ColorInput';
 import ColorPalette from '../ColorPalette';

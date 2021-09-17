@@ -10,9 +10,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Popover from '@material-ui/core/Popover';
-import { StylesProvider, createGenerateClassName, makeStyles } from '@material-ui/core/styles';
+import TextField from '@mui/material/TextField';
+import Popover from '@mui/material/Popover';
+import { StylesProvider, createGenerateClassName, makeStyles } from '@mui/styles';
 
 import ColorButton from './ColorButton';
 import ColorBox from './ColorBox';

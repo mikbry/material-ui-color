@@ -9,7 +9,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/styles';
 import ColorButton from './ColorButton';
 import * as CommonTypes from '../helpers/commonTypes';
 import useTranslate from '../helpers/useTranslate';

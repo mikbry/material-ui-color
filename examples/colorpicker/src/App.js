@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import { ThemeProvider, createMuiTheme } from "@mui/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import { ColorPicker, createColor } from "material-ui-color";
 
 const theme = createMuiTheme({
