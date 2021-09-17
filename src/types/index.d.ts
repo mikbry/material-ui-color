@@ -148,6 +148,8 @@ declare module 'material-ui-color' {
     ColorBox,
     ColorBoxProps,
     Color,
+    ColorObject,
+    ColorError,
     ColorFormat,
     ColorType,
     ColorValue,
