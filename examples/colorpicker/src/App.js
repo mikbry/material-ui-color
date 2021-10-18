@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { ThemeProvider, createMuiTheme } from "@mui/styles";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { ColorPicker, createColor } from "material-ui-color";
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {}
 });
 
